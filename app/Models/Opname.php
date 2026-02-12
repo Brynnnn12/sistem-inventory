@@ -7,39 +7,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class InboundTransaction extends Model
+class Opname extends Model
 {
-    /** @use HasFactory<\Database\Factories\InboundTransactionFactory> */
+    /** @use HasFactory<\Database\Factories\OpnameFactory> */
     use HasFactory;
 
     protected $fillable = [
         'code',
-        'supplier_id',
         'warehouse_id',
         'product_id',
-        'quantity',
-        'received_qty',
-        'damaged_qty',
-        'unit_price',
-        'total_price',
-        'receipt_date',
+        'system_qty',
+        'physical_qty',
+        'difference_qty',
+        'difference_type',
         'notes',
+        'opname_date',
         'created_by',
     ];
 
     protected $casts = [
-        'quantity' => 'decimal:2',
-        'received_qty' => 'decimal:2',
-        'damaged_qty' => 'decimal:2',
-        'unit_price' => 'decimal:2',
-        'total_price' => 'decimal:2',
-        'receipt_date' => 'datetime',
+        'system_qty' => 'decimal:2',
+        'physical_qty' => 'decimal:2',
+        'difference_qty' => 'decimal:2',
+        'opname_date' => 'datetime',
     ];
-
-    public function supplier(): BelongsTo
-    {
-        return $this->belongsTo(Supplier::class);
-    }
 
     public function warehouse(): BelongsTo
     {
@@ -59,12 +50,7 @@ class InboundTransaction extends Model
     public function stockHistories(): HasMany
     {
         return $this->hasMany(StockHistory::class, 'reference_id')
-            ->where('reference_type', 'inbound_transaction');
-    }
-
-    public function scopeBySupplier($query, $supplierId)
-    {
-        return $query->where('supplier_id', $supplierId);
+            ->where('reference_type', 'opname');
     }
 
     public function scopeByWarehouse($query, $warehouseId)
@@ -79,6 +65,21 @@ class InboundTransaction extends Model
 
     public function scopeByDateRange($query, $startDate, $endDate)
     {
-        return $query->whereBetween('receipt_date', [$startDate, $endDate]);
+        return $query->whereBetween('opname_date', [$startDate, $endDate]);
+    }
+
+    public function scopeWithDifferences($query)
+    {
+        return $query->where('difference_type', '!=', 'sama');
+    }
+
+    public function scopeShortages($query)
+    {
+        return $query->where('difference_type', 'kurang');
+    }
+
+    public function scopeSurpluses($query)
+    {
+        return $query->where('difference_type', 'lebih');
     }
 }
