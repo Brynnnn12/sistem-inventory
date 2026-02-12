@@ -1,0 +1,61 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class WarehouseUser extends Pivot
+{
+
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'warehouse_users';
+
+    protected $fillable = [
+        'user_id',
+        'warehouse_id',
+        'assigned_by',
+        'assigned_at',
+        'is_primary',
+    ];
+
+    protected $casts = [
+        'assigned_at' => 'datetime',
+        'is_primary' => 'boolean',
+    ];
+
+    public $incrementing = true;
+
+    public function scopeSearch($query, ?string $search): void
+    {
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('warehouse', function ($warehouse) use ($search) {
+                    $warehouse->where('name', 'like', "%{$search}%");
+                })
+                    ->orWhereHas('user', function ($user) use ($search) {
+                        $user->where('name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    });
+            });
+        }
+    }
+
+    public function warehouse(): BelongsTo
+    {
+        return $this->belongsTo(Warehouse::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function assignedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'assigned_by');
+    }
+}

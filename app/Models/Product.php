@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Product extends Model
+{
+    use HasFactory, SoftDeletes;
+
+
+    protected $fillable = [
+        'code',
+        'category_id',
+        'name',
+        'unit',
+        'min_stock',
+        'max_stock',
+        'price',
+        'cost',
+        'description',
+        'is_active',
+        'image',
+    ];
+
+    public function scopeSearch($query, ?string $search): void
+    {
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('code', 'like', "%{$search}%")
+                    ->orWhere('unit', 'like', "%{$search}%")
+                    ->orWhereHas('category', function ($category) use ($search) {
+                        $category->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+    }
+
+
+    protected function casts(): array
+    {
+        return [
+            'min_stock' => 'integer',
+            'max_stock' => 'integer',
+            'price' => 'decimal:2',
+            'cost' => 'decimal:2',
+            'is_active' => 'boolean',
+            'deleted_at' => 'datetime',
+        ];
+    }
+
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+
+
+    /**
+     * Get the full URL for the product image.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image ? asset('storage/' . $this->image) : null;
+    }
+
+    /**
+     * Get the image path for storage operations.
+     */
+    public function getImagePathAttribute(): ?string
+    {
+        return $this->image;
+    }
+}
