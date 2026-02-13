@@ -75,12 +75,6 @@ class OutboundController extends Controller
 
         $validated = $request->validated();
 
-        // Handle file upload
-        $attachmentPath = null;
-        if ($request->hasFile('attachment')) {
-            $attachmentPath = $request->file('attachment')->store('attachments/outbound', 'public');
-        }
-
         try {
             $transaction = $this->createOutboundAction->execute(
                 customerId: $validated['customer_id'],
@@ -90,7 +84,7 @@ class OutboundController extends Controller
                 unitPrice: $validated['unit_price'] ?? 0,
                 saleDate: $validated['sale_date'],
                 notes: $validated['notes'] ?? null,
-                attachment: $attachmentPath,
+                attachment: $request->hasFile('attachment') ? $request->file('attachment') : null,
             );
 
             // Get stock change info

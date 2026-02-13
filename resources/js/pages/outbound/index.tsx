@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { Pagination } from '@/components/pagination';
+import { useFilters } from '@/hooks/useFilters';
 import { useGenericModals } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
 import AppLayout from '@/layouts/app-layout';
@@ -42,14 +43,22 @@ export default function Index({
         only: ['outbounds'],
     });
 
+    const { setFilter, clearFilters } = useFilters({
+        route: '/dashboard/outbound',
+        initialFilters: {
+            warehouse_id: filters.warehouse_id || '',
+        },
+        only: ['outbounds'],
+    });
+
     const { modals, openModal, closeModal } = useGenericModals<OutboundTransaction>({
         simple: ['create'],
         withData: ['show']
     });
 
-    const clearFilters = () => {
+    const clearFiltersHandler = () => {
         clearSearch();
-        // TODO: clear other filters
+        clearFilters();
     };
 
     return (
@@ -60,7 +69,8 @@ export default function Index({
                     searchValue={searchValue}
                     onSearchChange={setSearchValue}
                     onAddClick={() => openModal('create')}
-                    onClearFilters={clearFilters}
+                    onClearFilters={clearFiltersHandler}
+                    onWarehouseChange={(value) => setFilter('warehouse_id', value)}
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                     filters={filters}

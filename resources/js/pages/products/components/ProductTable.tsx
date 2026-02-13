@@ -1,4 +1,5 @@
 import { Edit, Package, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -21,6 +22,39 @@ interface ProductTableProps {
     onDelete: (product: Product) => void;
     allSelected: boolean;
     someSelected: boolean;
+}
+
+function ProductImageCell({ product }: { product: Product }) {
+    const [imageError, setImageError] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+    if (!product.image_url || imageError) {
+        return (
+            <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
+                <Package className="h-5 w-5 text-muted-foreground" />
+            </div>
+        );
+    }
+
+    return (
+        <div className="h-10 w-10 rounded-lg border overflow-hidden relative">
+            {!imageLoaded && (
+                <div className="absolute inset-0 bg-muted animate-pulse flex items-center justify-center">
+                    <div className="h-4 w-4 bg-muted-foreground/20 rounded"></div>
+                </div>
+            )}
+            <img
+                src={product.image_url}
+                alt={product.name}
+                className={`h-full w-full object-cover transition-opacity duration-200 ${
+                    imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageError(true)}
+                loading="lazy"
+            />
+        </div>
+    );
 }
 
 export function ProductTable({
@@ -83,17 +117,7 @@ export function ProductTable({
                                     />
                                 </TableCell>
                                 <TableCell>
-                                    {product.image_url ? (
-                                        <img
-                                            src={product.image_url}
-                                            alt={product.name}
-                                            className="h-10 w-10 rounded-lg object-cover border"
-                                        />
-                                    ) : (
-                                        <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
-                                            <Package className="h-5 w-5 text-muted-foreground" />
-                                        </div>
-                                    )}
+                                    <ProductImageCell product={product} />
                                 </TableCell>
                                 <TableCell>
                                     <Badge variant="secondary" className="font-mono text-xs">
@@ -131,7 +155,6 @@ export function ProductTable({
                                             onClick={() => onEdit(product)}
                                         >
                                             <Edit className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only">Edit</span>
                                         </Button>
                                         <Button
                                             variant="ghost"
@@ -140,7 +163,6 @@ export function ProductTable({
                                             onClick={() => onDelete(product)}
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only">Hapus</span>
                                         </Button>
                                     </div>
                                 </TableCell>

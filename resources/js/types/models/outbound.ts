@@ -47,8 +47,6 @@ interface PageProps {
 interface Filters {
     search?: string;
     warehouse_id?: string;
-    start_date?: string;
-    end_date?: string;
 }
 
 interface OutboundFormModalProps {
@@ -67,6 +65,7 @@ interface OutboundToolbarProps {
     onSearchChange: (value: string) => void;
     onAddClick: () => void;
     onClearFilters: () => void;
+    onWarehouseChange: (value: string) => void;
     isSearching: boolean;
     hasActiveFilters: boolean;
     filters: Filters;

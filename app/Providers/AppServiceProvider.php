@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Contracts\NotificationServiceInterface;
 use App\Services\EmailNotificationService;
+use App\Services\FileUploadService;
 use App\Services\FonteService;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -28,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
                 'whatsapp' => $app->make(FonteService::class),
                 default => $app->make(FonteService::class),
             };
+        });
+
+        // Bind FileUploadService as singleton
+        $this->app->singleton(FileUploadService::class, function ($app) {
+            return new FileUploadService;
         });
     }
 

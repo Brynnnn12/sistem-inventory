@@ -25,6 +25,8 @@ class Product extends Model
         'image',
     ];
 
+    protected $appends = ['image_url'];
+
     public function scopeSearch($query, ?string $search): void
     {
         if ($search) {
@@ -59,5 +61,14 @@ class Product extends Model
     public function scopeActive($query): void
     {
         $query->where('is_active', true);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        if (! $this->image) {
+            return null;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->image);
     }
 }

@@ -2,6 +2,7 @@ import { Head } from '@inertiajs/react';
 import { Pagination } from '@/components/pagination';
 import { useGenericModals } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
+import { useFilters } from '@/hooks/useFilters';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import type { InboundTransaction, Filters, PageProps } from '@/types/models/inbound';
@@ -33,14 +34,22 @@ export default function Index({
         only: ['inbounds'],
     });
 
+    const { setFilter, clearFilters } = useFilters({
+        route: '/dashboard/inbound',
+        initialFilters: {
+            warehouse_id: filters.warehouse_id || '',
+        },
+        only: ['inbounds'],
+    });
+
     const { modals, openModal, closeModal } = useGenericModals<InboundTransaction>({
         simple: ['create'],
         withData: ['show']
     });
 
-    const clearFilters = () => {
+    const clearFiltersHandler = () => {
         clearSearch();
-        // TODO: clear other filters
+        clearFilters();
     };
 
     return (
@@ -51,7 +60,8 @@ export default function Index({
                     searchValue={searchValue}
                     onSearchChange={setSearchValue}
                     onAddClick={() => openModal('create')}
-                    onClearFilters={clearFilters}
+                    onClearFilters={clearFiltersHandler}
+                    onWarehouseChange={(value) => setFilter('warehouse_id', value)}
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                     filters={filters}

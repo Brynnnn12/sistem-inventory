@@ -56,7 +56,7 @@ export function MutationRejectModal({
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-125">
                 <DialogHeader>
                     <DialogTitle>Tolak Mutasi - {mutation.code}</DialogTitle>
                     <DialogDescription>

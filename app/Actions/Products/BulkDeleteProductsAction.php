@@ -3,11 +3,15 @@
 namespace App\Actions\Products;
 
 use App\Models\Product;
+use App\Services\FileUploadService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class BulkDeleteProductsAction
 {
+    public function __construct(
+        private readonly FileUploadService $fileUploadService,
+    ) {}
+
     /**
      * Bulk delete products (soft delete).
      *
@@ -21,11 +25,10 @@ class BulkDeleteProductsAction
             // Lock for update to prevent race conditions
             $products = Product::whereIn('id', $ids)->lockForUpdate()->get();
 
-
             // Delete associated images
             foreach ($products as $product) {
                 if ($product->image) {
-                    Storage::disk('public')->delete($product->image);
+                    $this->fileUploadService->delete($product->image);
                 }
             }
 

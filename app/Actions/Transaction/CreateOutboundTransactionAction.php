@@ -7,7 +7,9 @@ namespace App\Actions\Transaction;
 use App\Actions\Stock\CheckStockAvailabilityAction;
 use App\Actions\Stock\UpdateStockAction;
 use App\Models\OutboundTransaction;
+use App\Services\FileUploadService;
 use Exception;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -16,6 +18,7 @@ class CreateOutboundTransactionAction
     public function __construct(
         private readonly UpdateStockAction $updateStockAction,
         private readonly CheckStockAvailabilityAction $checkStockAvailabilityAction,
+        private readonly FileUploadService $fileUploadService,
         private readonly OutboundTransaction $outboundTransaction,
     ) {}
 
@@ -27,10 +30,33 @@ class CreateOutboundTransactionAction
         float $unitPrice,
         string $saleDate,
         ?string $notes = null,
-        ?string $attachment = null,
+        ?UploadedFile $attachment = null,
     ): OutboundTransaction {
-        return DB::transaction(function () use ($customerId, $warehouseId, $productId, $quantity, $unitPrice, $saleDate, $notes) {
+        return DB::transaction(function () use ($customerId, $warehouseId, $productId, $quantity, $unitPrice, $saleDate, $notes, $attachment) {
             try {
+                // Handle file upload if provided
+                $attachmentPath = null;
+                if ($attachment) {
+                    $attachmentPath = $this->fileUploadService->upload(
+                        file: $attachment,
+                        folder: 'attachments/outbound',
+                        disk: 'public',
+                        allowedMimes: [
+                            'application/pdf',
+                            'application/msword',
+                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                            'application/vnd.ms-excel',
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                            'image/jpeg',
+                            'image/png',
+                            'text/csv',
+                            'text/plain',
+                        ],
+                        maxSize: 5120, // 5MB
+                        prefix: 'outbound'
+                    );
+                }
+
                 // Check stock availability first
                 $stockInfo = $this->checkStockAvailabilityAction->getStockInfo($warehouseId, $productId);
 
@@ -54,7 +80,7 @@ class CreateOutboundTransactionAction
                     'total_price' => $totalPrice,
                     'sale_date' => $saleDate,
                     'notes' => $notes,
-                    'attachment' => $attachment,
+                    'attachment' => $attachmentPath,
                     'created_by' => auth()->id() ?? 1,
                 ]);
 

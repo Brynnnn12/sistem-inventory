@@ -9,6 +9,7 @@ export function OutboundToolbar({
     onSearchChange,
     onAddClick,
     onClearFilters,
+    onWarehouseChange,
     isSearching,
     hasActiveFilters,
     filters,
@@ -33,7 +34,7 @@ export function OutboundToolbar({
             </div>
 
             {/* Filters */}
-            <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="relative">
                     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -44,9 +45,7 @@ export function OutboundToolbar({
                         disabled={isSearching}
                     />
                 </div>
-                <Select value={filters.warehouse_id || 'all'} onValueChange={(value) => {
-                    // TODO: update filters
-                }}>
+                <Select value={filters.warehouse_id || 'all'} onValueChange={onWarehouseChange}>
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Pilih Warehouse" />
                     </SelectTrigger>
@@ -59,24 +58,6 @@ export function OutboundToolbar({
                         ))}
                     </SelectContent>
                 </Select>
-                <Input
-                    type="date"
-                    placeholder="Tanggal Mulai"
-                    value={filters.start_date || ''}
-                    onChange={(e) => {
-                        // TODO: update filters
-                    }}
-                    className="h-10"
-                />
-                <Input
-                    type="date"
-                    placeholder="Tanggal Akhir"
-                    value={filters.end_date || ''}
-                    onChange={(e) => {
-                        // TODO: update filters
-                    }}
-                    className="h-10"
-                />
             </div>
 
             {hasActiveFilters && (

@@ -3,12 +3,16 @@
 namespace App\Actions\Products;
 
 use App\Models\Product;
+use App\Services\FileUploadService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class CreateProductAction
 {
+    public function __construct(
+        private readonly FileUploadService $fileUploadService,
+    ) {}
+
     /**
      * Create a new product.
      *
@@ -21,7 +25,14 @@ class CreateProductAction
 
             // Handle image upload
             if (isset($input['image']) && $input['image'] instanceof UploadedFile) {
-                $imagePath = $this->storeImage($input['image']);
+                $imagePath = $this->fileUploadService->upload(
+                    file: $input['image'],
+                    folder: 'products',
+                    disk: 'public',
+                    allowedMimes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+                    maxSize: 2048, // 2MB
+                    prefix: 'product'
+                );
             }
 
             // Generate unique product code
@@ -52,21 +63,9 @@ class CreateProductAction
     private function generateProductCode(): string
     {
         do {
-            $code = 'PRD-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
+            $code = 'PRD-'.str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
         } while (Product::where('code', $code)->exists());
 
         return $code;
-    }
-
-    /**
-     * Store uploaded image and return the path.
-     */
-    private function storeImage(UploadedFile $image): string
-    {
-        // Generate unique filename
-        $filename = 'product_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-
-        // Store in public disk under products folder
-        return $image->storeAs('products', $filename, 'public');
     }
 }

@@ -3,11 +3,15 @@
 namespace App\Actions\Products;
 
 use App\Models\Product;
+use App\Services\FileUploadService;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 class UpdateProductAction
 {
+    public function __construct(
+        private readonly FileUploadService $fileUploadService,
+    ) {}
+
     /**
      * Update an existing product.
      *
@@ -22,14 +26,21 @@ class UpdateProductAction
             if ($input['image'] instanceof UploadedFile) {
                 // Delete old image if exists
                 if ($product->image) {
-                    Storage::disk('public')->delete($product->image);
+                    $this->fileUploadService->delete($product->image);
                 }
-                // Store new image
-                $imagePath = $this->storeImage($input['image']);
+                // Upload new image
+                $imagePath = $this->fileUploadService->upload(
+                    file: $input['image'],
+                    folder: 'products',
+                    disk: 'public',
+                    allowedMimes: ['image/jpeg', 'image/png'],
+                    maxSize: 2048, // 2MB
+                    prefix: 'product'
+                );
             } elseif ($input['image'] === null) {
                 // Remove image
                 if ($product->image) {
-                    Storage::disk('public')->delete($product->image);
+                    $this->fileUploadService->delete($product->image);
                 }
                 $imagePath = null;
             }
@@ -50,17 +61,5 @@ class UpdateProductAction
         ]);
 
         return $product;
-    }
-
-    /**
-     * Store uploaded image and return the path.
-     */
-    private function storeImage(UploadedFile $image): string
-    {
-        // Generate unique filename
-        $filename = 'product_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
-
-        // Store in public disk under products folder
-        return $image->storeAs('products', $filename, 'public');
     }
 }

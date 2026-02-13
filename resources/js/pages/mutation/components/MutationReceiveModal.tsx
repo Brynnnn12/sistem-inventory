@@ -1,5 +1,5 @@
-import React from 'react';
 import { useForm } from '@inertiajs/react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -71,7 +71,7 @@ export function MutationReceiveModal({
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[500px]">
+            <DialogContent className="sm:max-w-125">
                 <DialogHeader>
                     <DialogTitle>Terima Mutasi - {mutation.code}</DialogTitle>
                     <DialogDescription>
