@@ -90,7 +90,10 @@ class FileUploadService
      */
     public function getUrl(string $path, string $disk = 'public'): string
     {
-        return Storage::disk($disk)->url($path);
+        /** @var \Illuminate\Filesystem\FilesystemAdapter $filesystem */
+        $filesystem = Storage::disk($disk);
+
+        return $filesystem->url($path);
     }
 
     /**

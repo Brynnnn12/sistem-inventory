@@ -10,6 +10,7 @@ use App\Models\Supplier;
 use App\Models\Warehouse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -23,6 +24,9 @@ class InboundController extends Controller
     {
         $this->authorize('viewAny', InboundTransaction::class);
 
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
         $query = InboundTransaction::with(['supplier', 'warehouse', 'product', 'creator'])
             ->when($request->search, function ($q) use ($request) {
                 $q->where('code', 'like', "%{$request->search}%")
@@ -35,17 +39,17 @@ class InboundController extends Controller
             ->when($request->start_date && $request->end_date, function ($q) use ($request) {
                 $q->whereBetween('received_date', [$request->start_date, $request->end_date]);
             })
-            ->when(! auth()->user()->hasRole('super-admin'), function ($q) {
-                $warehouseIds = auth()->user()->warehouses()->pluck('warehouses.id');
+            ->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
+                $warehouseIds = $user->warehouses()->pluck('warehouses.id');
                 $q->whereIn('warehouse_id', $warehouseIds);
             })
             ->latest();
 
         $inbounds = $query->paginate(15)->withQueryString();
 
-        $warehouses = auth()->user()->hasRole('super-admin')
+        $warehouses = $user->hasRole('super-admin')
             ? Warehouse::active()->get()
-            : auth()->user()->warehouses()->active()->get();
+            : $user->warehouses()->active()->get();
 
         $suppliers = Supplier::active()->get();
         $products = Product::active()->get();

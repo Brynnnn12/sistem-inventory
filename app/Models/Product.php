@@ -69,6 +69,6 @@ class Product extends Model
             return null;
         }
 
-        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->image);
+        return asset('storage/'.$this->image);
     }
 }

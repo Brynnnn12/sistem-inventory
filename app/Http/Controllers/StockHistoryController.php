@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\StockHistory;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,6 +15,9 @@ class StockHistoryController extends Controller
     public function index(Request $request): Response
     {
         $this->authorize('viewAny', StockHistory::class);
+
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
         $query = StockHistory::with(['warehouse', 'product', 'creator'])
             ->when($request->search, function ($q) use ($request) {
@@ -35,17 +39,17 @@ class StockHistoryController extends Controller
             ->when($request->start_date && $request->end_date, function ($q) use ($request) {
                 $q->whereBetween('created_at', [$request->start_date, $request->end_date]);
             })
-            ->when(! auth()->user()->hasRole('super-admin'), function ($q) {
-                $warehouseIds = auth()->user()->warehouses()->pluck('warehouses.id');
+            ->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
+                $warehouseIds = $user->warehouses()->pluck('warehouses.id');
                 $q->whereIn('warehouse_id', $warehouseIds);
             })
             ->latest();
 
         $stockHistories = $query->paginate(25)->withQueryString();
 
-        $warehouses = auth()->user()->hasRole('super-admin')
+        $warehouses = $user->hasRole('super-admin')
             ? Warehouse::active()->get()
-            : auth()->user()->warehouses()->active()->get();
+            : $user->warehouses()->active()->get();
 
         $products = Product::active()->get();
 

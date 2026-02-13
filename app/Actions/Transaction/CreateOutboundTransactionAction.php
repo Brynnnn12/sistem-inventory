@@ -10,6 +10,7 @@ use App\Models\OutboundTransaction;
 use App\Services\FileUploadService;
 use Exception;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -81,7 +82,7 @@ class CreateOutboundTransactionAction
                     'sale_date' => $saleDate,
                     'notes' => $notes,
                     'attachment' => $attachmentPath,
-                    'created_by' => auth()->id() ?? 1,
+                    'created_by' => Auth::id(),
                 ]);
 
                 // Update stock with negative quantity

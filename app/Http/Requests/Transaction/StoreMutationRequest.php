@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreMutationRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreMutationRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->check() && (auth()->user()->hasRole(['super-admin', 'admin']));
+        return true;
     }
 
     /**
@@ -54,7 +55,8 @@ class StoreMutationRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        $user = auth()->user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
         // Set from_warehouse based on user role
         if (! $user->hasRole('super-admin') && ! $this->has('from_warehouse')) {

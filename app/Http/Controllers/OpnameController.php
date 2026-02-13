@@ -9,6 +9,7 @@ use App\Models\Warehouse;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,6 +24,9 @@ class OpnameController extends Controller
     {
         $this->authorize('viewAny', Opname::class);
 
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
         $query = Opname::with(['warehouse', 'product', 'creator'])
             ->when($request->search, function ($q) use ($request) {
                 $q->where('code', 'like', "%{$request->search}%")
@@ -34,17 +38,17 @@ class OpnameController extends Controller
             ->when($request->difference_type, function ($q) use ($request) {
                 $q->where('difference_type', $request->difference_type);
             })
-            ->when(! auth()->user()->hasRole('super-admin'), function ($q) {
-                $warehouseIds = auth()->user()->warehouses()->pluck('warehouses.id');
+            ->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
+                $warehouseIds = $user->warehouses()->pluck('warehouses.id');
                 $q->whereIn('warehouse_id', $warehouseIds);
             })
             ->latest();
 
         $opnames = $query->paginate(15)->withQueryString();
 
-        $warehouses = auth()->user()->hasRole('super-admin')
+        $warehouses = $user->hasRole('super-admin')
             ? Warehouse::active()->get()
-            : auth()->user()->warehouses()->active()->get();
+            : $user->warehouses()->active()->get();
 
         $products = Product::active()->get();
 
@@ -126,7 +130,7 @@ class OpnameController extends Controller
             'status' => 'draft',
             'notes' => $request->notes,
             'opname_date' => $request->opname_date,
-            'created_by' => auth()->id() ?? 1,
+            'created_by' => Auth::id() ?? 1,
         ]);
 
         return redirect()->route('opname.index')
@@ -138,7 +142,7 @@ class OpnameController extends Controller
         $this->authorize('approve', $opname);
 
         try {
-            $this->approveOpnameAction->execute($opname->id);
+            $this->approveOpnameAction->execute($opname->getKey());
 
             return redirect()->route('opname.index')
                 ->with('success', 'Opname berhasil diapprove dan stok disesuaikan.');

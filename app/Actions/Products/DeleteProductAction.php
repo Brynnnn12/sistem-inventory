@@ -21,7 +21,7 @@ class DeleteProductAction
     {
         DB::transaction(function () use ($product) {
             // Lock for update to prevent race conditions
-            $product = Product::where('id', $product->id)->lockForUpdate()->firstOrFail();
+            $product = Product::where('id', $product->getKey())->lockForUpdate()->firstOrFail();
 
             // Delete associated image if exists
             if ($product->image) {

@@ -89,7 +89,7 @@ export function InboundFormModal({
 
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent className="sm:max-w-150">
                 <DialogHeader>
                     <DialogTitle>Tambah Inbound</DialogTitle>
                     <DialogDescription>

@@ -8,6 +8,7 @@ use App\Actions\Stock\CheckStockAvailabilityAction;
 use App\Actions\Stock\UpdateStockAction;
 use App\Models\StockMutation;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -33,7 +34,7 @@ class CreateMutationAction
 
                 if (! $stockInfo['is_available'] || $stockInfo['available'] < $quantity) {
                     throw ValidationException::withMessages([
-                        'quantity' => "Stok gudang asal tidak cukup. Tersedia: {$stockInfo['available']}, diminta: {$quantity}",
+                        'quantity' => 'Stok gudang asal tidak cukup. Tersedia: '.$stockInfo['available'].', diminta: '.$quantity,
                     ]);
                 }
 
@@ -50,7 +51,7 @@ class CreateMutationAction
                     'status' => 'dikirim',
                     'sent_at' => now(),
                     'notes' => $notes,
-                    'created_by' => auth()->id() ?? 1,
+                    'created_by' => Auth::id(),
                 ]);
 
                 // Note: Stock reduction will happen when mutation is received/approved
@@ -83,7 +84,7 @@ class CreateMutationAction
 
                 if ($totalReceived > $mutation->quantity) {
                     throw ValidationException::withMessages([
-                        'received_qty' => "Jumlah diterima melebihi quantity mutation: {$mutation->quantity}",
+                        'received_qty' => 'Jumlah diterima melebihi quantity mutation: '.$mutation->quantity,
                     ]);
                 }
 
@@ -92,7 +93,7 @@ class CreateMutationAction
                     'damaged_qty' => $damagedQty,
                     'status' => 'completed', // Use English status for mutator
                     'received_at' => now(),
-                    'received_by' => auth()->id() ?? 1,
+                    'received_by' => Auth::id(),
                 ]);
 
                 // Reduce stock from source warehouse

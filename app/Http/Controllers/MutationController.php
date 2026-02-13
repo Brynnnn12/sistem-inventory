@@ -11,6 +11,7 @@ use App\Models\Warehouse;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -25,7 +26,8 @@ class MutationController extends Controller
     {
         $this->authorize('viewAny', StockMutation::class);
 
-        $user = auth()->user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
         $isSuperAdmin = $user->hasRole('super-admin');
 
         // Get all mutations (both outgoing and incoming for the user)
@@ -89,7 +91,7 @@ class MutationController extends Controller
                     } else {
                         // For super-admin with no specific warehouses, alternate between outgoing and incoming
                         // to show variety in the UI (this is just for display purposes)
-                        $mutation->type = $mutation->id % 2 === 0 ? 'outgoing' : 'incoming';
+                        $mutation->type = $mutation->getKey() % 2 === 0 ? 'outgoing' : 'incoming';
                     }
                 }
             } else {
@@ -161,7 +163,7 @@ class MutationController extends Controller
 
         try {
             $this->createMutationAction->receive(
-                mutationId: $mutation->id,
+                mutationId: $mutation->getKey(),
                 receivedQty: $validated['received_qty'],
                 damagedQty: $validated['damaged_qty'] ?? 0,
             );
@@ -186,7 +188,7 @@ class MutationController extends Controller
             $mutation->update([
                 'status' => 'rejected',
                 'rejected_at' => now(),
-                'rejected_by' => auth()->id(),
+                'rejected_by' => Auth::id(),
                 'notes' => $request->notes,
             ]);
 

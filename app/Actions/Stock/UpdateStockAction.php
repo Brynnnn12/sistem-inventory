@@ -6,6 +6,7 @@ namespace App\Actions\Stock;
 
 use App\Models\Stock;
 use App\Models\StockHistory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UpdateStockAction
@@ -34,7 +35,7 @@ class UpdateStockAction
                     'quantity' => 0,
                     'reserved_qty' => 0,
                     'last_updated' => now(),
-                    'updated_by' => auth()->id() ?? 1,
+                    'updated_by' => (int) (Auth::id() ?? 1),
                 ]
             );
 
@@ -43,13 +44,13 @@ class UpdateStockAction
 
             // Validate negative stock, except for adjustments
             if ($newQty < 0 && $type !== 'adjustment') {
-                throw new \Exception("Stok tidak boleh negatif. Stok saat ini: {$previousQty}, perubahan: {$quantity}");
+                throw new \Exception('Stok tidak boleh negatif. Stok saat ini: '.(string) $previousQty.', perubahan: '.(string) $quantity);
             }
 
             $stock->update([
                 'quantity' => $newQty,
                 'last_updated' => now(),
-                'updated_by' => auth()->id() ?? 1,
+                'updated_by' => Auth::id(),
             ]);
 
             $this->stockHistory->create([
@@ -63,7 +64,7 @@ class UpdateStockAction
                 'reference_id' => $referenceId,
                 'reference_code' => $referenceCode,
                 'notes' => $notes,
-                'created_by' => auth()->id() ?? 1,
+                'created_by' => (int) (Auth::id() ?? 1),
             ]);
 
             return $stock;

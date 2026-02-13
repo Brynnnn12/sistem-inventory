@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -79,7 +80,7 @@ class DashboardController extends Controller
         $totalStockValue = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
-            ->sum(\DB::raw('stocks.quantity * products.cost'));
+            ->sum(DB::raw('stocks.quantity * products.cost'));
 
         $lowStockCount = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)

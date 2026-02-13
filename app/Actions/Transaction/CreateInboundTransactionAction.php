@@ -7,6 +7,7 @@ namespace App\Actions\Transaction;
 use App\Actions\Stock\UpdateStockAction;
 use App\Models\InboundTransaction;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CreateInboundTransactionAction
@@ -38,7 +39,7 @@ class CreateInboundTransactionAction
                     'unit_price' => $unitPrice,
                     'received_date' => $receivedDate,
                     'notes' => $notes,
-                    'created_by' => auth()->id() ?? 1,
+                    'created_by' => Auth::id(),
                 ]);
 
                 $transaction->refresh();

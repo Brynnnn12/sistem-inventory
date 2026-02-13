@@ -32,7 +32,7 @@ export function OpnameApproveModal({ open, opname, onClose }: OpnameApproveModal
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-106.25">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <AlertTriangle className="h-5 w-5 text-amber-500" />

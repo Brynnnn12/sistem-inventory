@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Transaction;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreOutboundRequest extends FormRequest
 {
@@ -57,8 +58,10 @@ class StoreOutboundRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set warehouse_id based on user role
-        if (! auth()->user()->hasRole('super-admin') && ! $this->has('warehouse_id')) {
-            $userWarehouse = auth()->user()->warehouses()->first();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (! $user->hasRole('super-admin') && ! $this->has('warehouse_id')) {
+            $userWarehouse = $user->warehouses()->first();
             if ($userWarehouse) {
                 $this->merge(['warehouse_id' => $userWarehouse->id]);
             }

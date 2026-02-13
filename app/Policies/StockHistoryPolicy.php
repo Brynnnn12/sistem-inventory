@@ -25,7 +25,7 @@ class StockHistoryPolicy
         }
 
         if ($user->hasRole(['admin', 'viewer'])) {
-            return $user->warehouses()->where('warehouses.id', $stockHistory->warehouse_id)->exists();
+            return $user->warehouses()->where('warehouses.id', $stockHistory->getAttribute('warehouse_id'))->exists();
         }
 
         return false;
