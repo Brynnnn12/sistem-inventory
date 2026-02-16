@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { exportMethod } from '@/routes/reports/stock';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -78,12 +79,13 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
     };
 
     const handleExport = (format: 'pdf' | 'excel') => {
-        router.get('/dashboard/reports/stock/export', {
+        const params = {
             warehouse_id: selectedWarehouse || undefined,
             start_date: startDate,
             end_date: endDate,
             format,
-        });
+        };
+        window.open(exportMethod.url({ query: params }));
     };
 
     const getStatusBadge = (status: string) => {

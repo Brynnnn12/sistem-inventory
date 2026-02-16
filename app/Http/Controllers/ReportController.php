@@ -6,6 +6,7 @@ use App\Services\ReportService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {

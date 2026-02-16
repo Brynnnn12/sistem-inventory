@@ -2,11 +2,14 @@
 
 namespace App\Services;
 
+use App\Exports\StockReportExport;
+use App\Exports\TransactionReportExport;
 use App\Models\InboundTransaction;
 use App\Models\OutboundTransaction;
 use App\Models\Stock;
 use App\Models\StockMutation;
 use App\Models\Warehouse;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportService
 {
@@ -15,7 +18,10 @@ class ReportService
      */
     public function getStockReport(?int $warehouseId, string $startDate, string $endDate): array
     {
-        $query = Stock::with(['product', 'warehouse']);
+        $query = Stock::with(['product', 'warehouse'])
+            ->whereHas('product', function ($q) {
+                $q->where('is_active', true)->whereNull('deleted_at');
+            });
 
         if ($warehouseId) {
             $query->where('warehouse_id', $warehouseId);
@@ -255,8 +261,14 @@ class ReportService
      */
     public function exportStockReport(?int $warehouseId, string $startDate, string $endDate, string $format)
     {
-        // TODO: Implement PDF/Excel export
-        return response()->json(['message' => 'Export functionality not yet implemented']);
+        if ($format === 'excel') {
+            $filename = 'stock_report_' . str_replace('-', '_', $startDate) . '_to_' . str_replace('-', '_', $endDate) . '.xlsx';
+
+            return Excel::download(new StockReportExport($warehouseId, $startDate, $endDate), $filename);
+        }
+
+        // TODO: Implement PDF export
+        return response()->json(['message' => 'PDF export not yet implemented']);
     }
 
     /**
@@ -264,7 +276,13 @@ class ReportService
      */
     public function exportTransactionReport(string $type, ?int $warehouseId, string $startDate, string $endDate, string $format)
     {
-        // TODO: Implement PDF/Excel export
-        return response()->json(['message' => 'Export functionality not yet implemented']);
+        if ($format === 'excel') {
+            $filename = 'transaction_report_' . $type . '_' . str_replace('-', '_', $startDate) . '_to_' . str_replace('-', '_', $endDate) . '.xlsx';
+
+            return Excel::download(new TransactionReportExport($type, $warehouseId, $startDate, $endDate), $filename);
+        }
+
+        // TODO: Implement PDF export
+        return response()->json(['message' => 'PDF export not yet implemented']);
     }
 }

@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import { exportMethod } from '@/routes/reports/transactions';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -84,13 +85,14 @@ export default function TransactionReport({ transactionReport, warehouses, filte
     };
 
     const handleExport = (format: 'pdf' | 'excel') => {
-        router.get('/dashboard/reports/transactions/export', {
+        const params = {
             type: selectedType,
             warehouse_id: selectedWarehouse || undefined,
             start_date: startDate,
             end_date: endDate,
             format,
-        });
+        };
+        window.open(exportMethod.url({ query: params }));
     };
 
     const getTypeIcon = (type: string) => {
