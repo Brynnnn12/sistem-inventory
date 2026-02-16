@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Opname\ApproveOpnameAction;
+use App\Actions\Opname\CreateOpnameAction;
+use App\Http\Requests\Opname\StoreOpnameRequest;
 use App\Models\Opname;
 use App\Models\Product;
 use App\Models\Warehouse;
@@ -10,6 +12,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -69,72 +72,25 @@ class OpnameController extends Controller
         ]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(StoreOpnameRequest $request, CreateOpnameAction $action): RedirectResponse
     {
         $this->authorize('create', Opname::class);
 
-        $request->validate([
-            'warehouse_id' => 'required|exists:warehouses,id',
-            'product_id' => 'required|exists:products,id',
-            'physical_qty' => 'required|numeric|min:0',
-            'opname_date' => 'required|date|before_or_equal:today',
-            'notes' => 'nullable|string|max:500',
-        ]);
+        try {
+            $action->execute($request->validated());
 
-        // Check if opname for same product and date already exists
-        $existingOpname = Opname::where('warehouse_id', $request->warehouse_id)
-            ->where('product_id', $request->product_id)
-            ->whereDate('opname_date', $request->opname_date)
-            ->exists();
+            return redirect()->route('opname.index')
+                ->with('success', 'Opname berhasil dibuat.');
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (Exception $e) {
 
-        if ($existingOpname) {
-            throw ValidationException::withMessages([
-                'product_id' => 'Opname untuk produk ini pada tanggal yang sama sudah ada.',
-            ]);
+            return redirect()->back()
+                ->with('error', "Gagal membuat opname: {$e->getMessage()}")
+                ->withInput();
         }
-
-        // Get current system quantity
-        $stock = \App\Models\Stock::where('warehouse_id', $request->warehouse_id)
-            ->where('product_id', $request->product_id)
-            ->first();
-
-        $systemQty = $stock ? $stock->quantity : 0;
-        $physicalQty = $request->physical_qty;
-        $differenceQty = $physicalQty - $systemQty;
-        $differenceType = $differenceQty > 0 ? 'lebih' : ($differenceQty < 0 ? 'kurang' : 'sama');
-
-        // Generate code
-        $date = now()->format('Ymd');
-        $prefix = 'OP';
-        $lastOpname = Opname::where('code', 'like', "{$prefix}-{$date}-%")
-            ->orderBy('code', 'desc')
-            ->first();
-
-        if ($lastOpname) {
-            $lastNumber = (int) substr($lastOpname->code, -3);
-            $newNumber = $lastNumber + 1;
-        } else {
-            $newNumber = 1;
-        }
-
-        $code = sprintf('%s-%s-%03d', $prefix, $date, $newNumber);
-
-        Opname::create([
-            'code' => $code,
-            'warehouse_id' => $request->warehouse_id,
-            'product_id' => $request->product_id,
-            'system_qty' => $systemQty,
-            'physical_qty' => $physicalQty,
-            'difference_qty' => abs($differenceQty),
-            'difference_type' => $differenceType,
-            'status' => 'draft',
-            'notes' => $request->notes,
-            'opname_date' => $request->opname_date,
-            'created_by' => Auth::id() ?? 1,
-        ]);
-
-        return redirect()->route('opname.index')
-            ->with('success', 'Opname berhasil dibuat.');
     }
 
     public function approve(Request $request, Opname $opname): RedirectResponse

@@ -46,9 +46,13 @@ class ProductController extends Controller
     {
         $this->authorize('create', Product::class);
 
-        $action->execute($request->validated());
+        try {
+            $action->execute($request->validated());
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dibuat.');
+            return redirect()->route('products.index')->with('success', 'Produk berhasil dibuat.');
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -72,9 +76,13 @@ class ProductController extends Controller
     {
         $this->authorize('update', $product);
 
-        $action->execute($product, $request->validated());
+        try {
+            $action->execute($product, $request->validated());
 
-        return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
+            return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('products.index')->with('error', $e->getMessage());
+        }
     }
 
     /**

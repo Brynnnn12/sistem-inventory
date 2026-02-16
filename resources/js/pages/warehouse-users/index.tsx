@@ -60,13 +60,13 @@ export default function Index({
     };
 
     const handleSwap = () => {
-        if (selectedIds.length !== 2) return;
+        console.log('Updated handleSwap called', selectedIds);
+        if (selectedIds.length !== 2 || selectedIds[1] === undefined || selectedIds[0] === undefined) return;
 
         router.post('/dashboard/warehouse-users/swap', {
-            data: {
-                warehouse_user1_id: selectedIds[0],
-                warehouse_user2_id: selectedIds[1],
-            },
+            warehouse_user1_id: selectedIds[1].toString(),
+            warehouse_user2_id: selectedIds[0].toString(),
+        }, {
             preserveScroll: true,
             onSuccess: () => {
                 setSelectedIds([]);

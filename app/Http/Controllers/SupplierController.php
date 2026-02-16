@@ -10,6 +10,7 @@ use App\Http\Requests\Suppliers\StoreSupplierRequest;
 use App\Http\Requests\Suppliers\UpdateSupplierRequest;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class SupplierController extends Controller
@@ -43,9 +44,15 @@ class SupplierController extends Controller
     {
         $this->authorize('create', Supplier::class);
 
-        $action->execute($request->validated());
+        try {
+            $action->execute($request->validated());
 
-        return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil dibuat.');
+            return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil dibuat.');
+        } catch (\Exception $e) {
+            Log::error('Gagal membuat supplier: '.$e->getMessage(), ['exception' => $e]);
+
+            return redirect()->route('suppliers.index')->with('error', 'Gagal membuat supplier: '.$e->getMessage());
+        }
     }
 
     /**
@@ -67,9 +74,15 @@ class SupplierController extends Controller
     {
         $this->authorize('update', $supplier);
 
-        $action->execute($supplier, $request->validated());
+        try {
+            $action->execute($supplier, $request->validated());
 
-        return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil diperbarui.');
+            return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil diperbarui.');
+        } catch (\Exception $e) {
+            Log::error('Gagal memperbarui supplier: '.$e->getMessage(), ['exception' => $e]);
+
+            return redirect()->route('suppliers.index')->with('error', 'Gagal memperbarui supplier: '.$e->getMessage());
+        }
     }
 
     /**

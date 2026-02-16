@@ -177,41 +177,54 @@ class ReportService
     /**
      * Get stock alerts (low stock and out of stock).
      */
-    public function getStockAlerts(): array
+    public function getStockAlerts(?array $warehouseIds = null): array
     {
-        $lowStock = Stock::with(['product', 'warehouse'])
+        $lowStockQuery = Stock::with(['product', 'warehouse'])
             ->join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->where('products.min_stock', '>', 0)
             ->whereRaw('stocks.quantity <= products.min_stock')
             ->where('stocks.quantity', '>', 0)
+            ->whereNotNull('stocks.warehouse_id')
+            ->whereHas('warehouse');
+
+        $outOfStockQuery = Stock::with(['product', 'warehouse'])
+            ->whereHas('product', function ($q) {
+                $q->where('is_active', true);
+            })
+            ->whereNotNull('warehouse_id')
+            ->whereHas('warehouse')
+            ->where('quantity', '<=', 0);
+
+        if ($warehouseIds) {
+            $lowStockQuery->whereIn('stocks.warehouse_id', $warehouseIds);
+            $outOfStockQuery->whereIn('warehouse_id', $warehouseIds);
+        }
+
+        $lowStock = $lowStockQuery
             ->select('stocks.*')
             ->get()
             ->map(function ($stock) {
                 return [
                     'type' => 'low_stock',
-                    'warehouse' => $stock->warehouse->name,
-                    'product' => $stock->product->name,
+                    'warehouse' => $stock->warehouse?->name ?? 'Unknown Warehouse',
+                    'product' => $stock->product?->name ?? 'Unknown Product',
                     'current_qty' => $stock->quantity,
-                    'min_stock' => $stock->product->min_stock,
-                    'unit' => $stock->product->unit,
+                    'min_stock' => $stock->product?->min_stock ?? 0,
+                    'unit' => $stock->product?->unit ?? 'pcs',
                 ];
             });
 
-        $outOfStock = Stock::with(['product', 'warehouse'])
-            ->whereHas('product', function ($q) {
-                $q->where('is_active', true);
-            })
-            ->where('quantity', '<=', 0)
+        $outOfStock = $outOfStockQuery
             ->get()
             ->map(function ($stock) {
                 return [
                     'type' => 'out_of_stock',
-                    'warehouse' => $stock->warehouse->name,
-                    'product' => $stock->product->name,
+                    'warehouse' => $stock->warehouse?->name ?? 'Unknown Warehouse',
+                    'product' => $stock->product?->name ?? 'Unknown Product',
                     'current_qty' => $stock->quantity,
-                    'min_stock' => $stock->product->min_stock,
-                    'unit' => $stock->product->unit,
+                    'min_stock' => $stock->product?->min_stock ?? 0,
+                    'unit' => $stock->product?->unit ?? 'pcs',
                 ];
             });
 

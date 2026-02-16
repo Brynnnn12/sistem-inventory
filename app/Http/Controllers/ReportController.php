@@ -64,7 +64,10 @@ class ReportController extends Controller
     {
         $this->authorize('view any reports');
 
-        $alerts = $this->reportService->getStockAlerts();
+        $user = auth()->user();
+        $warehouseIds = $user->warehouses->pluck('id')->toArray();
+
+        $alerts = $this->reportService->getStockAlerts($warehouseIds);
 
         return Inertia::render('reports/alerts', [
             'alerts' => $alerts,

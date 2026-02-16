@@ -54,9 +54,14 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request, CreateEmployeeAction $action)
     {
-        $action->execute($request->validated());
+        $this->authorize('create', User::class);
+        try {
+            $action->execute($request->validated());
 
-        return redirect()->route('employees.index')->with('success', 'Berhasil membuat karyawan.');
+            return redirect()->route('employees.index')->with('success', 'Karyawan berhasil dibuat.');
+        } catch (\Exception $e) {
+            return redirect()->route('employees.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -76,9 +81,14 @@ class EmployeeController extends Controller
      */
     public function update(UpdateEmployeeRequest $request, User $employee, UpdateEmployeeAction $action)
     {
-        $action->execute($employee, $request->validated());
+        $this->authorize('update', $employee);
+        try {
+            $action->execute($employee, $request->validated());
 
-        return redirect()->route('employees.index')->with('success', 'Berhasil memperbarui karyawan.');
+            return redirect()->route('employees.index')->with('success', 'Karyawan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('employees.index')->with('error', $e->getMessage());
+        }
     }
 
     /**

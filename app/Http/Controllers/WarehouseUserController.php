@@ -54,9 +54,13 @@ class WarehouseUserController extends Controller
     {
         $this->authorize('create', WarehouseUser::class);
 
-        $action->execute($request->validated());
+        try {
+            $action->execute($request->validated());
 
-        return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil.');
+            return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil.');
+        } catch (\Exception $e) {
+            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -80,9 +84,13 @@ class WarehouseUserController extends Controller
     {
         $this->authorize('delete', $warehouseUser);
 
-        $action->execute($warehouseUser);
+        try {
+            $action->execute($warehouseUser);
 
-        return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil.');
+            return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -97,9 +105,13 @@ class WarehouseUserController extends Controller
             'ids.*' => 'required|integer|exists:warehouse_users,id',
         ]);
 
-        $count = $action->execute($request->ids);
+        try {
+            $action->execute($request->input('ids'));
 
-        return redirect()->route('warehouse-users.index')->with('success', "{$count} penempatan berhasil dihapus.");
+            return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -107,10 +119,14 @@ class WarehouseUserController extends Controller
      */
     public function swap(SwapWarehouseUsersRequest $request, SwapWarehouseUsersAction $action)
     {
-        $this->authorize('update', WarehouseUser::class);
+        $this->authorize('swap', WarehouseUser::class);
 
-        $action->execute($request->input('warehouse_user1_id'), $request->input('warehouse_user2_id'));
+        try {
+            $action->execute($request->input('warehouse_user1_id'), $request->input('warehouse_user2_id'));
 
-        return redirect()->route('warehouse-users.index')->with('success', 'Penempatan gudang berhasil ditukar.');
+            return redirect()->route('warehouse-users.index')->with('success', 'Penempatan gudang berhasil ditukar.');
+        } catch (\Exception $e) {
+            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+        }
     }
 }

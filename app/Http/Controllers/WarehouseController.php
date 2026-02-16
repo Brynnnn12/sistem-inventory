@@ -43,9 +43,13 @@ class WarehouseController extends Controller
     {
         $this->authorize('create', Warehouse::class);
 
-        $action->execute($request->validated());
+        try {
+            $action->execute($request->validated());
 
-        return redirect()->route('warehouses.index')->with('success', 'Gudang berhasil dibuat.');
+            return redirect()->route('warehouses.index')->with('success', 'Gudang berhasil dibuat.');
+        } catch (\Exception $e) {
+            return redirect()->route('warehouses.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -60,30 +64,7 @@ class WarehouseController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $this->authorize('create', Warehouse::class);
 
-        return Inertia::render('warehouses/form', [
-            'isEditing' => false,
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Warehouse $warehouse)
-    {
-        $this->authorize('update', $warehouse);
-
-        return Inertia::render('warehouses/form', [
-            'warehouse' => $warehouse,
-            'isEditing' => true,
-        ]);
-    }
 
     /**
      * Update the specified resource in storage.
@@ -92,9 +73,13 @@ class WarehouseController extends Controller
     {
         $this->authorize('update', $warehouse);
 
-        $action->execute($warehouse, $request->validated());
+        try {
+            $action->execute($warehouse, $request->validated());
 
-        return redirect()->route('warehouses.index')->with('success', 'Gudang berhasil diperbarui   .');
+            return redirect()->route('warehouses.index')->with('success', 'Gudang berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('warehouses.index')->with('error', $e->getMessage());
+        }
     }
 
     /**

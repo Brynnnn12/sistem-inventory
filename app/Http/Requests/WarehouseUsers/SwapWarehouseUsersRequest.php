@@ -11,6 +11,14 @@ class SwapWarehouseUsersRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        // Accept payloads sent as { data: { ... } } (Inertia or other clients)
+        if ($this->has('data') && is_array($this->input('data'))) {
+            $this->merge($this->input('data'));
+        }
+    }
+
     public function rules(): array
     {
         return [

@@ -70,4 +70,12 @@ class WarehouseUserPolicy
     {
         return $user->hasRole('super-admin');
     }
+
+    /**
+     * Determine whether the user can swap assignments between two warehouse users.
+     */
+    public function swap(User $user): bool
+    {
+        return $user->hasRole('super-admin');
+    }
 }
