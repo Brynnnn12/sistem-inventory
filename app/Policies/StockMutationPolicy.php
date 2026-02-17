@@ -27,8 +27,8 @@ class StockMutationPolicy
         if ($user->hasRole(['admin', 'viewer'])) {
             $userWarehouseIds = $user->warehouses()->pluck('warehouses.id')->toArray();
 
-            return in_array($stockMutation->from_warehouse_id, $userWarehouseIds) ||
-                   in_array($stockMutation->to_warehouse_id, $userWarehouseIds);
+            return in_array($stockMutation->from_warehouse, $userWarehouseIds) ||
+                   in_array($stockMutation->to_warehouse, $userWarehouseIds);
         }
 
         return false;
@@ -54,8 +54,8 @@ class StockMutationPolicy
         if ($user->hasRole('admin')) {
             $userWarehouseIds = $user->warehouses()->pluck('warehouses.id')->toArray();
 
-            return in_array($stockMutation->from_warehouse_id, $userWarehouseIds) ||
-                   in_array($stockMutation->to_warehouse_id, $userWarehouseIds);
+            return in_array($stockMutation->from_warehouse, $userWarehouseIds) ||
+                   in_array($stockMutation->to_warehouse, $userWarehouseIds);
         }
 
         return false;
@@ -95,7 +95,7 @@ class StockMutationPolicy
         }
 
         if ($user->hasRole('admin')) {
-            return $user->warehouses()->where('warehouses.id', $stockMutation->to_warehouse_id)->exists();
+            return $user->warehouses()->where('warehouses.id', $stockMutation->to_warehouse)->exists();
         }
 
         return false;
@@ -111,7 +111,7 @@ class StockMutationPolicy
         }
 
         if ($user->hasRole('admin')) {
-            return $user->warehouses()->where('warehouses.id', $stockMutation->to_warehouse_id)->exists();
+            return $user->warehouses()->where('warehouses.id', $stockMutation->to_warehouse)->exists();
         }
 
         return false;

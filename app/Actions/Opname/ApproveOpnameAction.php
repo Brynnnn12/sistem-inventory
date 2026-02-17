@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+// declare(strict_types=1);
 
 namespace App\Actions\Opname;
 
@@ -35,8 +35,8 @@ class ApproveOpnameAction
 
             if ($opname->difference_type !== 'sama') {
                 $adjustmentQty = $opname->difference_type === 'lebih'
-                    ? $opname->difference_qty
-                    : -$opname->difference_qty;
+                    ? (float) $opname->difference_qty
+                    : -(float) $opname->difference_qty;
 
                 $this->updateStockAction->execute(
                     warehouseId: $opname->warehouse_id,

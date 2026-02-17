@@ -23,7 +23,9 @@ class CustomerController extends Controller
 
         $customers = Customer::query()
             ->search($request->search)
-            ->active($request->boolean('active_only'))
+            ->when($request->boolean('active_only'), function ($query) {
+                $query->where('is_active', true);
+            })
             ->latest()
             ->paginate(10)
             ->withQueryString();

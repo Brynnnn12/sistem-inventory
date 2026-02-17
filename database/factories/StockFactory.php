@@ -23,6 +23,8 @@ class StockFactory extends Factory
             'product_id' => Product::factory(),
             'quantity' => $this->faker->randomFloat(2, 10, 1000),
             'reserved_qty' => $this->faker->randomFloat(2, 0, 100),
+            'last_updated' => now(),
+            'updated_by' => 1,
         ];
     }
 
