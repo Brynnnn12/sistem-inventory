@@ -16,10 +16,19 @@ class UpdateEmployeeRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        $this->merge([
-            'name' => strip_tags(trim($this->name)),
-            'email' => strtolower(trim($this->email)),
-        ]);
+        $merge = [];
+
+        if ($this->has('name')) {
+            $merge['name'] = strip_tags(trim($this->name));
+        }
+
+        if ($this->has('email')) {
+            $merge['email'] = strtolower(trim($this->email));
+        }
+
+        if (! empty($merge)) {
+            $this->merge($merge);
+        }
     }
 
     public function rules(): array

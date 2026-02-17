@@ -15,11 +15,23 @@ class UpdateEmployeeAction
     public function execute(User $user, array $input): User
     {
         return DB::transaction(function () use ($user, $input) {
-            $user->forceFill([
-                'name' => $input['name'],
-                'email' => $input['email'],
-                'phone_number' => $input['phone_number'],
-            ])->save();
+            $update = [];
+
+            if (array_key_exists('name', $input)) {
+                $update['name'] = $input['name'];
+            }
+
+            if (array_key_exists('email', $input)) {
+                $update['email'] = $input['email'];
+            }
+
+            if (array_key_exists('phone_number', $input)) {
+                $update['phone_number'] = $input['phone_number'];
+            }
+
+            if (! empty($update)) {
+                $user->forceFill($update)->save();
+            }
 
             // Check if role needs update
             if (isset($input['role']) && in_array($input['role'], ['admin', 'viewer'])) {
