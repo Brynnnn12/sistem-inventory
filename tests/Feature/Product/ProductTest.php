@@ -10,7 +10,7 @@ use function Pest\Laravel\get;
 test('super-admin bisa melihat daftar produk', function () {
     $superAdmin = createSuperAdmin();
 
-    $products = \App\Models\Product::factory()->count(3)->create();
+    $products = \App\Models\Product::factory()->count(3)->create(['is_active' => true]);
 
     $response = actingAs($superAdmin)->get(route('products.index'));
 
@@ -20,15 +20,20 @@ test('super-admin bisa melihat daftar produk', function () {
             ->has('products.data', 3)
             ->has('products.data.0', fn ($product) => $product
                 ->has('id')
+                ->has('code')
                 ->has('name')
-                ->has('brand')
                 ->has('unit')
-                ->has('sku')
                 ->has('category_id')
                 ->has('category', fn ($cat) => $cat
                     ->has('id')
                     ->has('name')
                 )
+                ->has('price')
+                ->has('cost')
+                ->has('min_stock')
+                ->has('max_stock')
+                ->has('description')
+                ->has('is_active')
                 ->has('created_at')
                 ->has('updated_at')
                 ->has('deleted_at')
@@ -38,7 +43,7 @@ test('super-admin bisa melihat daftar produk', function () {
 
 test('admin bisa melihat daftar produk', function () {
     $admin = createAdmin();
-    \App\Models\Product::factory()->count(2)->create();
+    \App\Models\Product::factory()->count(2)->create(['is_active' => true]);
 
     $response = actingAs($admin)->get(route('products.index'));
 
@@ -51,7 +56,7 @@ test('admin bisa melihat daftar produk', function () {
 
 test('viewer bisa melihat daftar produk', function () {
     $viewer = createViewer();
-    \App\Models\Product::factory()->count(2)->create();
+    \App\Models\Product::factory()->count(2)->create(['is_active' => true]);
 
     $response = actingAs($viewer)->get(route('products.index'));
 
@@ -66,10 +71,9 @@ test('super-admin bisa buat produk' , function() {
 
     $productData = [
         'name' => 'Produk A',
-        'brand' => 'Merek A',
         'unit' => 'Pcs',
-        'selling_price' => 10000,
-        'cost_price' => 8000,
+        'price' => 10000,
+        'cost' => 8000,
         'category_id' => \App\Models\Category::factory()->create()->id,
     ];
 
@@ -81,18 +85,14 @@ test('super-admin bisa buat produk' , function() {
     // Verifikasi produk tersimpan di database
     expect(\App\Models\Product::where([
         'name' => 'Produk A',
-        'brand' => 'Merek A',
         'unit' => 'Pcs',
         'category_id' => $productData['category_id'],
     ])->exists())->toBeTrue();
 
-    // Verifikasi harga produk tersimpan
+    // Verifikasi harga dan cost tersimpan
     $product = \App\Models\Product::where('name', 'Produk A')->first();
-    expect(\App\Models\ProductPrice::where([
-        'product_id' => $product->id,
-        'selling_price' => 10000,
-        'cost_price' => 8000,
-    ])->exists())->toBeTrue();
+    expect((float) $product->price)->toBe(10000.0);
+    expect((float) $product->cost)->toBe(8000.0);
 });
 
 test('admin tidak bisa buat produk', function () {
@@ -135,7 +135,6 @@ test('super-admin bisa update produk', function () {
 
     $updateData = [
         'name' => 'Produk Updated',
-        'brand' => 'Merek Updated',
         'unit' => 'Box',
         'category_id' => $product->category_id,
     ];
@@ -148,7 +147,6 @@ test('super-admin bisa update produk', function () {
     // Verifikasi produk terupdate di database
     $product->refresh();
     expect($product->name)->toBe('Produk Updated');
-    expect($product->brand)->toBe('Merek Updated');
     expect($product->unit)->toBe('Box');
 });
 
@@ -164,6 +162,22 @@ test('super-admin bisa hapus produk', function () {
     // Verifikasi produk terhapus (soft delete)
     expect(\App\Models\Product::find($product->id))->toBeNull();
     expect(\App\Models\Product::withTrashed()->find($product->id))->not->toBeNull();
+});
+
+test('super-admin bisa hapus banyak produk', function () {
+    $superAdmin = createSuperAdmin();
+    $products = \App\Models\Product::factory()->count(3)->create();
+    $ids = $products->pluck('id')->toArray();
+
+    $response = actingAs($superAdmin)->delete(route('products.bulk-destroy'), ['ids' => $ids]);
+
+    $response->assertRedirect(route('products.index'))
+        ->assertSessionHas('success', 'Berhasil menghapus 3 produk.');
+
+    foreach ($ids as $id) {
+        expect(\App\Models\Product::find($id))->toBeNull();
+        expect(\App\Models\Product::withTrashed()->find($id))->not->toBeNull();
+    }
 });
 
 test('admin tidak bisa update produk', function () {
