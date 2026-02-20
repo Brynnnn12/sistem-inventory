@@ -41,7 +41,7 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'category_id' => 'sometimes|required|integer|exists:categories,id',
-            'name'        => 'sometimes|required|string|max:255|regex:/^[a-zA-Z0-9\s\-\.\(\)]+$/',
+            'name'        => 'sometimes|required|string|min:3|max:255|regex:/^[a-zA-Z0-9\s\-\.\(\)]+$/',
             'unit'        => 'sometimes|required|string|max:50',
             'min_stock'   => 'nullable|numeric|min:0',
             'max_stock'   => 'nullable|numeric|min:0',
@@ -60,6 +60,7 @@ class UpdateProductRequest extends FormRequest
             'category_id.exists' => 'Kategori produk tidak ditemukan.',
             'name.required' => 'Nama produk wajib diisi.',
             'name.string' => 'Nama produk harus berupa teks.',
+            'name.min' => 'Nama produk minimal 3 karakter.',
             'name.max' => 'Nama produk tidak boleh lebih dari 255 karakter.',
             'name.regex' => 'Nama produk hanya boleh mengandung huruf, angka, spasi, dan tanda hubung (-), titik, atau kurung.',
             'unit.required' => 'Satuan produk wajib diisi.',

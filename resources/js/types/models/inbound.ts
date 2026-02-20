@@ -6,7 +6,7 @@ interface InboundTransaction {
     product_id: number;
     quantity: number;
     unit_price: number | null;
-    receipt_date: string;
+    received_date: string;
     notes: string | null;
     created_by: number;
     created_at: string;

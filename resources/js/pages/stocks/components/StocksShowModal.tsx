@@ -1,9 +1,8 @@
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { formatQuantity, formatDateTime } from '@/lib/utils';
 import type { StocksShowModalProps } from '@/types/models/stocks';
 
 export function StocksShowModal({
@@ -34,19 +33,19 @@ export function StocksShowModal({
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Qty Total</label>
-                                <p className="text-sm font-medium font-mono">{stock.quantity?.toLocaleString() || 0}</p>
+                                <p className="text-sm font-medium font-mono">{formatQuantity(stock.quantity || 0)}</p>
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Qty Tersedia</label>
-                                <p className="text-sm font-medium font-mono">{stock.available_qty?.toLocaleString() || 0}</p>
+                                <p className="text-sm font-medium font-mono">{formatQuantity(stock.available_qty || 0)}</p>
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Qty Dipesan</label>
-                                <p className="text-sm font-medium font-mono">{stock.reserved_qty?.toLocaleString() || 0}</p>
+                                <p className="text-sm font-medium font-mono">{formatQuantity(stock.reserved_qty || 0)}</p>
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Qty Minimum</label>
-                                <p className="text-sm font-medium font-mono">{stock.min_stock?.toLocaleString() || 0}</p>
+                                <p className="text-sm font-medium font-mono">{formatQuantity(stock.min_stock || 0)}</p>
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Status</label>
@@ -70,10 +69,7 @@ export function StocksShowModal({
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Terakhir Update</label>
                                 <p className="text-sm font-medium">
-                                    {stock.updated_at
-                                        ? format(new Date(stock.updated_at), 'dd MMMM yyyy HH:mm', { locale: id })
-                                        : '-'
-                                    }
+                                    {stock.updated_at ? formatDateTime(stock.updated_at) : '-'}
                                 </p>
                             </div>
                         </div>
@@ -102,21 +98,23 @@ export function StocksShowModal({
                                             {stock.histories.map((history) => (
                                                 <TableRow key={history.id}>
                                                     <TableCell>
-                                                        {format(new Date(history.created_at), 'dd/MM/yyyy HH:mm', { locale: id })}
+                                                        {formatDateTime(history.created_at)}
                                                     </TableCell>
                                                     <TableCell>
                                                         <Badge variant="outline">
-                                                            {history.type === 'inbound' ? 'Masuk' :
-                                                             history.type === 'outbound' ? 'Keluar' :
-                                                             history.type === 'opname' ? 'Opname' :
-                                                             history.type === 'mutation' ? 'Mutasi' : history.type}
+                                                            {history.reference_type === 'inbound' ? 'Masuk' :
+                                                             history.reference_type === 'outbound' ? 'Keluar' :
+                                                             history.reference_type === 'opname' ? 'Opname' :
+                                                             history.reference_type === 'mutation_sent' ? 'Mutasi Keluar' :
+                                                             history.reference_type === 'mutation_received' ? 'Mutasi Masuk' :
+                                                             history.reference_type}
                                                         </Badge>
                                                     </TableCell>
                                                     <TableCell className="text-right font-mono">
-                                                        {history.previous_qty?.toLocaleString() || 0}
+                                                        {formatQuantity(history.previous_qty || 0)}
                                                     </TableCell>
                                                     <TableCell className="text-right font-mono">
-                                                        {history.new_qty?.toLocaleString() || 0}
+                                                        {formatQuantity(history.new_qty || 0)}
                                                     </TableCell>
                                                     <TableCell className="text-right font-mono">
                                                         <span className={
@@ -126,8 +124,7 @@ export function StocksShowModal({
                                                                 ? 'text-red-600'
                                                                 : ''
                                                         }>
-                                                            {((history.new_qty || 0) - (history.previous_qty || 0) > 0 ? '+' : '') +
-                                                             ((history.new_qty || 0) - (history.previous_qty || 0)).toLocaleString()}
+                                                            {formatQuantity((history.new_qty || 0) - (history.previous_qty || 0))}
                                                         </span>
                                                     </TableCell>
                                                     <TableCell className="text-sm">

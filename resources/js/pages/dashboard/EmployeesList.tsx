@@ -1,4 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Users, User } from 'lucide-react';
 
@@ -63,7 +64,7 @@ export function EmployeesList({ employees }: EmployeesListProps) {
                                         {employee.is_active ? 'Aktif' : 'Tidak Aktif'}
                                     </Badge>
                                     <div className="text-xs text-muted-foreground mt-1">
-                                        {new Date(employee.created_at).toLocaleDateString('id-ID')}
+                                        {formatDate(employee.created_at)}
                                     </div>
                                 </div>
                             </div>

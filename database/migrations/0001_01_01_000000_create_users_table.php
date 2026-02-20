@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name',50);
             $table->string('email')->unique();
-            $table->string('phone_number')->nullable();
+            $table->string('phone_number', 14)->nullable();
             $table->string('google_id')->nullable()->unique();
             $table->text('google_token')->nullable();
             $table->text('google_refresh_token')->nullable();

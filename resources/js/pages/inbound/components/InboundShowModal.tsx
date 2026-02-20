@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import type { InboundTransaction } from '@/types/models/inbound';
+import { formatQuantity, formatDate } from '@/lib/utils';
 
 interface InboundShowModalProps {
     open: boolean;
@@ -49,7 +50,9 @@ export function InboundShowModal({
                         </div>
                         <div>
                             <Label className="text-sm font-medium">Quantity</Label>
-                            <p className="text-sm text-muted-foreground">{inbound.quantity}</p>
+                            <p className="text-sm text-muted-foreground">
+                                {formatQuantity(inbound.quantity)}
+                            </p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -69,7 +72,7 @@ export function InboundShowModal({
                     <div>
                         <Label className="text-sm font-medium">Tanggal Penerimaan</Label>
                         <p className="text-sm text-muted-foreground">
-                            {new Date(inbound.received_date).toLocaleDateString('id-ID')}
+                            {formatDate(inbound.received_date)}
                         </p>
                     </div>
                     {inbound.notes && (
@@ -86,7 +89,7 @@ export function InboundShowModal({
                         <div>
                             <Label className="text-sm font-medium">Tanggal Dibuat</Label>
                             <p className="text-sm text-muted-foreground">
-                                {new Date(inbound.created_at).toLocaleDateString('id-ID')}
+                                {formatDate(inbound.created_at)}
                             </p>
                         </div>
                     </div>

@@ -7,6 +7,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
+import { formatQuantity, formatDate } from '@/lib/utils';
 import type { OutboundTransaction } from '@/types/models/outbound';
 
 interface OutboundShowModalProps {
@@ -49,7 +50,7 @@ export function OutboundShowModal({
                         </div>
                         <div>
                             <Label className="text-sm font-medium">Quantity</Label>
-                            <p className="text-sm text-muted-foreground">{outbound.quantity}</p>
+                            <p className="text-sm text-muted-foreground">{formatQuantity(outbound.quantity)}</p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
@@ -69,7 +70,7 @@ export function OutboundShowModal({
                     <div>
                         <Label className="text-sm font-medium">Tanggal Penjualan</Label>
                         <p className="text-sm text-muted-foreground">
-                            {new Date(outbound.sale_date).toLocaleDateString('id-ID')}
+                            {formatDate(outbound.sale_date)}
                         </p>
                     </div>
                     {outbound.notes && (
@@ -86,7 +87,7 @@ export function OutboundShowModal({
                         <div>
                             <Label className="text-sm font-medium">Tanggal Dibuat</Label>
                             <p className="text-sm text-muted-foreground">
-                                {new Date(outbound.created_at).toLocaleDateString('id-ID')}
+                                {formatDate(outbound.created_at)}
                             </p>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
 import { Eye, CheckCircle, XCircle } from 'lucide-react';
+import { formatQuantity, formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -61,7 +62,7 @@ export function MutationTable({
                                 }
                             </TableCell>
                             <TableCell className="text-right font-mono">
-                                {mutation.quantity?.toLocaleString() || 0}
+                                {formatQuantity(mutation.quantity || 0)}
                             </TableCell>
                             <TableCell>
                                 <Badge
@@ -81,7 +82,7 @@ export function MutationTable({
                                 </Badge>
                             </TableCell>
                             <TableCell className="text-sm">
-                                {new Date(mutation.created_at).toLocaleDateString('id-ID')}
+                                {formatDate(mutation.created_at)}
                             </TableCell>
                             <TableCell>
                                 <div className="flex gap-1">

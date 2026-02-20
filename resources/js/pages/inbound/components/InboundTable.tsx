@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatQuantity, formatDate } from '@/lib/utils';
 import type { InboundTableProps } from '@/types/models/inbound';
 
 export function InboundTable({
@@ -63,10 +64,12 @@ export function InboundTable({
                                 <div className="font-medium">{inbound.warehouse.name}</div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{inbound.quantity}</div>
+                                <div className="font-medium">
+                                    {formatQuantity(inbound.quantity)}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{new Date(inbound.received_date).toLocaleDateString('id-ID')}</div>
+                                <div className="font-medium">{formatDate(inbound.received_date)}</div>
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">

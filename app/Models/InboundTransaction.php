@@ -74,6 +74,6 @@ class InboundTransaction extends Model
 
     public function scopeByDateRange($query, $startDate, $endDate)
     {
-        return $query->whereBetween('receipt_date', [$startDate, $endDate]);
+        return $query->whereBetween('received_date', [$startDate, $endDate]);
     }
 }

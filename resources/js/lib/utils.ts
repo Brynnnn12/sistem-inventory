@@ -21,10 +21,27 @@ export function formatCurrency(value: string | number): string {
 
 export function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: '2-digit',
         year: 'numeric',
-        month: 'short',
-        day: 'numeric',
     });
+}
+
+export const formatQuantity = (quantity: number | string): string => {
+    const num = Number(quantity);
+    if (isNaN(num)) return '0';
+
+    return num.toLocaleString('id-ID', {
+        maximumFractionDigits: num % 1 === 0 ? 0 : 2, // 0 desimal jika bulat, 2 jika pecah
+    });
+};
+
+export function formatDateTime(dateString: string): string {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '-';
+    const day = date.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const time = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    return `${day} ${time}`;
 }
 
 export function calculateMargin(costPrice: string | number, sellingPrice: string | number): string {

@@ -1,8 +1,8 @@
 import { Head } from '@inertiajs/react';
 import { Pagination } from '@/components/pagination';
+import { useFilters } from '@/hooks/useFilters';
 import { useGenericModals } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
-import { useFilters } from '@/hooks/useFilters';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import type { InboundTransaction, Filters, PageProps } from '@/types/models/inbound';

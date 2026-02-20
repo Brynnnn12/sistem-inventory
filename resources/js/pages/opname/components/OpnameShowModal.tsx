@@ -45,16 +45,16 @@ export function OpnameShowModal({
                     <div className="grid grid-cols-3 gap-4">
                         <div>
                             <Label className="text-sm font-medium">System Qty</Label>
-                            <p className="text-sm text-muted-foreground">{opname.system_qty}</p>
+                            <p className="text-sm text-muted-foreground">{formatQuantity(opname.system_qty)}</p>
                         </div>
                         <div>
                             <Label className="text-sm font-medium">Physical Qty</Label>
-                            <p className="text-sm text-muted-foreground">{opname.physical_qty}</p>
+                            <p className="text-sm text-muted-foreground">{formatQuantity(opname.physical_qty)}</p>
                         </div>
                         <div>
                             <Label className="text-sm font-medium">Selisih</Label>
                             <p className={`text-sm font-medium ${opname.difference_type === 'lebih' ? 'text-green-600' : opname.difference_type === 'kurang' ? 'text-red-600' : 'text-gray-600'}`}>
-                                {opname.difference_type === 'lebih' ? '+' : opname.difference_type === 'kurang' ? '-' : ''}{opname.difference_qty}
+                                {opname.difference_type === 'lebih' ? '+' : opname.difference_type === 'kurang' ? '-' : ''}{formatQuantity(opname.difference_qty)}
                             </p>
                         </div>
                     </div>
@@ -68,7 +68,7 @@ export function OpnameShowModal({
                         <div>
                             <Label className="text-sm font-medium">Tanggal Opname</Label>
                             <p className="text-sm text-muted-foreground">
-                                {new Date(opname.opname_date).toLocaleDateString('id-ID')}
+                                {formatDate(opname.opname_date)}
                             </p>
                         </div>
                     </div>
@@ -86,7 +86,7 @@ export function OpnameShowModal({
                         <div>
                             <Label className="text-sm font-medium">Tanggal Dibuat</Label>
                             <p className="text-sm text-muted-foreground">
-                                {new Date(opname.created_at).toLocaleDateString('id-ID')}
+                                {formatDate(opname.created_at)}
                             </p>
                         </div>
                     </div>

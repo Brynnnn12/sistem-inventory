@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatQuantity, formatDate } from '@/lib/utils';
 import type { OutboundTableProps } from '@/types/models/outbound';
 
 export function OutboundTable({
@@ -63,10 +64,10 @@ export function OutboundTable({
                                 <div className="font-medium">{outbound.warehouse.name}</div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{outbound.quantity}</div>
+                                <div className="font-medium">{formatQuantity(outbound.quantity)}</div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{new Date(outbound.sale_date).toLocaleDateString('id-ID')}</div>
+                                <div className="font-medium">{formatDate(outbound.sale_date)}</div>
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">

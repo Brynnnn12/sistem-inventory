@@ -1,4 +1,4 @@
-import { Edit, Trash2, UserCircle, Warehouse as WarehouseIcon } from 'lucide-react';
+import { Trash2, UserCircle, Warehouse as WarehouseIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { formatDate } from '@/lib/utils';
 import type { WarehouseUser } from '@/types/models/warehouse-users';
 
 interface WarehouseUserTableProps {
@@ -102,7 +103,7 @@ export function WarehouseUserTable({
                                     </span>
                                 </TableCell>
                                 <TableCell className="text-muted-foreground text-sm">
-                                    {new Date(warehouseUser.assigned_at).toLocaleDateString('id-ID')}
+                                    {formatDate(warehouseUser.assigned_at)}
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex items-center justify-end gap-2">

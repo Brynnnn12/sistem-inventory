@@ -47,11 +47,26 @@ export interface StockHistory {
     created_by: number;
     created_at: string;
     updated_at: string;
-    creator: {
+    user: {
         id: number;
         name: string;
         email: string;
     };
+}
+
+export interface PageProps {
+    data: Stock[];
+    current_page: number;
+    last_page: number;
+    per_page: number;
+    total: number;
+    from: number;
+    to: number;
+    links: Array<{
+        url: string | null;
+        label: string;
+        active: boolean;
+    }>;
 }
 
 export interface StockFilters {

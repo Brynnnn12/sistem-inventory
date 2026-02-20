@@ -36,6 +36,7 @@ class StoreProductRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
+                'min:3',
                 'max:255',
                 'regex:/^[a-zA-Z0-9\s\-\.\(\)]+$/',
             ],
@@ -74,6 +75,7 @@ class StoreProductRequest extends FormRequest
             'category_id.exists' => 'Kategori produk tidak ditemukan.',
             'name.required' => 'Nama produk wajib diisi.',
             'name.string' => 'Nama produk harus berupa teks.',
+            'name.min' => 'Nama produk minimal 3 karakter.',
             'name.max' => 'Nama produk tidak boleh lebih dari 255 karakter.',
             'name.regex' => 'Nama produk hanya boleh mengandung huruf, angka, spasi, dan tanda hubung (-), titik, atau kurung.',
             'unit.required' => 'Satuan produk wajib diisi.',

@@ -5,7 +5,7 @@ import { useGenericModals, type ModalWithData } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { Stock, StockHistory, StockFilters, PageProps } from '@/types/models/stocks';
+import type { Stock, StockFilters, PageProps } from '@/types/models/stocks';
 import { StocksModals } from './components/StocksModals';
 import { StocksTable } from './components/StocksTable';
 import { StocksToolbar } from './components/StocksToolbar';
@@ -26,7 +26,7 @@ export default function Index({
     products: Array<{ id: number; name: string }>;
     filters?: StockFilters;
 }) {
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading] = useState(false);
 
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
         route: '/dashboard/stocks',

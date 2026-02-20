@@ -1,7 +1,6 @@
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { formatDateTime, formatQuantity } from '@/lib/utils';
 import type { StockHistoryTableProps } from '@/types/models/stock-history';
 
 export function StockHistoryTable({
@@ -50,7 +49,7 @@ export function StockHistoryTable({
                     {stockHistories.map((history) => (
                         <TableRow key={history.id} className="group">
                             <TableCell className="text-sm">
-                                {format(new Date(history.created_at), 'dd/MM HH:mm', { locale: id })}
+                                {formatDateTime(history.created_at)}
                             </TableCell>
                             <TableCell>
                                 <div className="font-medium">{history.product?.name || '-'}</div>
@@ -63,11 +62,11 @@ export function StockHistoryTable({
                                     history.change_qty > 0 ? 'text-green-600' :
                                     history.change_qty < 0 ? 'text-red-600' : 'text-gray-600'
                                 }`}>
-                                    {history.change_qty > 0 ? '+' : ''}{history.change_qty}
+                                    {history.change_qty > 0 ? '+' : ''}{formatQuantity(history.change_qty)}
                                 </div>
                             </TableCell>
                             <TableCell className="font-mono text-sm">
-                                {history.previous_qty} → {history.new_qty}
+                                {formatQuantity(history.previous_qty)} → {formatQuantity(history.new_qty)}
                             </TableCell>
                             <TableCell>
                                 <Badge variant="outline" className="font-mono text-xs">

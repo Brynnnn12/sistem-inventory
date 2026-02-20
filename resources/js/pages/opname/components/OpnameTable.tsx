@@ -10,6 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import type { OpnameTableProps } from '@/types/models/opname';
+import { formatQuantity } from '@/lib/utils';
 
 export function OpnameTable({
     opnames,
@@ -62,14 +63,14 @@ export function OpnameTable({
                                 <div className="font-medium">{opname.warehouse.name}</div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{opname.system_qty}</div>
+                                <div className="font-medium">{formatQuantity(opname.system_qty)}</div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{opname.physical_qty}</div>
+                                <div className="font-medium">{formatQuantity(opname.physical_qty)}</div>
                             </TableCell>
                             <TableCell>
                                 <div className={`font-medium ${opname.difference_type === 'lebih' ? 'text-green-600' : opname.difference_type === 'kurang' ? 'text-red-600' : 'text-gray-600'}`}>
-                                    {opname.difference_type === 'lebih' ? '+' : opname.difference_type === 'kurang' ? '-' : ''}{opname.difference_qty}
+                                    {opname.difference_type === 'lebih' ? '+' : opname.difference_type === 'kurang' ? '-' : ''}{formatQuantity(opname.difference_qty)}
                                 </div>
                             </TableCell>
                             <TableCell>

@@ -37,6 +37,7 @@ class StoreCategoryRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
+                'min:3',
                 'max:50',
                 Rule::unique('categories', 'name')->whereNull('deleted_at'),
                 'regex:/^[a-zA-Z0-9\s\-]+$/',
@@ -49,6 +50,7 @@ class StoreCategoryRequest extends FormRequest
         return [
             'name.required' => 'Nama kategori wajib diisi.',
             'name.string' => 'Nama kategori harus berupa teks.',
+            'name.min' => 'Nama kategori minimal 3 karakter.',
             'name.max' => 'Nama kategori tidak boleh lebih dari 50 karakter.',
             'name.unique' => 'Nama kategori sudah digunakan.',
             'name.regex' => 'Nama kategori hanya boleh mengandung huruf, angka, spasi, dan tanda hubung (-).',

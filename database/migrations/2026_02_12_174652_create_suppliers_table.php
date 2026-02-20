@@ -16,10 +16,10 @@ return new class extends Migration
             // Kode supplier (SPL001) - Kita buat unique agar tidak kembar
             $table->string('code', 20)->unique();
 
-            $table->string('name', 100)->index();
-            $table->string('contact_person', 100)->nullable();
-            $table->string('phone', 20)->nullable();
-            $table->string('email', 100)->nullable();
+            $table->string('name', 60)->index();
+            $table->string('contact_person', 60)->nullable();
+            $table->string('phone', 14)->nullable();
+            $table->string('email', 50)->nullable();
             $table->text('address')->nullable();
             $table->string('tax_id', 50)->nullable(); // NPWP
 

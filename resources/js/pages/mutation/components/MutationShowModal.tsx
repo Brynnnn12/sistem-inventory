@@ -1,5 +1,4 @@
-import { format } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { formatQuantity, formatDateTime } from '@/lib/utils';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -52,7 +51,7 @@ export function MutationShowModal({
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Qty</label>
-                                <p className="text-sm font-medium font-mono">{mutation.quantity?.toLocaleString() || 0}</p>
+                                <p className="text-sm font-medium font-mono">{formatQuantity(mutation.quantity || 0)}</p>
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Dari Gudang</label>
@@ -69,7 +68,7 @@ export function MutationShowModal({
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Tanggal Dibuat</label>
                                 <p className="text-sm font-medium">
-                                    {format(new Date(mutation.created_at), 'dd MMMM yyyy HH:mm', { locale: id })}
+                                    {formatDateTime(mutation.created_at)}
                                 </p>
                             </div>
                             {mutation.notes && (
@@ -105,7 +104,7 @@ export function MutationShowModal({
                                                 {mutation.stockHistories.map((history) => (
                                                     <TableRow key={history.id}>
                                                         <TableCell>
-                                                            {format(new Date(history.created_at), 'dd/MM/yyyy HH:mm', { locale: id })}
+                                                            {formatDateTime(history.created_at)}
                                                         </TableCell>
                                                         <TableCell>
                                                             <Badge variant="outline">
@@ -114,10 +113,10 @@ export function MutationShowModal({
                                                             </Badge>
                                                         </TableCell>
                                                         <TableCell className="text-right font-mono">
-                                                            {history.previous_qty?.toLocaleString() || 0}
+                                                            {formatQuantity(history.previous_qty || 0)}
                                                         </TableCell>
                                                         <TableCell className="text-right font-mono">
-                                                            {history.new_qty?.toLocaleString() || 0}
+                                                            {formatQuantity(history.new_qty || 0)}
                                                         </TableCell>
                                                         <TableCell className="text-right font-mono">
                                                             <span className={
@@ -127,8 +126,7 @@ export function MutationShowModal({
                                                                     ? 'text-red-600'
                                                                     : ''
                                                             }>
-                                                                {((history.new_qty || 0) - (history.previous_qty || 0) > 0 ? '+' : '') +
-                                                                 ((history.new_qty || 0) - (history.previous_qty || 0)).toLocaleString()}
+                                                                {formatQuantity((history.new_qty || 0) - (history.previous_qty || 0))}
                                                             </span>
                                                         </TableCell>
                                                         <TableCell className="text-sm">

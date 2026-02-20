@@ -39,7 +39,6 @@ export function StocksToolbar({
                     />
                 </div>
                 <Select value={filters.warehouse_id || 'all'} onValueChange={(value) => {
-                    // TODO: update filters
                 }}>
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Pilih Warehouse" />
@@ -54,7 +53,6 @@ export function StocksToolbar({
                     </SelectContent>
                 </Select>
                 <Select value={filters.product_id || 'all'} onValueChange={(value) => {
-                    // TODO: update filters
                 }}>
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Pilih Produk" />

@@ -4,9 +4,9 @@ import { useFilters } from '@/hooks/useFilters';
 
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import type {  Filters, PageProps } from '@/types/models/stock-history';
 import { StockHistoryTable } from './components/StockHistoryTable';
 import { StockHistoryToolbar } from './components/StockHistoryToolbar';
-import type {  Filters, PageProps } from '@/types/models/stock-history';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },

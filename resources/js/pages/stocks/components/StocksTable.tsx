@@ -1,7 +1,8 @@
 import { Eye } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { formatQuantity } from '@/lib/utils';
 import type { StocksTableProps } from '@/types/models/stocks';
 
 export function StocksTable({
@@ -37,7 +38,7 @@ export function StocksTable({
                         <TableHead className="text-right">Qty Total</TableHead>
                         <TableHead className="text-right">Qty Minimum</TableHead>
                         <TableHead>Status</TableHead>
-                        <TableHead className="w-[100px]">Aksi</TableHead>
+                        <TableHead className="w-25">Aksi</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -50,16 +51,16 @@ export function StocksTable({
                                 {stock.warehouse?.name || '-'}
                             </TableCell>
                             <TableCell className="text-right font-mono">
-                                {stock.available_qty?.toLocaleString() || 0}
+                                {formatQuantity(stock.available_qty || 0)}
                             </TableCell>
                             <TableCell className="text-right font-mono">
-                                {stock.reserved_qty?.toLocaleString() || 0}
+                                {formatQuantity(stock.reserved_qty || 0)}
                             </TableCell>
                             <TableCell className="text-right font-mono">
-                                {stock.quantity?.toLocaleString() || 0}
+                                {formatQuantity(stock.quantity || 0)}
                             </TableCell>
                             <TableCell className="text-right font-mono">
-                                {stock.min_stock?.toLocaleString() || 0}
+                                {formatQuantity(stock.min_stock || 0)}
                             </TableCell>
                             <TableCell>
                                 <Badge

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 20)->unique();
             $table->foreignId('category_id')->constrained()->onDelete('restrict');
-            $table->string('name')->index();
+            $table->string('name', 50)->index();
             $table->string('unit', 50);
             $table->integer('min_stock')->default(0);
             $table->integer('max_stock')->default(0);

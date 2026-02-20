@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            // Kode customer (CST001) - Unique + Index otomatis
             $table->string('code', 20)->unique();
 
             $table->string('name', 100)->index();
-            $table->string('contact_person', 100)->nullable();
-            $table->string('phone', 20)->nullable();
-            $table->string('email', 100)->nullable();
+            $table->string('contact_person', 60)->nullable();
+            $table->string('phone', 14)->nullable();
+            $table->string('email', 50)->nullable();
             $table->text('address')->nullable();
 
             // Status aktif, default: true
