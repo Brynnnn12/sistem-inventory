@@ -43,7 +43,6 @@ test('super-admin bisa melihat daftar stock', function () {
                 ->has('warehouse_id')
                 ->has('product_id')
                 ->has('quantity')
-                ->has('reserved_qty')
                 ->has('available_qty')
                 ->has('last_updated')
                 ->has('updated_by')

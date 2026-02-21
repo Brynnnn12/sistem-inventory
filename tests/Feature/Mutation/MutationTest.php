@@ -70,7 +70,7 @@ test('super-admin bisa mengirim mutation', function () {
     $product = Product::factory()->create();
 
     // pastikan stok gudang asal mencukupi
-    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 20, 'reserved_qty' => 0]);
+    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 20]);
 
     $payload = [
         'from_warehouse' => $from->id,
@@ -104,7 +104,7 @@ test('gagal mengirim mutation jika stok gudang asal tidak cukup', function () {
     $product = Product::factory()->create();
 
     // hanya 2 di stok
-    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 2, 'reserved_qty' => 0]);
+    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 2]);
 
     $payload = [
         'from_warehouse' => $from->id,
@@ -155,7 +155,7 @@ test('super-admin bisa menerima mutation dan stok diperbarui', function () {
     ]);
 
     // stok gudang asal mencukupi
-    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 10, 'reserved_qty' => 0]);
+    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 10]);
 
     $response = actingAs($superAdmin)->post(route('mutations.receive', $mutation), [
         'received_qty' => 8,
@@ -195,7 +195,7 @@ test('admin yang bertanggung jawab di gudang tujuan bisa menerima mutation', fun
         'quantity' => 5,
     ]);
 
-    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 5, 'reserved_qty' => 0]);
+    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 5]);
 
     $response = actingAs($admin)->post(route('mutations.receive', $mutation), [
         'received_qty' => 5,
@@ -246,7 +246,7 @@ test('gagal menerima jika jumlah diterima melebihi quantity', function () {
         'quantity' => 5,
     ]);
 
-    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 5, 'reserved_qty' => 0]);
+    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 5]);
 
     $response = actingAs($superAdmin)->post(route('mutations.receive', $mutation), [
         'received_qty' => 6,

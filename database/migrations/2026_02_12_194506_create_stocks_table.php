@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('warehouse_id')->constrained('warehouses')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+
+            // Kolom stok utama
             $table->decimal('quantity', 10, 2)->default(0);
-            $table->decimal('reserved_qty', 10, 2)->default(0);
-            $table->decimal('available_qty', 10, 2)->storedAs('quantity - reserved_qty');
-            $table->timestamp('last_updated');
+
+            // available_qty sekarang menjadi kolom biasa, bukan storedAs lagi
+            $table->decimal('available_qty', 10, 2)->default(0);
+
+            $table->timestamp('last_updated')->useCurrent()->useCurrentOnUpdate();
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps();
 

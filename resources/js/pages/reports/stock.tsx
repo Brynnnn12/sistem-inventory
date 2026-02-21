@@ -29,7 +29,6 @@ interface StockItem {
     product_name: string;
     unit: string;
     quantity: number;
-    reserved_qty: number;
     available_qty: number;
     min_stock: number;
     max_stock: number;
@@ -115,7 +114,6 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                     <TableHead>Nama Produk</TableHead>
                     <TableHead>Unit</TableHead>
                     <TableHead className="text-right">Qty</TableHead>
-                    <TableHead className="text-right">Reserved</TableHead>
                     <TableHead className="text-right">Available</TableHead>
                     <TableHead className="text-right">Min Stock</TableHead>
                     <TableHead className="text-right">Cost</TableHead>
@@ -131,7 +129,6 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                         <TableCell>{item.product_name}</TableCell>
                         <TableCell>{item.unit}</TableCell>
                         <TableCell className="text-right">{item.quantity}</TableCell>
-                        <TableCell className="text-right">{item.reserved_qty}</TableCell>
                         <TableCell className="text-right">{item.available_qty}</TableCell>
                         <TableCell className="text-right">{item.min_stock}</TableCell>
                         <TableCell className="text-right">{formatCurrency(item.cost)}</TableCell>

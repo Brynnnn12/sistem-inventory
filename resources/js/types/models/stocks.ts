@@ -3,7 +3,6 @@ export interface Stock {
     warehouse_id: number;
     product_id: number;
     quantity: number;
-    reserved_qty: number;
     available_qty: number;
     min_stock: number;
     last_updated: string;

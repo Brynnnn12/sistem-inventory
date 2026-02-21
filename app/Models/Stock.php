@@ -15,18 +15,17 @@ class Stock extends Model
         'warehouse_id',
         'product_id',
         'quantity',
-        'reserved_qty',
+        'available_qty',
         'last_updated',
         'updated_by',
     ];
 
     protected $casts = [
         'quantity' => 'decimal:2',
-        'reserved_qty' => 'decimal:2',
         'available_qty' => 'decimal:2',
     ];
 
-    protected $appends = ['available_qty'];
+    // available_qty is a real column now, no need for accessor
 
     public function warehouse(): BelongsTo
     {
@@ -43,10 +42,6 @@ class Stock extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function getAvailableQtyAttribute(): float
-    {
-        return $this->quantity - $this->reserved_qty;
-    }
 
     public function scopeByWarehouse($query, $warehouseId)
     {
@@ -58,8 +53,4 @@ class Stock extends Model
         return $query->where('product_id', $productId);
     }
 
-    public function scopeAvailable($query)
-    {
-        return $query->whereRaw('quantity > reserved_qty');
-    }
 }

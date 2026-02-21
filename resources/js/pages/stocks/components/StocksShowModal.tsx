@@ -41,7 +41,6 @@ export function StocksShowModal({
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Qty Dipesan</label>
-                                <p className="text-sm font-medium font-mono">{formatQuantity(stock.reserved_qty || 0)}</p>
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Qty Minimum</label>

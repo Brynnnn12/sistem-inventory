@@ -22,7 +22,7 @@ class StockFactory extends Factory
             'warehouse_id' => Warehouse::factory(),
             'product_id' => Product::factory(),
             'quantity' => $this->faker->randomFloat(2, 10, 1000),
-            'reserved_qty' => $this->faker->randomFloat(2, 0, 100),
+            'available_qty' => 0,
             'last_updated' => now(),
             'updated_by' => 1,
         ];
@@ -35,17 +35,11 @@ class StockFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'quantity' => $this->faker->randomFloat(2, 1, 10),
-            'reserved_qty' => 0,
         ]);
     }
 
     /**
      * Indicate that the stock has reserved quantity.
      */
-    public function withReserved(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'reserved_qty' => $this->faker->randomFloat(2, 1, 50),
-        ]);
-    }
+    // reservation state removed since reserved_qty no longer exists
 }

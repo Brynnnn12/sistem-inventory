@@ -160,7 +160,7 @@ test('super-admin bisa mengapprove opname dan stok disesuaikan', function () {
     $product = Product::factory()->create();
 
     // existing stock
-    Stock::factory()->create(['warehouse_id' => $warehouse->id, 'product_id' => $product->id, 'quantity' => 10, 'reserved_qty' => 0]);
+    Stock::factory()->create(['warehouse_id' => $warehouse->id, 'product_id' => $product->id, 'quantity' => 10]);
 
     // opname mencatat surplus 5 (physical 15)
     $opname = Opname::factory()->create([
@@ -197,7 +197,7 @@ test('admin di gudang bisa mengapprove opname', function () {
 
     $product = Product::factory()->create();
 
-    Stock::factory()->create(['warehouse_id' => $warehouse->id, 'product_id' => $product->id, 'quantity' => 8, 'reserved_qty' => 0]);
+    Stock::factory()->create(['warehouse_id' => $warehouse->id, 'product_id' => $product->id, 'quantity' => 8]);
 
     $opname = Opname::factory()->create([
         'warehouse_id' => $warehouse->id,

@@ -34,7 +34,6 @@ export function StocksTable({
                         <TableHead>Produk</TableHead>
                         <TableHead>Gudang</TableHead>
                         <TableHead className="text-right">Qty Tersedia</TableHead>
-                        <TableHead className="text-right">Qty Dipesan</TableHead>
                         <TableHead className="text-right">Qty Total</TableHead>
                         <TableHead className="text-right">Qty Minimum</TableHead>
                         <TableHead>Status</TableHead>
@@ -52,9 +51,6 @@ export function StocksTable({
                             </TableCell>
                             <TableCell className="text-right font-mono">
                                 {formatQuantity(stock.available_qty || 0)}
-                            </TableCell>
-                            <TableCell className="text-right font-mono">
-                                {formatQuantity(stock.reserved_qty || 0)}
                             </TableCell>
                             <TableCell className="text-right font-mono">
                                 {formatQuantity(stock.quantity || 0)}

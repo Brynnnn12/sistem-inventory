@@ -220,7 +220,6 @@
                         <td>{{ $item['product_name'] }}</td>
                         <td>{{ $item['unit'] }}</td>
                         <td class="text-right">{{ number_format($item['quantity'], 0, ',', '.') }}</td>
-                        <td class="text-right">{{ number_format($item['reserved_qty'], 0, ',', '.') }}</td>
                         <td class="text-right">{{ number_format($item['available_qty'], 0, ',', '.') }}</td>
                         <td class="text-right">{{ number_format($item['min_stock'], 0, ',', '.') }}</td>
                         <td class="text-right">Rp {{ number_format($item['cost'], 0, ',', '.') }}</td>
