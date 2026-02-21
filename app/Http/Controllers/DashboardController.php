@@ -108,17 +108,17 @@ class DashboardController extends Controller
     private function getRecentTransactions(): array
     {
         $inbound = \App\Models\InboundTransaction::with(['product', 'warehouse', 'supplier'])
-            ->latest('receipt_date')
+            ->latest('received_date')
             ->take(3)
             ->get()
             ->map(function ($transaction) {
                 return [
                     'type' => 'inbound',
                     'code' => $transaction->code,
-                    'date' => $transaction->receipt_date,
+                    'date' => $transaction->received_date,
                     'product' => $transaction->product->name,
                     'warehouse' => $transaction->warehouse->name,
-                    'quantity' => $transaction->received_qty,
+                    'quantity' => $transaction->quantity,
                     'supplier' => $transaction->supplier->name,
                 ];
             });
@@ -219,18 +219,21 @@ class DashboardController extends Controller
             $startDate = \Carbon\Carbon::create($currentYear, $month, 1)->startOfMonth();
             $endDate = \Carbon\Carbon::create($currentYear, $month, 1)->endOfMonth();
 
-            $inbound = \App\Models\InboundTransaction::whereBetween('receipt_date', [
+            $inbound = \App\Models\InboundTransaction::whereBetween('received_date', [
                 $startDate->format('Y-m-d'),
                 $endDate->format('Y-m-d'),
-            ])->sum('received_qty');
+            ])->sum('quantity');
 
             $outbound = \App\Models\OutboundTransaction::whereBetween('sale_date', [
                 $startDate->format('Y-m-d'),
                 $endDate->format('Y-m-d'),
             ])->sum('quantity');
 
+            // use Indonesian full month name for clearer labels
+            $monthName = $startDate->locale('id')->isoFormat('MMMM');
+
             $monthlyData[] = [
-                'month' => $startDate->format('M'),
+                'month' => $monthName,
                 'inbound' => (int) $inbound,
                 'outbound' => (int) $outbound,
             ];

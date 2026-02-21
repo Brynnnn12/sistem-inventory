@@ -13,11 +13,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            UserSeeder::class,           // 1. Create users & roles first
-            CategorySeeder::class,       // 2. Create categories
-            WarehouseSeeder::class,      // 3. Create warehouses
-            ProductSeeder::class,        // 4. Create products (needs categories)
-            WarehouseUserSeeder::class,  // 6. Assign users to warehouses
+            UserSeeder::class,
+            CategorySeeder::class,
+            WarehouseSeeder::class,
+            ProductSeeder::class,
+            WarehouseUserSeeder::class,
+            SupplierSeeder::class,
+            ProductSeeder::class,
+            CustomerSeeder::class
         ]);
     }
 }

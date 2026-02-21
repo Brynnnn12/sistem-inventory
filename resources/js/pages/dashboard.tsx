@@ -17,63 +17,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { EmployeesList } from '@/pages/dashboard/EmployeesList';
+import MonthlyChart from '@/pages/dashboard/MonthlyChart';
 import { ProductsList } from '@/pages/dashboard/ProductsList';
 import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 
-interface DashboardProps {
-    products: Array<{
-        id: number;
-        code: string;
-        name: string;
-        unit: string;
-        price: number;
-        is_active: boolean;
-        category?: {
-            name: string;
-        };
-    }>;
-    employees: Array<{
-        id: number;
-        name: string;
-        email: string;
-        role?: string;
-        is_active: boolean;
-        created_at: string;
-    }>;
-    stockSummary: {
-        total_products: number;
-        total_warehouses: number;
-        total_stock_value: number;
-        low_stock_count: number;
-        out_of_stock_count: number;
-    };
-    recentTransactions: Array<{
-        type: 'inbound' | 'outbound' | 'mutation';
-        code: string;
-        date: string;
-        product: string;
-        warehouse?: string;
-        supplier?: string;
-        customer?: string;
-        from_warehouse?: string;
-        to_warehouse?: string;
-        quantity: number;
-        status?: string;
-    }>;
-    stockAlerts: Array<{
-        type: 'low_stock' | 'out_of_stock';
-        message: string;
-        current_qty: number;
-        min_stock: number;
-        unit: string;
-    }>;
-    monthlyChart: Array<{
-        month: string;
-        inbound: number;
-        outbound: number;
-    }>;
-}
+import type { DashboardProps } from '@/types/models/dashboard';
+import { formatCurrency } from '@/utils/format';
+
+
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -88,13 +40,8 @@ export default function Dashboard({
     stockSummary,
     recentTransactions,
     stockAlerts,
+    monthlyChart,
 }: DashboardProps) {
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-        }).format(amount);
-    };
 
     const getTransactionIcon = (type: string) => {
         switch (type) {
@@ -210,9 +157,7 @@ export default function Dashboard({
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="h-64 flex items-center justify-center text-muted-foreground">
-                                Chart akan ditampilkan di sini (menggunakan library chart)
-                            </div>
+                            <MonthlyChart data={monthlyChart} />
                         </CardContent>
                     </Card>
 

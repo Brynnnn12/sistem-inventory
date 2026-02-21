@@ -1,7 +1,7 @@
+import { Users, User } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatDate } from '@/lib/utils';
-import { Badge } from '@/components/ui/badge';
-import { Users, User } from 'lucide-react';
 
 interface Employee {
     id: number;
