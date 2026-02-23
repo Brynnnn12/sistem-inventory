@@ -99,7 +99,7 @@ export function MutationCreateModal({
                 setData('product_id', '');
             }
         }
-    }, [data.from_warehouse, data.product_id, availableProducts]);
+    }, [data.from_warehouse, data.product_id, availableProducts, setData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

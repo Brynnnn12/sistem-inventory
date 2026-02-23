@@ -105,7 +105,7 @@ export function OutboundFormModal({
                 setData('product_id', '');
             }
         }
-    }, [data.warehouse_id, data.product_id, availableProducts]);
+    }, [data.warehouse_id, data.product_id, availableProducts, setData]);
 
     // Live preview for total (quantity * unit_price) — keeps unit_price as user input
     const previewTotal = (() => {

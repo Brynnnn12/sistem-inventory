@@ -1,7 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { Pagination } from '@/components/pagination';
-import { useGenericModals } from '@/hooks/useGenericModals';
 import { useFilters } from '@/hooks/useFilters';
+import { useGenericModals } from '@/hooks/useGenericModals';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import type { StockMutation, Filters, PageProps } from '@/types/models/mutation';

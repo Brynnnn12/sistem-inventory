@@ -38,8 +38,7 @@ export function StocksToolbar({
                         disabled={isSearching}
                     />
                 </div>
-                <Select value={filters.warehouse_id || 'all'} onValueChange={(value) => {
-                }}>
+                <Select value={filters.warehouse_id || 'all'} onValueChange={() => {}}>
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Pilih Warehouse" />
                     </SelectTrigger>
@@ -52,8 +51,7 @@ export function StocksToolbar({
                         ))}
                     </SelectContent>
                 </Select>
-                <Select value={filters.product_id || 'all'} onValueChange={(value) => {
-                }}>
+                <Select value={filters.product_id || 'all'} onValueChange={() => {}}>
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Pilih Produk" />
                     </SelectTrigger>

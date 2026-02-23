@@ -11,8 +11,6 @@ export function OpnameToolbar({
     onClearFilters,
     onWarehouseChange,
     onDifferenceTypeChange,
-    onStartDateChange,
-    onEndDateChange,
     isSearching,
     hasActiveFilters,
     filters,

@@ -94,7 +94,7 @@ export function OpnameFormModal({
                 setData('product_id', '');
             }
         }
-    }, [data.warehouse_id, data.product_id, availableProducts]);
+    }, [data.warehouse_id, data.product_id, availableProducts, setData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

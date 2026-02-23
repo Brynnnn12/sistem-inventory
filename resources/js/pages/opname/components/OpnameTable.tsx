@@ -9,8 +9,8 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import type { OpnameTableProps } from '@/types/models/opname';
 import { formatQuantity } from '@/lib/utils';
+import type { OpnameTableProps } from '@/types/models/opname';
 
 export function OpnameTable({
     opnames,

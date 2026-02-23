@@ -1,8 +1,8 @@
+import type { MutationModalsProps } from '@/types/models/mutation';
 import { MutationCreateModal } from './MutationCreateModal';
 import { MutationReceiveModal } from './MutationReceiveModal';
 import { MutationRejectModal } from './MutationRejectModal';
 import { MutationShowModal } from './MutationShowModal';
-import type { MutationModalsProps } from '@/types/models/mutation';
 
 interface MutationModalsPropsExtended extends MutationModalsProps {
     warehouses: Array<{ id: number; name: string }>;
@@ -19,7 +19,6 @@ interface MutationModalsPropsExtended extends MutationModalsProps {
 
 export function MutationModals({
     showModal,
-    selectedMutation,
     onCloseShowModal,
     createModal,
     onCloseCreateModal,

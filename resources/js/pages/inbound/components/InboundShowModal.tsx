@@ -7,8 +7,8 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import type { InboundTransaction } from '@/types/models/inbound';
 import { formatQuantity, formatDate } from '@/lib/utils';
+import type { InboundTransaction } from '@/types/models/inbound';
 
 interface InboundShowModalProps {
     open: boolean;

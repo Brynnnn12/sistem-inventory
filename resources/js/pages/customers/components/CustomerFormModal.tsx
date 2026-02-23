@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import InputError from '@/components/input-error';
 import { ModalHeader } from '@/components/modal-header';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
     Dialog,
     DialogContent,
@@ -12,7 +13,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
 import type { Customer } from '@/types/models/customers';
 
 interface CustomerFormModalProps {
@@ -46,7 +46,7 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
                 is_active: customer.is_active,
             });
         }
-    }, [customer]);
+    }, [customer, form]);
 
     const handleClose = () => {
         form.reset();

@@ -62,7 +62,7 @@ export interface MutationStoreRequest {
     notes?: string;
 }
 
-export interface PageProps<T = any> {
+export interface PageProps<T = unknown> {
     data: T[];
     current_page: number;
     last_page: number;

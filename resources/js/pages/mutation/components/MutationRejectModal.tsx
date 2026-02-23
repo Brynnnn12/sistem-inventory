@@ -1,5 +1,5 @@
-import React from 'react';
 import { useForm } from '@inertiajs/react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -9,8 +9,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import type { StockMutation } from '@/types/models/mutation';
 
 interface MutationRejectModalProps {
@@ -50,7 +50,7 @@ export function MutationRejectModal({
                 notes: '',
             });
         }
-    }, [mutation]);
+    }, [mutation, setData]);
 
     if (!mutation) return null;
 

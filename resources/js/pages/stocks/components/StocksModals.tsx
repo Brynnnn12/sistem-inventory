@@ -1,5 +1,5 @@
-import { StocksShowModal } from './StocksShowModal';
 import type { StocksModalsProps } from '@/types/models/stocks';
+import { StocksShowModal } from './StocksShowModal';
 
 export function StocksModals({
     showModal,

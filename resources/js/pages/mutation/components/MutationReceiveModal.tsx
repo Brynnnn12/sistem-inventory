@@ -65,7 +65,7 @@ export function MutationReceiveModal({
                 notes: '',
             });
         }
-    }, [mutation]);
+    }, [mutation, setData]);
 
     if (!mutation) return null;
 

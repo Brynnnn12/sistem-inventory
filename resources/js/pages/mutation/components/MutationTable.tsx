@@ -1,8 +1,8 @@
 import { Eye, CheckCircle, XCircle } from 'lucide-react';
-import { formatQuantity, formatDate } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { formatQuantity, formatDate } from '@/lib/utils';
 import type { MutationTableProps } from '@/types/models/mutation';
 
 export function MutationTable({
