@@ -17,6 +17,7 @@ interface OpnameModalsProps {
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
+    canSelectWarehouse: boolean;
 }
 
 export function OpnameModals({
@@ -25,6 +26,7 @@ export function OpnameModals({
     warehouses,
     products,
     stocks,
+    canSelectWarehouse,
 }: OpnameModalsProps) {
     return (
         <>
@@ -34,6 +36,7 @@ export function OpnameModals({
                 warehouses={warehouses}
                 products={products}
                 stocks={stocks}
+                canSelectWarehouse={canSelectWarehouse}
             />
 
             <OpnameShowModal

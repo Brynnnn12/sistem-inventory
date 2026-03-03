@@ -40,6 +40,7 @@ interface OpnameFormModalPropsExtended extends OpnameFormModalProps {
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
+    canSelectWarehouse: boolean;
 }
 
 export function OpnameFormModal({
@@ -49,6 +50,7 @@ export function OpnameFormModal({
     warehouses,
     products,
     stocks,
+    canSelectWarehouse,
 }: OpnameFormModalPropsExtended) {
     const [warehouseSearchOpen, setWarehouseSearchOpen] = useState(false);
     const [productSearchOpen, setProductSearchOpen] = useState(false);
@@ -96,6 +98,12 @@ export function OpnameFormModal({
         }
     }, [data.warehouse_id, data.product_id, availableProducts, setData]);
 
+    useEffect(() => {
+        if (!canSelectWarehouse && warehouses.length > 0 && !data.warehouse_id) {
+            setData('warehouse_id', warehouses[0].id.toString());
+        }
+    }, [canSelectWarehouse, warehouses, data.warehouse_id, setData]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post('/dashboard/opname', {
@@ -125,13 +133,14 @@ export function OpnameFormModal({
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse_id">Warehouse</Label>
-                                <Popover open={warehouseSearchOpen} onOpenChange={setWarehouseSearchOpen}>
+                                <Popover open={warehouseSearchOpen} onOpenChange={canSelectWarehouse ? setWarehouseSearchOpen : undefined}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={warehouseSearchOpen}
                                             className="w-full justify-between"
+                                            disabled={!canSelectWarehouse}
                                         >
                                             {selectedWarehouse ? (
                                                 <div className="flex items-center gap-2">

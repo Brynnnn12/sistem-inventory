@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { Check, ChevronsUpDown, Package, Truck, Warehouse as WarehouseIcon } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import {
     Command,
@@ -33,6 +33,7 @@ interface InboundFormModalPropsExtended extends InboundFormModalProps {
     warehouses: Array<{ id: number; name: string }>;
     suppliers: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
+    canSelectWarehouse: boolean;
 }
 
 export function InboundFormModal({
@@ -42,6 +43,7 @@ export function InboundFormModal({
     warehouses,
     suppliers,
     products,
+    canSelectWarehouse,
 }: InboundFormModalPropsExtended) {
     const [supplierSearchOpen, setSupplierSearchOpen] = useState(false);
     const [warehouseSearchOpen, setWarehouseSearchOpen] = useState(false);
@@ -71,6 +73,12 @@ export function InboundFormModal({
         () => products.find((p) => p.id.toString() === data.product_id),
         [data.product_id, products]
     );
+
+    useEffect(() => {
+        if (!canSelectWarehouse && warehouses.length > 0 && !data.warehouse_id) {
+            setData('warehouse_id', warehouses[0].id.toString());
+        }
+    }, [canSelectWarehouse, warehouses, data.warehouse_id, setData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -156,13 +164,14 @@ export function InboundFormModal({
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse_id">Warehouse</Label>
-                                <Popover open={warehouseSearchOpen} onOpenChange={setWarehouseSearchOpen}>
+                                <Popover open={warehouseSearchOpen} onOpenChange={canSelectWarehouse ? setWarehouseSearchOpen : undefined}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={warehouseSearchOpen}
                                             className="w-full justify-between"
+                                            disabled={!canSelectWarehouse}
                                         >
                                             {selectedWarehouse ? (
                                                 <div className="flex items-center gap-2">

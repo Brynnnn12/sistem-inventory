@@ -20,12 +20,14 @@ export default function Index({
     warehouses,
     suppliers,
     products,
+    canSelectWarehouse,
     filters = {},
 }: {
     inbounds: PageProps;
     warehouses: Array<{ id: number; name: string }>;
     suppliers: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
+    canSelectWarehouse: boolean;
     filters?: Filters;
 }) {
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
@@ -95,6 +97,7 @@ export default function Index({
                     warehouses={warehouses}
                     suppliers={suppliers}
                     products={products}
+                    canSelectWarehouse={canSelectWarehouse}
                 />
             </div>
         </AppLayout>

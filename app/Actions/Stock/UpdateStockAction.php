@@ -56,6 +56,7 @@ class UpdateStockAction
 
             $stock->update([
                 'quantity' => $newQty,
+                'available_qty' => $stock->available_qty + $quantity,
                 'last_updated' => now(),
                 'updated_by' => Auth::id(),
             ]);

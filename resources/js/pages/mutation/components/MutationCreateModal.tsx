@@ -40,6 +40,7 @@ interface MutationCreateModalPropsExtended extends MutationCreateModalProps {
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
+    canSelectWarehouse: boolean;
 }
 
 export function MutationCreateModal({
@@ -48,6 +49,7 @@ export function MutationCreateModal({
     warehouses,
     products,
     stocks,
+    canSelectWarehouse,
 }: MutationCreateModalPropsExtended) {
     const [fromWarehouseSearchOpen, setFromWarehouseSearchOpen] = useState(false);
     const [toWarehouseSearchOpen, setToWarehouseSearchOpen] = useState(false);
@@ -101,6 +103,17 @@ export function MutationCreateModal({
         }
     }, [data.from_warehouse, data.product_id, availableProducts, setData]);
 
+    useEffect(() => {
+        if (!canSelectWarehouse && warehouses.length > 0) {
+            if (!data.from_warehouse) {
+                setData('from_warehouse', warehouses[0].id.toString());
+            }
+            if (!data.to_warehouse && warehouses.length > 1) {
+                setData('to_warehouse', warehouses[1].id.toString());
+            }
+        }
+    }, [canSelectWarehouse, warehouses, data.from_warehouse, data.to_warehouse, setData]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         post('/dashboard/mutations', {
@@ -130,13 +143,14 @@ export function MutationCreateModal({
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="from_warehouse">Dari Gudang</Label>
-                                <Popover open={fromWarehouseSearchOpen} onOpenChange={setFromWarehouseSearchOpen}>
+                                <Popover open={fromWarehouseSearchOpen} onOpenChange={canSelectWarehouse ? setFromWarehouseSearchOpen : undefined}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={fromWarehouseSearchOpen}
                                             className="w-full justify-between"
+                                            disabled={!canSelectWarehouse}
                                         >
                                             {selectedFromWarehouse ? (
                                                 <div className="flex items-center gap-2">
@@ -185,13 +199,14 @@ export function MutationCreateModal({
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="to_warehouse">Ke Gudang</Label>
-                                <Popover open={toWarehouseSearchOpen} onOpenChange={setToWarehouseSearchOpen}>
+                                <Popover open={toWarehouseSearchOpen} onOpenChange={canSelectWarehouse ? setToWarehouseSearchOpen : undefined}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={toWarehouseSearchOpen}
                                             className="w-full justify-between"
+                                            disabled={!canSelectWarehouse}
                                         >
                                             {selectedToWarehouse ? (
                                                 <div className="flex items-center gap-2">

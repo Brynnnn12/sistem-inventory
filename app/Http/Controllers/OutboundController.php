@@ -70,6 +70,7 @@ class OutboundController extends Controller
             'customers' => $customers,
             'products' => $products,
             'stocks' => $stocks,
+            'canSelectWarehouse' => $user->hasRole('super-admin'),
             'filters' => $request->only(['search', 'warehouse_id', 'start_date', 'end_date']),
         ]);
     }

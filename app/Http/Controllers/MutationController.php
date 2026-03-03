@@ -118,6 +118,7 @@ class MutationController extends Controller
                 })
                 ->where('quantity', '>', 0) // Only products with stock for mutations
                 ->get(),
+            'canSelectWarehouse' => $user->hasRole('super-admin'),
             'filters' => $request->only(['search', 'status', 'type']),
         ]);
     }

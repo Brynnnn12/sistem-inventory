@@ -19,7 +19,8 @@ export default function Index({
     warehouses,
     products,
     stocks,
-    initialFilters = {},
+    canSelectWarehouse,
+    filters = {},
 }: {
     mutations: PageProps;
     warehouses: Array<{ id: number; name: string }>;
@@ -32,14 +33,15 @@ export default function Index({
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
-    initialFilters?: Filters;
+    canSelectWarehouse: boolean;
+    filters?: Filters;
 }) {
     const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
         route: '/dashboard/mutations',
         initialFilters: {
-            search: initialFilters?.search || '',
-            status: initialFilters?.status || '',
-            type: initialFilters?.type || '',
+            search: filters?.search || '',
+            status: filters?.status || '',
+            type: filters?.type || '',
         },
         only: ['mutations'],
     });
@@ -108,6 +110,7 @@ export default function Index({
                     warehouses={warehouses}
                     products={products}
                     stocks={stocks}
+                    canSelectWarehouse={canSelectWarehouse}
                 />
             </div>
         </AppLayout>

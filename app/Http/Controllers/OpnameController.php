@@ -12,7 +12,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -60,7 +59,7 @@ class OpnameController extends Controller
             ->whereHas('warehouse', function ($q) use ($warehouses) {
                 $q->whereIn('id', $warehouses->pluck('id'));
             })
-            ->where('quantity', '>=', 0) // Include products with 0 stock for opname
+            ->where('quantity', '>', 0) // Only include products with stock > 0 for opname
             ->get();
 
         return Inertia::render('opname/index', [
@@ -68,6 +67,7 @@ class OpnameController extends Controller
             'warehouses' => $warehouses,
             'products' => $products,
             'stocks' => $stocks,
+            'canSelectWarehouse' => $user->hasRole('super-admin'),
             'filters' => $request->only(['search', 'warehouse_id', 'difference_type', 'start_date', 'end_date']),
         ]);
     }

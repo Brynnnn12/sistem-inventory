@@ -17,7 +17,7 @@ class ReportService
     /**
      * Get stock report data.
      */
-    public function getStockReport(?int $warehouseId, string $startDate, string $endDate): array
+    public function getStockReport(?int $warehouseId, string $startDate, string $endDate, ?array $warehouseIds = null): array
     {
         $query = Stock::with(['product', 'warehouse'])
             ->whereHas('product', function ($q) {
@@ -26,6 +26,8 @@ class ReportService
 
         if ($warehouseId) {
             $query->where('warehouse_id', $warehouseId);
+        } elseif ($warehouseIds) {
+            $query->whereIn('warehouse_id', $warehouseIds);
         }
 
         $stocks = $query->get();
@@ -88,13 +90,14 @@ class ReportService
     /**
      * Get transaction report data.
      */
-    public function getTransactionReport(string $type, ?int $warehouseId, string $startDate, string $endDate): array
+    public function getTransactionReport(string $type, ?int $warehouseId, string $startDate, string $endDate, ?array $warehouseIds = null): array
     {
         $data = [];
 
         if ($type === 'all' || $type === 'inbound') {
             $inbound = InboundTransaction::with(['product', 'warehouse', 'supplier'])
                 ->when($warehouseId, fn ($q) => $q->where('warehouse_id', $warehouseId))
+                ->when($warehouseId === null && $warehouseIds, fn ($q) => $q->whereIn('warehouse_id', $warehouseIds))
                 ->whereBetween('received_date', [$startDate, $endDate])
                 ->get()
                 ->map(function ($transaction) {
@@ -116,6 +119,7 @@ class ReportService
         if ($type === 'all' || $type === 'outbound') {
             $outbound = OutboundTransaction::with(['product', 'warehouse', 'customer'])
                 ->when($warehouseId, fn ($q) => $q->where('warehouse_id', $warehouseId))
+                ->when($warehouseId === null && $warehouseIds, fn ($q) => $q->whereIn('warehouse_id', $warehouseIds))
                 ->whereBetween('sale_date', [$startDate, $endDate])
                 ->get()
                 ->map(function ($transaction) {
@@ -138,6 +142,9 @@ class ReportService
             $mutations = StockMutation::with(['product', 'fromWarehouse', 'toWarehouse'])
                 ->when($warehouseId, function ($q) use ($warehouseId) {
                     $q->where('from_warehouse', $warehouseId)->orWhere('to_warehouse', $warehouseId);
+                })
+                ->when($warehouseId === null && $warehouseIds, function ($q) use ($warehouseIds) {
+                    $q->whereIn('from_warehouse', $warehouseIds)->orWhereIn('to_warehouse', $warehouseIds);
                 })
                 ->whereBetween('sent_at', [$startDate, $endDate])
                 ->get()
@@ -273,16 +280,16 @@ class ReportService
     /**
      * Export stock report (placeholder for PDF/Excel export).
      */
-    public function exportStockReport(?int $warehouseId, string $startDate, string $endDate, string $format)
+    public function exportStockReport(?int $warehouseId, string $startDate, string $endDate, string $format, ?array $warehouseIds = null)
     {
         if ($format === 'excel') {
             $filename = 'stock_report_'.str_replace('-', '_', $startDate).'_to_'.str_replace('-', '_', $endDate).'.xlsx';
 
-            return Excel::download(new StockReportExport($warehouseId, $startDate, $endDate), $filename);
+            return Excel::download(new StockReportExport($warehouseId, $startDate, $endDate, $warehouseIds), $filename);
         }
 
         if ($format === 'pdf') {
-            $stockReport = $this->getStockReport($warehouseId, $startDate, $endDate);
+            $stockReport = $this->getStockReport($warehouseId, $startDate, $endDate, $warehouseIds);
             $warehouse = $warehouseId ? Warehouse::find($warehouseId) : null;
 
             $filename = 'stock_report_'.str_replace('-', '_', $startDate).'_to_'.str_replace('-', '_', $endDate).'.pdf';
@@ -298,16 +305,16 @@ class ReportService
     /**
      * Export transaction report (placeholder for PDF/Excel export).
      */
-    public function exportTransactionReport(string $type, ?int $warehouseId, string $startDate, string $endDate, string $format)
+    public function exportTransactionReport(string $type, ?int $warehouseId, string $startDate, string $endDate, string $format, ?array $warehouseIds = null)
     {
         if ($format === 'excel') {
             $filename = 'transaction_report_'.$type.'_'.str_replace('-', '_', $startDate).'_to_'.str_replace('-', '_', $endDate).'.xlsx';
 
-            return Excel::download(new TransactionReportExport($type, $warehouseId, $startDate, $endDate), $filename);
+            return Excel::download(new TransactionReportExport($type, $warehouseId, $startDate, $endDate, $warehouseIds), $filename);
         }
 
         if ($format === 'pdf') {
-            $transactionReport = $this->getTransactionReport($type, $warehouseId, $startDate, $endDate);
+            $transactionReport = $this->getTransactionReport($type, $warehouseId, $startDate, $endDate, $warehouseIds);
             $warehouse = $warehouseId ? Warehouse::find($warehouseId) : null;
 
             $filename = 'transaction_report_'.$type.'_'.str_replace('-', '_', $startDate).'_to_'.str_replace('-', '_', $endDate).'.pdf';

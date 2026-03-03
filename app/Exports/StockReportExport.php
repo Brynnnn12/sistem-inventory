@@ -19,16 +19,19 @@ class StockReportExport implements FromCollection, WithHeadings, WithMapping, Wi
 
     protected $endDate;
 
+    protected $warehouseIds;
+
     protected $data;
 
-    public function __construct(?int $warehouseId, string $startDate, string $endDate)
+    public function __construct(?int $warehouseId, string $startDate, string $endDate, ?array $warehouseIds = null)
     {
         $this->warehouseId = $warehouseId;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->warehouseIds = $warehouseIds;
 
         $service = new ReportService;
-        $report = $service->getStockReport($warehouseId, $startDate, $endDate);
+        $report = $service->getStockReport($warehouseId, $startDate, $endDate, $warehouseIds);
         $this->data = $report['data'];
     }
 

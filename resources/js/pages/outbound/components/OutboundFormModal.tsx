@@ -41,6 +41,7 @@ interface OutboundFormModalPropsExtended extends OutboundFormModalProps {
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
+    canSelectWarehouse: boolean;
 }
 
 export function OutboundFormModal({
@@ -51,6 +52,7 @@ export function OutboundFormModal({
     customers,
     products,
     stocks,
+    canSelectWarehouse,
 }: OutboundFormModalPropsExtended) {
     const [customerSearchOpen, setCustomerSearchOpen] = useState(false);
     const [warehouseSearchOpen, setWarehouseSearchOpen] = useState(false);
@@ -106,6 +108,12 @@ export function OutboundFormModal({
             }
         }
     }, [data.warehouse_id, data.product_id, availableProducts, setData]);
+
+    useEffect(() => {
+        if (!canSelectWarehouse && warehouses.length > 0 && !data.warehouse_id) {
+            setData('warehouse_id', warehouses[0].id.toString());
+        }
+    }, [canSelectWarehouse, warehouses, data.warehouse_id, setData]);
 
     // Live preview for total (quantity * unit_price) — keeps unit_price as user input
     const previewTotal = (() => {
@@ -198,13 +206,14 @@ export function OutboundFormModal({
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse_id">Warehouse</Label>
-                                <Popover open={warehouseSearchOpen} onOpenChange={setWarehouseSearchOpen}>
+                                <Popover open={warehouseSearchOpen} onOpenChange={canSelectWarehouse ? setWarehouseSearchOpen : undefined}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={warehouseSearchOpen}
                                             className="w-full justify-between"
+                                            disabled={!canSelectWarehouse}
                                         >
                                             {selectedWarehouse ? (
                                                 <div className="flex items-center gap-2">

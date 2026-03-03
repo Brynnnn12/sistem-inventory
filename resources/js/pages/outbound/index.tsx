@@ -21,6 +21,7 @@ export default function Index({
     customers,
     products,
     stocks,
+    canSelectWarehouse,
     filters = {},
 }: {
     outbounds: PageProps;
@@ -35,6 +36,7 @@ export default function Index({
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
+    canSelectWarehouse: boolean;
     filters?: Filters;
 }) {
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
@@ -105,6 +107,7 @@ export default function Index({
                     customers={customers}
                     products={products}
                     stocks={stocks}
+                    canSelectWarehouse={canSelectWarehouse}
                 />
             </div>
         </AppLayout>

@@ -17,6 +17,7 @@ interface OutboundModalsProps {
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
+    canSelectWarehouse: boolean;
 }
 
 export function OutboundModals({
@@ -26,6 +27,7 @@ export function OutboundModals({
     customers,
     products,
     stocks,
+    canSelectWarehouse,
 }: OutboundModalsProps) {
     return (
         <>
@@ -36,6 +38,7 @@ export function OutboundModals({
                 customers={customers}
                 products={products}
                 stocks={stocks}
+                canSelectWarehouse={canSelectWarehouse}
             />
 
             <OutboundShowModal

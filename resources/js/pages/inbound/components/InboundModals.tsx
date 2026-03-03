@@ -9,6 +9,7 @@ interface InboundModalsProps {
     warehouses: Array<{ id: number; name: string }>;
     suppliers: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
+    canSelectWarehouse: boolean;
 }
 
 export function InboundModals({
@@ -17,6 +18,7 @@ export function InboundModals({
     warehouses,
     suppliers,
     products,
+    canSelectWarehouse,
 }: InboundModalsProps) {
     return (
         <>
@@ -26,6 +28,7 @@ export function InboundModals({
                 warehouses={warehouses}
                 suppliers={suppliers}
                 products={products}
+                canSelectWarehouse={canSelectWarehouse}
             />
 
             <InboundShowModal

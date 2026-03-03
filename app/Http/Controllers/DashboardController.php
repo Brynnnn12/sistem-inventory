@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -13,6 +14,11 @@ class DashboardController extends Controller
      */
     public function index(): Response
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $isSuperAdmin = $user->hasRole('super-admin');
+        $warehouseIds = $isSuperAdmin ? null : $user->warehouses()->pluck('warehouses.id')->toArray();
+
         // Get latest 5 products with category
         $products = \App\Models\Product::query()
             ->active()
@@ -52,16 +58,16 @@ class DashboardController extends Controller
             });
 
         // Get stock summary
-        $stockSummary = $this->getStockSummary();
+        $stockSummary = $this->getStockSummary($warehouseIds);
 
         // Get recent transactions
-        $recentTransactions = $this->getRecentTransactions();
+        $recentTransactions = $this->getRecentTransactions($warehouseIds);
 
         // Get stock alerts
-        $stockAlerts = $this->getStockAlerts();
+        $stockAlerts = $this->getStockAlerts($warehouseIds);
 
         // Get monthly transaction chart data
-        $monthlyChart = $this->getMonthlyTransactionChart();
+        $monthlyChart = $this->getMonthlyTransactionChart($warehouseIds);
 
         return Inertia::render('dashboard', [
             'products' => $products,
@@ -73,28 +79,37 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function getStockSummary(): array
+    private function getStockSummary(?array $warehouseIds = null): array
     {
         $totalProducts = \App\Models\Product::active()->count();
-        $totalWarehouses = \App\Models\Warehouse::count();
-        $totalStockValue = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
+        $totalWarehouses = $warehouseIds ? count($warehouseIds) : \App\Models\Warehouse::count();
+        $totalStockValueQuery = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
-            ->whereNull('products.deleted_at')
-            ->sum(DB::raw('stocks.quantity * products.cost'));
+            ->whereNull('products.deleted_at');
+        if ($warehouseIds) {
+            $totalStockValueQuery->whereIn('stocks.warehouse_id', $warehouseIds);
+        }
+        $totalStockValue = $totalStockValueQuery->sum(DB::raw('stocks.quantity * products.cost'));
 
-        $lowStockCount = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
+        $lowStockQuery = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
             ->where('products.min_stock', '>', 0)
             ->whereRaw('stocks.quantity <= products.min_stock')
-            ->where('stocks.quantity', '>', 0)
-            ->count();
+            ->where('stocks.quantity', '>', 0);
+        if ($warehouseIds) {
+            $lowStockQuery->whereIn('stocks.warehouse_id', $warehouseIds);
+        }
+        $lowStockCount = $lowStockQuery->count();
 
-        $outOfStockCount = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
+        $outOfStockQuery = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
-            ->where('stocks.quantity', '<=', 0)
-            ->count();
+            ->where('stocks.quantity', '<=', 0);
+        if ($warehouseIds) {
+            $outOfStockQuery->whereIn('stocks.warehouse_id', $warehouseIds);
+        }
+        $outOfStockCount = $outOfStockQuery->count();
 
         return [
             'total_products' => $totalProducts,
@@ -105,10 +120,13 @@ class DashboardController extends Controller
         ];
     }
 
-    private function getRecentTransactions(): array
+    private function getRecentTransactions(?array $warehouseIds = null): array
     {
-        $inbound = \App\Models\InboundTransaction::with(['product', 'warehouse', 'supplier'])
-            ->latest('received_date')
+        $inboundQuery = \App\Models\InboundTransaction::with(['product', 'warehouse', 'supplier']);
+        if ($warehouseIds) {
+            $inboundQuery->whereIn('warehouse_id', $warehouseIds);
+        }
+        $inbound = $inboundQuery->latest('received_date')
             ->take(3)
             ->get()
             ->map(function ($transaction) {
@@ -123,8 +141,11 @@ class DashboardController extends Controller
                 ];
             });
 
-        $outbound = \App\Models\OutboundTransaction::with(['product', 'warehouse', 'customer'])
-            ->latest('sale_date')
+        $outboundQuery = \App\Models\OutboundTransaction::with(['product', 'warehouse', 'customer']);
+        if ($warehouseIds) {
+            $outboundQuery->whereIn('warehouse_id', $warehouseIds);
+        }
+        $outbound = $outboundQuery->latest('sale_date')
             ->take(3)
             ->get()
             ->map(function ($transaction) {
@@ -139,8 +160,14 @@ class DashboardController extends Controller
                 ];
             });
 
-        $mutations = \App\Models\StockMutation::with(['product', 'fromWarehouse', 'toWarehouse'])
-            ->latest('sent_at')
+        $mutationsQuery = \App\Models\StockMutation::with(['product', 'fromWarehouse', 'toWarehouse']);
+        if ($warehouseIds) {
+            $mutationsQuery->where(function ($q) use ($warehouseIds) {
+                $q->whereIn('from_warehouse', $warehouseIds)
+                    ->orWhereIn('to_warehouse', $warehouseIds);
+            });
+        }
+        $mutations = $mutationsQuery->latest('sent_at')
             ->take(3)
             ->get()
             ->map(function ($mutation) {
@@ -165,16 +192,19 @@ class DashboardController extends Controller
         return $transactions;
     }
 
-    private function getStockAlerts(): array
+    private function getStockAlerts(?array $warehouseIds = null): array
     {
-        $lowStock = \App\Models\Stock::with(['product', 'warehouse'])
+        $lowStockQuery = \App\Models\Stock::with(['product', 'warehouse'])
             ->join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
             ->where('products.min_stock', '>', 0)
             ->whereRaw('stocks.quantity <= products.min_stock')
-            ->where('stocks.quantity', '>', 0)
-            ->select('stocks.*', 'products.name as product_name', 'products.min_stock', 'products.unit')
+            ->where('stocks.quantity', '>', 0);
+        if ($warehouseIds) {
+            $lowStockQuery->whereIn('stocks.warehouse_id', $warehouseIds);
+        }
+        $lowStock = $lowStockQuery->select('stocks.*', 'products.name as product_name', 'products.min_stock', 'products.unit')
             ->with(['warehouse'])
             ->take(5)
             ->get()
@@ -188,12 +218,15 @@ class DashboardController extends Controller
                 ];
             });
 
-        $outOfStock = \App\Models\Stock::with(['product', 'warehouse'])
+        $outOfStockQuery = \App\Models\Stock::with(['product', 'warehouse'])
             ->join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
-            ->where('stocks.quantity', '<=', 0)
-            ->select('stocks.*', 'products.name as product_name', 'products.min_stock', 'products.unit')
+            ->where('stocks.quantity', '<=', 0);
+        if ($warehouseIds) {
+            $outOfStockQuery->whereIn('stocks.warehouse_id', $warehouseIds);
+        }
+        $outOfStock = $outOfStockQuery->select('stocks.*', 'products.name as product_name', 'products.min_stock', 'products.unit')
             ->with(['warehouse'])
             ->take(5)
             ->get()
@@ -210,7 +243,7 @@ class DashboardController extends Controller
         return collect([...$lowStock, ...$outOfStock])->take(5)->all();
     }
 
-    private function getMonthlyTransactionChart(): array
+    private function getMonthlyTransactionChart(?array $warehouseIds = null): array
     {
         $currentYear = now()->year;
         $monthlyData = [];
@@ -219,15 +252,23 @@ class DashboardController extends Controller
             $startDate = \Carbon\Carbon::create($currentYear, $month, 1)->startOfMonth();
             $endDate = \Carbon\Carbon::create($currentYear, $month, 1)->endOfMonth();
 
-            $inbound = \App\Models\InboundTransaction::whereBetween('received_date', [
+            $inboundQuery = \App\Models\InboundTransaction::whereBetween('received_date', [
                 $startDate->format('Y-m-d'),
                 $endDate->format('Y-m-d'),
-            ])->sum('quantity');
+            ]);
+            if ($warehouseIds) {
+                $inboundQuery->whereIn('warehouse_id', $warehouseIds);
+            }
+            $inbound = $inboundQuery->sum('quantity');
 
-            $outbound = \App\Models\OutboundTransaction::whereBetween('sale_date', [
+            $outboundQuery = \App\Models\OutboundTransaction::whereBetween('sale_date', [
                 $startDate->format('Y-m-d'),
                 $endDate->format('Y-m-d'),
-            ])->sum('quantity');
+            ]);
+            if ($warehouseIds) {
+                $outboundQuery->whereIn('warehouse_id', $warehouseIds);
+            }
+            $outbound = $outboundQuery->sum('quantity');
 
             // use Indonesian full month name for clearer labels
             $monthName = $startDate->locale('id')->isoFormat('MMMM');

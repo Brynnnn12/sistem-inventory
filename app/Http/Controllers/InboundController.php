@@ -59,6 +59,7 @@ class InboundController extends Controller
             'warehouses' => $warehouses,
             'suppliers' => $suppliers,
             'products' => $products,
+            'canSelectWarehouse' => $user->hasRole('super-admin'),
             'filters' => $request->only(['search', 'warehouse_id', 'start_date', 'end_date']),
         ]);
     }

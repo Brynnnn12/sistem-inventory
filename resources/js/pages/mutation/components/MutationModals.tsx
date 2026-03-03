@@ -15,6 +15,7 @@ interface MutationModalsPropsExtended extends MutationModalsProps {
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
+    canSelectWarehouse: boolean;
 }
 
 export function MutationModals({
@@ -29,6 +30,7 @@ export function MutationModals({
     warehouses,
     products,
     stocks,
+    canSelectWarehouse,
 }: MutationModalsPropsExtended) {
     return (
         <>
@@ -38,6 +40,7 @@ export function MutationModals({
                 warehouses={warehouses}
                 products={products}
                 stocks={stocks}
+                canSelectWarehouse={canSelectWarehouse}
             />
             <MutationShowModal
                 mutation={showModal.data}

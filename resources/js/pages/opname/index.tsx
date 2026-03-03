@@ -19,7 +19,8 @@ export default function Index({
     warehouses,
     products,
     stocks,
-    initialFilters = {},
+    canSelectWarehouse,
+    filters = {},
 }: {
     opnames: PageProps;
     warehouses: Array<{ id: number; name: string }>;
@@ -32,14 +33,15 @@ export default function Index({
         product: { id: number; name: string };
         warehouse: { id: number; name: string };
     }>;
-    initialFilters?: Filters;
+    canSelectWarehouse: boolean;
+    filters?: Filters;
 }) {
     const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
         route: '/dashboard/opname',
         initialFilters: {
-            search: initialFilters?.search || '',
-            warehouse_id: initialFilters?.warehouse_id || '',
-            difference_type: initialFilters?.difference_type || '',
+            search: filters?.search || '',
+            warehouse_id: filters?.warehouse_id || '',
+            difference_type: filters?.difference_type || '',
         },
         only: ['opnames'],
     });
@@ -98,6 +100,7 @@ export default function Index({
                     warehouses={warehouses}
                     products={products}
                     stocks={stocks}
+                    canSelectWarehouse={canSelectWarehouse}
                 />
             </div>
         </AppLayout>

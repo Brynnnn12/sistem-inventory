@@ -21,17 +21,20 @@ class TransactionReportExport implements FromCollection, WithHeadings, WithMappi
 
     protected $endDate;
 
+    protected $warehouseIds;
+
     protected $data;
 
-    public function __construct(string $type, ?int $warehouseId, string $startDate, string $endDate)
+    public function __construct(string $type, ?int $warehouseId, string $startDate, string $endDate, ?array $warehouseIds = null)
     {
         $this->type = $type;
         $this->warehouseId = $warehouseId;
         $this->startDate = $startDate;
         $this->endDate = $endDate;
+        $this->warehouseIds = $warehouseIds;
 
         $service = new ReportService;
-        $report = $service->getTransactionReport($type, $warehouseId, $startDate, $endDate);
+        $report = $service->getTransactionReport($type, $warehouseId, $startDate, $endDate, $warehouseIds);
         $this->data = $report['data'];
     }
 
