@@ -96,7 +96,7 @@ test('export stock memanggil service dan mengembalikan response', function () {
     $superAdmin = createSuperAdmin();
 
     $mock = Mockery::mock(ReportService::class);
-    $mock->shouldReceive('exportStockReport')->once()->with(null, Mockery::any(), Mockery::any(), 'excel')
+    $mock->shouldReceive('exportStockReport')->once()->with(null, Mockery::any(), Mockery::any(), 'excel', null)
         ->andReturn(response()->json(['file' => 'ok']));
 
     app()->instance(ReportService::class, $mock);
@@ -110,7 +110,7 @@ test('export transactions memanggil service dan mengembalikan response', functio
     $superAdmin = createSuperAdmin();
 
     $mock = Mockery::mock(ReportService::class);
-    $mock->shouldReceive('exportTransactionReport')->once()->with('all', null, Mockery::any(), Mockery::any(), 'pdf')
+    $mock->shouldReceive('exportTransactionReport')->once()->with('all', null, Mockery::any(), Mockery::any(), 'pdf', null)
         ->andReturn(response()->json(['file' => 'tx']));
 
     app()->instance(ReportService::class, $mock);

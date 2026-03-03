@@ -70,7 +70,7 @@ test('super-admin bisa mengirim mutation', function () {
     $product = Product::factory()->create();
 
     // pastikan stok gudang asal mencukupi
-    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 20]);
+    Stock::factory()->create(['warehouse_id' => $from->id, 'product_id' => $product->id, 'quantity' => 20, 'available_qty' => 20]);
 
     $payload = [
         'from_warehouse' => $from->id,

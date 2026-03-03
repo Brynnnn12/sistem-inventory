@@ -69,6 +69,7 @@ test('super-admin bisa membuat outbound dan mengurangi stok', function () {
         'warehouse_id' => $warehouse->id,
         'product_id' => $product->id,
         'quantity' => 10,
+        'available_qty' => 10,
 
     ]);
 
@@ -124,6 +125,7 @@ test('admin bisa membuat outbound tanpa mengirim warehouse_id (diisi otomatis)',
         'warehouse_id' => $warehouse->id,
         'product_id' => $product->id,
         'quantity' => 5,
+        'available_qty' => 5,
     ]);
 
     $payload = [
