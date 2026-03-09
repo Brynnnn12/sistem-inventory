@@ -61,7 +61,8 @@ class StoreInboundRequest extends FormRequest
         /** @var \App\Models\User $user */
         $user = Auth::user();
         if (! $user->hasRole('super-admin') && ! $this->has('warehouse_id')) {
-            $userWarehouse = $user->warehouses()->first();
+            $userWarehouse = $user->warehouses()->where('is_primary', true)->first()
+                ?? $user->warehouses()->first();
             if ($userWarehouse) {
                 $this->merge(['warehouse_id' => $userWarehouse->id]);
             }

@@ -29,7 +29,6 @@ export default function Index({
         initialSearch: filters.search || '',
     });
 
-
     const { modals, openModal, closeModal } = useGenericModals<Product>({
         simple: ['create', 'bulkDelete'],
         withData: ['edit', 'delete']

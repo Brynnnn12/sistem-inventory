@@ -31,6 +31,7 @@ import type { MutationCreateModalProps } from '@/types/models/mutation';
 
 interface MutationCreateModalPropsExtended extends MutationCreateModalProps {
     warehouses: Array<{ id: number; name: string }>;
+    userWarehouses: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
     stocks: Array<{
         id: number;
@@ -47,6 +48,7 @@ export function MutationCreateModal({
     open,
     onClose,
     warehouses,
+    userWarehouses,
     products,
     stocks,
     canSelectWarehouse,
@@ -64,8 +66,8 @@ export function MutationCreateModal({
     });
 
     const selectedFromWarehouse = useMemo(
-        () => warehouses.find((w) => w.id.toString() === data.from_warehouse),
-        [data.from_warehouse, warehouses]
+        () => userWarehouses.find((w) => w.id.toString() === data.from_warehouse),
+        [data.from_warehouse, userWarehouses]
     );
 
     const selectedToWarehouse = useMemo(
@@ -104,15 +106,12 @@ export function MutationCreateModal({
     }, [data.from_warehouse, data.product_id, availableProducts, setData]);
 
     useEffect(() => {
-        if (!canSelectWarehouse && warehouses.length > 0) {
+        if (!canSelectWarehouse && userWarehouses.length > 0) {
             if (!data.from_warehouse) {
-                setData('from_warehouse', warehouses[0].id.toString());
-            }
-            if (!data.to_warehouse && warehouses.length > 1) {
-                setData('to_warehouse', warehouses[1].id.toString());
+                setData('from_warehouse', userWarehouses[0].id.toString());
             }
         }
-    }, [canSelectWarehouse, warehouses, data.from_warehouse, data.to_warehouse, setData]);
+    }, [canSelectWarehouse, userWarehouses, data.from_warehouse, setData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -169,7 +168,7 @@ export function MutationCreateModal({
                                             <CommandList>
                                                 <CommandEmpty>Gudang tidak ditemukan</CommandEmpty>
                                                 <CommandGroup>
-                                                    {warehouses.map((warehouse) => (
+                                                    {userWarehouses.map((warehouse) => (
                                                         <CommandItem
                                                             key={warehouse.id}
                                                             value={warehouse.name}
@@ -199,14 +198,13 @@ export function MutationCreateModal({
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="to_warehouse">Ke Gudang</Label>
-                                <Popover open={toWarehouseSearchOpen} onOpenChange={canSelectWarehouse ? setToWarehouseSearchOpen : undefined}>
+                                <Popover open={toWarehouseSearchOpen} onOpenChange={setToWarehouseSearchOpen}>
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
                                             role="combobox"
                                             aria-expanded={toWarehouseSearchOpen}
                                             className="w-full justify-between"
-                                            disabled={!canSelectWarehouse}
                                         >
                                             {selectedToWarehouse ? (
                                                 <div className="flex items-center gap-2">

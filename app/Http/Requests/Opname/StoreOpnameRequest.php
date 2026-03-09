@@ -42,7 +42,8 @@ class StoreOpnameRequest extends FormRequest
         $user = Auth::user();
 
         if (! $user->hasRole('super-admin') && ! $this->has('warehouse_id')) {
-            $userWarehouse = $user->warehouses()->first();
+            $userWarehouse = $user->warehouses()->where('is_primary', true)->first()
+                ?? $user->warehouses()->first();
             if ($userWarehouse) {
                 $this->merge(['warehouse_id' => $userWarehouse->id]);
             }

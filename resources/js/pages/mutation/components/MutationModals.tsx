@@ -6,6 +6,7 @@ import { MutationShowModal } from './MutationShowModal';
 
 interface MutationModalsPropsExtended extends MutationModalsProps {
     warehouses: Array<{ id: number; name: string }>;
+    userWarehouses: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
     stocks: Array<{
         id: number;
@@ -28,6 +29,7 @@ export function MutationModals({
     rejectModal,
     onCloseRejectModal,
     warehouses,
+    userWarehouses,
     products,
     stocks,
     canSelectWarehouse,
@@ -38,6 +40,7 @@ export function MutationModals({
                 open={createModal}
                 onClose={onCloseCreateModal}
                 warehouses={warehouses}
+                userWarehouses={userWarehouses}
                 products={products}
                 stocks={stocks}
                 canSelectWarehouse={canSelectWarehouse}

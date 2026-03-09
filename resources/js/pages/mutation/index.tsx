@@ -17,6 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Index({
     mutations,
     warehouses,
+    userWarehouses,
     products,
     stocks,
     canSelectWarehouse,
@@ -24,6 +25,7 @@ export default function Index({
 }: {
     mutations: PageProps;
     warehouses: Array<{ id: number; name: string }>;
+    userWarehouses: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
     stocks: Array<{
         id: number;
@@ -107,6 +109,7 @@ export default function Index({
                     rejectModal={modals.reject}
                     onCloseRejectModal={() => closeModal('reject')}
                     warehouses={warehouses}
+                    userWarehouses={userWarehouses}
                     products={products}
                     stocks={stocks}
                     canSelectWarehouse={canSelectWarehouse}

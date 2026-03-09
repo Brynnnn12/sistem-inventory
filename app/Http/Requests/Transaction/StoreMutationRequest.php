@@ -60,7 +60,8 @@ class StoreMutationRequest extends FormRequest
 
         // Set from_warehouse based on user role
         if (! $user->hasRole('super-admin') && ! $this->has('from_warehouse')) {
-            $userWarehouse = $user->warehouses()->first();
+            $userWarehouse = $user->warehouses()->where('is_primary', true)->first()
+                ?? $user->warehouses()->first();
             if ($userWarehouse) {
                 $this->merge(['from_warehouse' => $userWarehouse->id]);
             }

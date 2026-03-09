@@ -27,16 +27,6 @@ export interface StockMutation {
         name: string;
         code: string;
     };
-    from_warehouse: {
-        id: number;
-        name: string;
-        code: string;
-    };
-    to_warehouse: {
-        id: number;
-        name: string;
-        code: string;
-    };
     product: {
         id: number;
         name: string;

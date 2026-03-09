@@ -106,7 +106,8 @@ class MutationController extends Controller
 
         return Inertia::render('mutation/index', [
             'mutations' => $mutations,
-            'warehouses' => $user->hasRole('super-admin')
+            'warehouses' => Warehouse::active()->get(['id', 'name']), // All warehouses for mutations
+            'userWarehouses' => $user->hasRole('super-admin')
                 ? Warehouse::active()->get(['id', 'name'])
                 : $user->warehouses()->active()->select('warehouses.id', 'warehouses.name')->get(),
             'products' => Product::active()->get(['id', 'name']),
