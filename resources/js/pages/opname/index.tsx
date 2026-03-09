@@ -43,7 +43,6 @@ export default function Index({
             warehouse_id: filters?.warehouse_id || '',
             difference_type: filters?.difference_type || '',
         },
-        only: ['opnames'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Opname>({
@@ -78,7 +77,7 @@ export default function Index({
                     onApprove={handleApprove}
                 />
 
-                {opnames.last_page > 1 && (
+                {opnames.total > 0 && (
                     <div className="mt-6">
                         <Pagination
                             links={opnames.links}

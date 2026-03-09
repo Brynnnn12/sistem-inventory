@@ -44,10 +44,12 @@ class MutationController extends Controller
         // Apply filters
         if ($request->search) {
             $query->where(function ($q) use ($request) {
-                $q->where('code', 'like', "%{$request->search}%")
-                    ->orWhereHas('product', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
-                    ->orWhereHas('fromWarehouse', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
-                    ->orWhereHas('toWarehouse', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"));
+                $q->where(function ($searchQuery) use ($request) {
+                    $searchQuery->where('code', 'like', "%{$request->search}%")
+                        ->orWhereHas('product', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
+                        ->orWhereHas('fromWarehouse', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
+                        ->orWhereHas('toWarehouse', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"));
+                });
             });
         }
 

@@ -44,7 +44,7 @@ export function Pagination({ links, meta }: PaginationProps) {
                     asChild={meta.current_page !== 1}
                 >
                     {meta.current_page !== 1 ? (
-                        <Link href={links[0]?.url || '#'} preserveScroll>
+                        <Link href={links[0]?.url || undefined} preserveScroll preserveState>
                             <ChevronsLeft className="h-4 w-4" />
                         </Link>
                     ) : (
@@ -60,7 +60,7 @@ export function Pagination({ links, meta }: PaginationProps) {
                     asChild={meta.current_page !== 1}
                 >
                     {meta.current_page !== 1 ? (
-                        <Link href={links.find(l => l.label === '&laquo; Previous')?.url || '#'} preserveScroll>
+                        <Link href={links.find(l => l.label === '&laquo; Previous')?.url || undefined} preserveScroll preserveState>
                             <ChevronLeft className="h-4 w-4" />
                         </Link>
                     ) : (
@@ -89,7 +89,7 @@ export function Pagination({ links, meta }: PaginationProps) {
                                     asChild={!link.active && link.url !== null}
                                 >
                                     {!link.active && link.url ? (
-                                        <Link href={link.url} preserveScroll>
+                                        <Link href={link.url} preserveScroll preserveState>
                                             {link.label}
                                         </Link>
                                     ) : (
@@ -115,7 +115,7 @@ export function Pagination({ links, meta }: PaginationProps) {
                     asChild={meta.current_page !== meta.last_page}
                 >
                     {meta.current_page !== meta.last_page ? (
-                        <Link href={links.find(l => l.label === 'Next &raquo;')?.url || '#'} preserveScroll>
+                        <Link href={links.find(l => l.label === 'Next &raquo;')?.url || undefined} preserveScroll preserveState>
                             <ChevronRight className="h-4 w-4" />
                         </Link>
                     ) : (
@@ -131,7 +131,7 @@ export function Pagination({ links, meta }: PaginationProps) {
                     asChild={meta.current_page !== meta.last_page}
                 >
                     {meta.current_page !== meta.last_page ? (
-                        <Link href={links[links.length - 1]?.url || '#'} preserveScroll>
+                        <Link href={links[links.length - 1]?.url || undefined} preserveScroll preserveState>
                             <ChevronsRight className="h-4 w-4" />
                         </Link>
                     ) : (

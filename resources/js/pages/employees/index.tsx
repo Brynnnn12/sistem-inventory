@@ -69,7 +69,6 @@ export default function Index({
                     preserveState: true,
                     preserveScroll: true,
                     replace: true,
-                    only: ['employees'],
                 }
             );
         }, 300);
@@ -149,7 +148,7 @@ export default function Index({
                 />
 
                 {/* Pagination */}
-                {employees.last_page > 1 && (
+                {employees.total > 0 && (
                     <div className="mt-4">
                         <Pagination
                             links={employees.links}

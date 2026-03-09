@@ -29,7 +29,6 @@ export default function Index({
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
         route: '/dashboard/warehouse-users',
         initialSearch: filters.search || '',
-        only: ['warehouseUsers'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<WarehouseUser>({
@@ -119,7 +118,7 @@ export default function Index({
                 />
 
                 {/* Pagination */}
-                {warehouseUsers.last_page > 1 && (
+                {warehouseUsers.total > 0 && (
                     <div className="mt-4">
                         <Pagination
                             links={warehouseUsers.links}

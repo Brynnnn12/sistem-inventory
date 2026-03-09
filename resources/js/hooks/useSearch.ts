@@ -54,7 +54,7 @@ export function useSearch({
                     preserveState: true,
                     preserveScroll: true,
                     replace: true,
-                    only: only.length > 0 ? only : undefined,
+                    ...(only && only.length > 0 && { only }),
                 }
             );
         }, debounceMs);

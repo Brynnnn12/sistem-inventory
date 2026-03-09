@@ -34,7 +34,6 @@ export default function Index({
             start_date: initialFilters?.start_date || '',
             end_date: initialFilters?.end_date || '',
         },
-        only: ['stockHistories'],
     });
 
     return (
@@ -67,7 +66,7 @@ export default function Index({
                     isLoading={false}
                 />
 
-                {stockHistories.last_page > 1 && (
+                {stockHistories.total > 0 && (
                     <div className="mt-6">
                         <Pagination
                             links={stockHistories.links}

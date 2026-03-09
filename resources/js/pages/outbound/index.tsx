@@ -42,7 +42,6 @@ export default function Index({
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
         route: '/dashboard/outbound',
         initialSearch: filters.search || '',
-        only: ['outbounds'],
     });
 
     const { setFilter, clearFilters } = useFilters({
@@ -84,7 +83,7 @@ export default function Index({
                     onShow={(outbound) => openModal('show', outbound)}
                 />
 
-                {outbounds.last_page > 1 && (
+                {outbounds.total > 0 && (
                     <div className="mt-6">
                         <Pagination
                             links={outbounds.links}

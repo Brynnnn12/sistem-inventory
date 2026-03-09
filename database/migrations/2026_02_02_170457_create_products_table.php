@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('code', 20)->unique();
-            $table->foreignId('category_id')->constrained()->onDelete('restrict');
+            $table->foreignId(column: 'category_id')->constrained()->onDelete('restrict');
             $table->string('name', 50)->index();
             $table->string('unit', 50);
             $table->integer('min_stock')->default(0);

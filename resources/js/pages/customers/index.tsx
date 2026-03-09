@@ -25,7 +25,6 @@ export default function Index({
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
         route: '/dashboard/customers',
         initialSearch: filters.search || '',
-        only: ['customers'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Customer>({
@@ -100,7 +99,7 @@ export default function Index({
                     someSelected={someSelected}
                 />
 
-                {customers.last_page > 1 && (
+                {customers.total > 0 && (
                     <div className="mt-4">
                         <Pagination
                             links={customers.links}

@@ -31,7 +31,6 @@ export default function Index({
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
         route: '/dashboard/stocks',
         initialSearch: filters.search || '',
-        only: ['stocks'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Stock>({
@@ -65,7 +64,7 @@ export default function Index({
                     onShowStock={(stock) => openModal('show', stock)}
                 />
 
-                {stocks.last_page > 1 && (
+                {stocks.total > 0 && (
                     <div className="mt-6">
                         <Pagination
                             links={stocks.links}

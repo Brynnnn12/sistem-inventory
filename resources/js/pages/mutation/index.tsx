@@ -43,7 +43,6 @@ export default function Index({
             status: filters?.status || '',
             type: filters?.type || '',
         },
-        only: ['mutations'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<StockMutation>({
@@ -79,7 +78,7 @@ export default function Index({
                             onRejectMutation={(mutation) => openModal('reject', mutation)}
                         />
 
-                        {mutations.last_page > 1 && (
+                        {mutations.total > 0 && (
                             <div className="mt-6">
                                 <Pagination
                                     links={mutations.links}

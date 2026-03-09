@@ -29,12 +29,14 @@ class StockController extends Controller
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('product', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%");
-            })->orWhereHas('warehouse', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('product', function ($productQuery) use ($search) {
+                    $productQuery->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%");
+                })->orWhereHas('warehouse', function ($warehouseQuery) use ($search) {
+                    $warehouseQuery->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%");
+                });
             });
         }
 

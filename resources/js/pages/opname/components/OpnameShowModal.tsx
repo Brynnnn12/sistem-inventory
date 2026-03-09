@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
     Dialog,
     DialogContent,
@@ -6,7 +7,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
-import {Label} from "@/components/ui/label";
+import { Separator } from '@/components/ui/separator';
+import { formatQuantity, formatDate } from '@/lib/utils';
 import type { Opname } from '@/types/models/opname';
 
 interface OpnameShowModalProps {
@@ -24,72 +26,114 @@ export function OpnameShowModal({
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent className="sm:max-w-150">
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Detail Opname</DialogTitle>
+                    <DialogTitle className="flex items-center gap-2">
+                        Detail Opname
+                        <Badge variant="secondary" className="font-mono">
+                            {opname.code}
+                        </Badge>
+                    </DialogTitle>
                     <DialogDescription>
-                        Kode: <Badge variant="secondary">{opname.code}</Badge>
+                        Informasi lengkap hasil opname stok
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label className="text-sm font-medium">Produk</Label>
-                            <p className="text-sm text-muted-foreground">{opname.product.name}</p>
-                        </div>
-                        <div>
-                            <Label className="text-sm font-medium">Warehouse</Label>
-                            <p className="text-sm text-muted-foreground">{opname.warehouse.name}</p>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-3 gap-4">
-                        <div>
-                            <Label className="text-sm font-medium">System Qty</Label>
-                            <p className="text-sm text-muted-foreground">{formatQuantity(opname.system_qty)}</p>
-                        </div>
-                        <div>
-                            <Label className="text-sm font-medium">Physical Qty</Label>
-                            <p className="text-sm text-muted-foreground">{formatQuantity(opname.physical_qty)}</p>
-                        </div>
-                        <div>
-                            <Label className="text-sm font-medium">Selisih</Label>
-                            <p className={`text-sm font-medium ${opname.difference_type === 'lebih' ? 'text-green-600' : opname.difference_type === 'kurang' ? 'text-red-600' : 'text-gray-600'}`}>
-                                {opname.difference_type === 'lebih' ? '+' : opname.difference_type === 'kurang' ? '-' : ''}{formatQuantity(opname.difference_qty)}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label className="text-sm font-medium">Status</Label>
-                            <Badge variant={opname.status === 'approved' ? 'default' : 'secondary'}>
-                                {opname.status === 'approved' ? 'Approved' : 'Draft'}
-                            </Badge>
-                        </div>
-                        <div>
-                            <Label className="text-sm font-medium">Tanggal Opname</Label>
-                            <p className="text-sm text-muted-foreground">
-                                {formatDate(opname.opname_date)}
-                            </p>
-                        </div>
-                    </div>
-                    {opname.notes && (
-                        <div>
-                            <Label className="text-sm font-medium">Catatan</Label>
-                            <p className="text-sm text-muted-foreground">{opname.notes}</p>
-                        </div>
-                    )}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label className="text-sm font-medium">Dibuat Oleh</Label>
-                            <p className="text-sm text-muted-foreground">{opname.creator.name}</p>
-                        </div>
-                        <div>
-                            <Label className="text-sm font-medium">Tanggal Dibuat</Label>
-                            <p className="text-sm text-muted-foreground">
-                                {formatDate(opname.created_at)}
-                            </p>
-                        </div>
-                    </div>
+
+                <div className="space-y-6">
+                    {/* Basic Information */}
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-lg">Informasi Dasar</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Produk</label>
+                                    <p className="text-sm font-medium">{opname.product.name}</p>
+                                </div>
+                                <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Warehouse</label>
+                                    <p className="text-sm font-medium">{opname.warehouse.name}</p>
+                                </div>
+                                <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Tanggal Opname</label>
+                                    <p className="text-sm font-medium">{formatDate(opname.opname_date)}</p>
+                                </div>
+                                <div>
+                                    <label className="text-sm font-medium text-muted-foreground mr-2">Status</label>
+                                    <Badge variant={opname.status === 'approved' ? 'default' : 'secondary'} className="mt-1">
+                                        {opname.status === 'approved' ? 'Approved' : 'Draft'}
+                                    </Badge>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Quantity Information */}
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-lg">Hasil Opname</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid grid-cols-3 gap-4">
+                                <div className="text-center p-4 bg-muted/50 rounded-lg">
+                                    <label className="text-sm font-medium text-muted-foreground block mb-2">Sistem</label>
+                                    <p className="text-lg font-mono font-semibold">{formatQuantity(opname.system_qty)}</p>
+                                </div>
+                                <div className="text-center p-4 bg-muted/50 rounded-lg">
+                                    <label className="text-sm font-medium text-muted-foreground block mb-2">Fisik</label>
+                                    <p className="text-lg font-mono font-semibold">{formatQuantity(opname.physical_qty)}</p>
+                                </div>
+                                <div className="text-center p-4 rounded-lg border-2 border-dashed">
+                                    <label className="text-sm font-medium text-muted-foreground block mb-2">Selisih</label>
+                                    <p className={`text-lg font-mono font-bold ${
+                                        opname.difference_type === 'lebih' ? 'text-green-600' :
+                                        opname.difference_type === 'kurang' ? 'text-red-600' : 'text-gray-600'
+                                    }`}>
+                                        {opname.difference_type === 'lebih' ? '+' : opname.difference_type === 'kurang' ? '-' : ''}
+                                        {formatQuantity(opname.difference_qty)}
+                                    </p>
+                                    {opname.difference_type && (
+                                        <Badge
+                                            variant={opname.difference_type === 'lebih' ? 'default' : 'destructive'}
+                                            className="mt-1 text-xs"
+                                        >
+                                            {opname.difference_type === 'lebih' ? 'Lebih' : 'Kurang'}
+                                        </Badge>
+                                    )}
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Additional Information */}
+                    <Card>
+                        <CardHeader className="pb-3">
+                            <CardTitle className="text-lg">Informasi Tambahan</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Dibuat Oleh</label>
+                                    <p className="text-sm font-medium">{opname.creator.name}</p>
+                                </div>
+                                <div>
+                                    <label className="text-sm font-medium text-muted-foreground">Tanggal Dibuat</label>
+                                    <p className="text-sm font-medium">{formatDate(opname.created_at)}</p>
+                                </div>
+                            </div>
+
+                            {opname.notes && (
+                                <>
+                                    <Separator />
+                                    <div>
+                                        <label className="text-sm font-medium text-muted-foreground">Catatan</label>
+                                        <p className="text-sm mt-1 p-3 bg-muted/50 rounded-md">{opname.notes}</p>
+                                    </div>
+                                </>
+                            )}
+                        </CardContent>
+                    </Card>
                 </div>
             </DialogContent>
         </Dialog>

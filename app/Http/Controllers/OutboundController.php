@@ -31,9 +31,11 @@ class OutboundController extends Controller
 
         $query = OutboundTransaction::with(['customer', 'warehouse', 'product', 'creator'])
             ->when($request->search, function ($q) use ($request) {
-                $q->where('code', 'like', "%{$request->search}%")
-                    ->orWhereHas('customer', fn ($cq) => $cq->where('name', 'like', "%{$request->search}%"))
-                    ->orWhereHas('product', fn ($pq) => $pq->where('name', 'like', "%{$request->search}%"));
+                $q->where(function ($searchQuery) use ($request) {
+                    $searchQuery->where('code', 'like', "%{$request->search}%")
+                        ->orWhereHas('customer', fn ($cq) => $cq->where('name', 'like', "%{$request->search}%"))
+                        ->orWhereHas('product', fn ($pq) => $pq->where('name', 'like', "%{$request->search}%"));
+                });
             })
             ->when($request->warehouse_id, function ($q) use ($request) {
                 $q->where('warehouse_id', $request->warehouse_id);

@@ -27,8 +27,8 @@ export default function Index({
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
         route: '/dashboard/products',
         initialSearch: filters.search || '',
-        only: ['products'],
     });
+
 
     const { modals, openModal, closeModal } = useGenericModals<Product>({
         simple: ['create', 'bulkDelete'],
@@ -102,7 +102,7 @@ export default function Index({
                     someSelected={someSelected}
                 />
 
-                {products.last_page > 1 && (
+                {products.total > 0 && (
                     <div className="mt-4">
                         <Pagination
                             links={products.links}

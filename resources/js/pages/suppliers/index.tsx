@@ -25,7 +25,6 @@ export default function Index({
     const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
         route: '/dashboard/suppliers',
         initialSearch: filters.search || '',
-        only: ['suppliers'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Supplier>({
@@ -100,7 +99,7 @@ export default function Index({
                     someSelected={someSelected}
                 />
 
-                {suppliers.last_page > 1 && (
+                {suppliers.total > 0 && (
                     <div className="mt-4">
                         <Pagination
                             links={suppliers.links}
