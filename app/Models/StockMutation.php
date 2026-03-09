@@ -79,6 +79,17 @@ class StockMutation extends Model
         return $this->belongsTo(Warehouse::class, 'to_warehouse');
     }
 
+    // Accessors to ensure consistent naming
+    public function getFromWarehouseAttribute()
+    {
+        return $this->fromWarehouse;
+    }
+
+    public function getToWarehouseAttribute()
+    {
+        return $this->toWarehouse;
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

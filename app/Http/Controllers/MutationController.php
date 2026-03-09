@@ -79,6 +79,9 @@ class MutationController extends Controller
 
         // Add type to each mutation
         $mutations->getCollection()->transform(function ($mutation) use ($user, $isSuperAdmin, $request) {
+            // Ensure relationships are loaded
+            $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator', 'receiver']);
+
             if ($isSuperAdmin) {
                 // For super admin, determine type based on filter or default logic
                 if ($request->type === 'outgoing') {
