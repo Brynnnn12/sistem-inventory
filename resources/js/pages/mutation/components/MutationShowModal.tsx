@@ -59,7 +59,7 @@ export function MutationShowModal({
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Ke Gudang</label>
-                                <p className="text-sm font-medium">{mutation.toWarehouse?.name || '-'}</p>
+                                <p className="text-sm font-medium">{mutation.to_warehouse?.name || '-'}</p>
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-muted-foreground">Dibuat Oleh</label>

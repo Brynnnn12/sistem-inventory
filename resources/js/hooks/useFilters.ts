@@ -51,28 +51,28 @@ export function useFilters({
                 }
             });
 
-            router.get(
-                route,
-                params,
-                {
-                    preserveState: true,
-                    preserveScroll: true,
-                    replace: true,
-                    only: only.length > 0 ? only : undefined,
-                }
-            );
+            router.visit(route, {
+                method: 'get',
+                data: params,
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                ...(only && only.length > 0 && { only }),
+            });
         }, debounceMs);
 
         return () => clearTimeout(timer);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [...Object.values(filterForm.data)]);
+    }, [JSON.stringify(filterForm.data)]);
 
     const clearFilters = () => {
         filterForm.setData(initialFilters);
-        router.get(route, {}, {
+        router.visit(route, {
+            method: 'get',
+            data: {},
             replace: true,
             preserveState: false,
-            only: only.length > 0 ? only : undefined,
+            ...(only && only.length > 0 && { only }),
         });
     };
 

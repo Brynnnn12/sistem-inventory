@@ -17,12 +17,12 @@ export interface StockMutation {
     rejected_by: number | null;
     created_at: string;
     updated_at: string;
-    fromWarehouse: {
+    from_warehouse: {
         id: number;
         name: string;
         code: string;
     };
-    toWarehouse: {
+    to_warehouse: {
         id: number;
         name: string;
         code: string;

@@ -79,15 +79,20 @@ class StockMutation extends Model
         return $this->belongsTo(Warehouse::class, 'to_warehouse');
     }
 
-    // Accessors to ensure consistent naming
-    public function getFromWarehouseAttribute()
+    // Override toArray to ensure relationships are included
+    public function toArray()
     {
-        return $this->fromWarehouse;
-    }
+        $array = parent::toArray();
 
-    public function getToWarehouseAttribute()
-    {
-        return $this->toWarehouse;
+        // Ensure relationships are loaded and included
+        if ($this->relationLoaded('fromWarehouse')) {
+            $array['from_warehouse'] = $this->fromWarehouse;
+        }
+        if ($this->relationLoaded('toWarehouse')) {
+            $array['to_warehouse'] = $this->toWarehouse;
+        }
+
+        return $array;
     }
 
     public function product(): BelongsTo
