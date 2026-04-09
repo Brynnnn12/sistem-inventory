@@ -14,7 +14,6 @@ test('super-admin bisa melakukan CRUD dan bulk pada karyawan; role lain dilarang
 
     $superAdmin = createSuperAdmin();
 
-    // pastikan role tersetup dan buat beberapa karyawan dengan peran
     createRoles(['admin', 'viewer']);
 
     $adminA = createAdmin();

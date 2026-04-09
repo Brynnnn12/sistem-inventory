@@ -13,6 +13,8 @@ export function StocksToolbar({
     filters,
     warehouses,
     products,
+    onWarehouseChange,
+    onProductChange,
 }: StocksToolbarProps) {
     return (
         <>
@@ -38,27 +40,40 @@ export function StocksToolbar({
                         disabled={isSearching}
                     />
                 </div>
-                <Select value={filters.warehouse_id || 'all'} onValueChange={() => {}}>
+                <Select
+
+                    value={filters?.warehouse_id?.toString() || 'all'}
+                    onValueChange={onWarehouseChange}
+                >
                     <SelectTrigger className="h-10">
+
                         <SelectValue placeholder="Pilih Warehouse" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">Semua Warehouse</SelectItem>
                         {warehouses.map((warehouse) => (
-                            <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
+                            <SelectItem
+                                key={warehouse.id}
+                                value={warehouse.id.toString()}
+                            >
                                 {warehouse.name}
                             </SelectItem>
                         ))}
                     </SelectContent>
                 </Select>
-                <Select value={filters.product_id || 'all'} onValueChange={() => {}}>
+                <Select value={filters.product_id ? filters.product_id.toString() : 'all'} onValueChange={(value) => {
+                    onProductChange(value === 'all' ? '' : value);
+                }}>
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Pilih Produk" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">Semua Produk</SelectItem>
                         {products.map((product) => (
-                            <SelectItem key={product.id} value={product.id.toString()}>
+                            <SelectItem
+                                key={product.id}
+                                value={product.id.toString()}
+                            >
                                 {product.name}
                             </SelectItem>
                         ))}

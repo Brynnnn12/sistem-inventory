@@ -33,7 +33,11 @@ export function StockHistoryToolbar({
 
                 <div className="flex gap-2">
                     <div className="w-48">
-                        <Select value={filters.warehouse_id || 'all'} onValueChange={onWarehouseChange}>
+<Select
+    key={`wh-${filters.warehouse_id}`} // Tambahkan ini
+    value={filters.warehouse_id?.toString() || 'all'}
+    onValueChange={onWarehouseChange}
+>
                             <SelectTrigger>
                                 <SelectValue placeholder="Semua Gudang" />
                             </SelectTrigger>
@@ -49,7 +53,11 @@ export function StockHistoryToolbar({
                     </div>
 
                     <div className="w-48">
-                        <Select value={filters.product_id || 'all'} onValueChange={onProductChange}>
+<Select
+    key={`prod-${filters.product_id}`} // Tambahkan ini
+    value={filters.product_id?.toString() || 'all'}
+    onValueChange={onProductChange}
+>
                             <SelectTrigger>
                                 <SelectValue placeholder="Semua Produk" />
                             </SelectTrigger>

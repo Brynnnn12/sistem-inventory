@@ -1,8 +1,8 @@
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { Pagination } from '@/components/pagination';
+import { useFilters } from '@/hooks/useFilters';
 import { useGenericModals, type ModalWithData } from '@/hooks/useGenericModals';
-import { useSearch } from '@/hooks/useSearch';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import type { Stock, StockFilters, PageProps } from '@/types/models/stocks';
@@ -28,9 +28,13 @@ export default function Index({
 }) {
     const [isLoading] = useState(false);
 
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
         route: '/dashboard/stocks',
-        initialSearch: filters.search || '',
+        initialFilters: {
+            search: filters.search || '',
+            warehouse_id: filters.warehouse_id || '',
+            product_id: filters.product_id || '',
+        },
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Stock>({
@@ -38,24 +42,21 @@ export default function Index({
         withData: ['show']
     });
 
-    const clearFilters = () => {
-        clearSearch();
-        // TODO: clear other filters
-    };
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Stok" />
             <div className="p-6">
                 <StocksToolbar
-                    searchValue={searchValue}
-                    onSearchChange={setSearchValue}
+                    searchValue={filterState.search}
+                    onSearchChange={(value) => setFilter('search', value)}
                     onClearFilters={clearFilters}
-                    isSearching={isSearching}
-                    hasActiveFilters={hasActiveSearch}
-                    filters={filters}
+                    isSearching={isFiltering}
+                    hasActiveFilters={hasActiveFilters}
+                    filters={filterState}
                     warehouses={warehouses}
                     products={products}
+                    onWarehouseChange={(value) => setFilter('warehouse_id', value)}
+                    onProductChange={(value) => setFilter('product_id', value)}
                 />
 
                 <StocksTable

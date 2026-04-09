@@ -23,9 +23,9 @@ export function InboundTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <FolderOpen className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Inbound</h3>
+                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Transaksi Barang Masuk</h3>
                     <p className="mt-2 text-sm text-muted-foreground max-w-sm">
-                        Mulai dengan menambahkan transaksi inbound pertama
+                        Mulai dengan menambahkan transaksi Barang Masuk untuk mencatat penerimaan barang ke dalam gudang Anda.
                     </p>
                 </div>
             </div>
@@ -40,8 +40,8 @@ export function InboundTable({
                         <TableHead className="font-semibold">Kode</TableHead>
                         <TableHead className="font-semibold">Supplier</TableHead>
                         <TableHead className="font-semibold">Produk</TableHead>
-                        <TableHead className="font-semibold">Warehouse</TableHead>
-                        <TableHead className="font-semibold">Qty</TableHead>
+                        <TableHead className="font-semibold">Gudang</TableHead>
+                        <TableHead className="font-semibold">Jumlah</TableHead>
                         <TableHead className="font-semibold">Tanggal</TableHead>
                         <TableHead className="text-right font-semibold">Aksi</TableHead>
                     </TableRow>

@@ -83,6 +83,8 @@ export interface StocksToolbarProps {
     filters: StockFilters;
     warehouses: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
+    onWarehouseChange: (value: string) => void;
+    onProductChange: (value: string) => void;
 }
 
 export interface StocksTableProps {

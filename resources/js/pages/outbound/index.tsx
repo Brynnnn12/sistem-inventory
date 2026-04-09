@@ -49,7 +49,7 @@ export default function Index({
         initialFilters: {
             warehouse_id: filters.warehouse_id || '',
         },
-        only: ['outbounds'],
+        only: ['outbounds', 'filters'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<OutboundTransaction>({

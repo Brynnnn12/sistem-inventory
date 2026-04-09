@@ -40,7 +40,7 @@ export default function Index({
         initialFilters: {
             warehouse_id: filters.warehouse_id || '',
         },
-        only: ['inbounds'],
+        only: ['inbounds', 'filters'],
     });
 
     const { modals, openModal, closeModal } = useGenericModals<InboundTransaction>({
@@ -62,9 +62,11 @@ export default function Index({
                     onSearchChange={setSearchValue}
                     onAddClick={() => openModal('create')}
                     onClearFilters={clearFiltersHandler}
-                    onWarehouseChange={(value) => setFilter('warehouse_id', value)}
+                    // Pastikan nilai 'all' ditangani dengan benar saat pengiriman filter
+                    onWarehouseChange={(value) => setFilter('warehouse_id', value === 'all' ? '' : value)}
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
+                    // Kirim filters langsung dari props
                     filters={filters}
                     warehouses={warehouses}
                 />

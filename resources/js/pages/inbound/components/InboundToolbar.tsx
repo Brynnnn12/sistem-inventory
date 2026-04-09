@@ -45,14 +45,22 @@ export function InboundToolbar({
                         disabled={isSearching}
                     />
                 </div>
-                <Select value={filters.warehouse_id || 'all'} onValueChange={onWarehouseChange}>
+                <Select
+
+                    value={filters?.warehouse_id?.toString() || 'all'}
+                    onValueChange={onWarehouseChange}
+                >
                     <SelectTrigger className="h-10">
+
                         <SelectValue placeholder="Pilih Warehouse" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">Semua Warehouse</SelectItem>
                         {warehouses.map((warehouse) => (
-                            <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
+                            <SelectItem
+                                key={warehouse.id}
+                                value={warehouse.id.toString()}
+                            >
                                 {warehouse.name}
                             </SelectItem>
                         ))}

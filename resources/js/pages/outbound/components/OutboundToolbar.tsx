@@ -45,19 +45,28 @@ export function OutboundToolbar({
                         disabled={isSearching}
                     />
                 </div>
-                <Select value={filters.warehouse_id || 'all'} onValueChange={onWarehouseChange}>
-                    <SelectTrigger className="h-10">
-                        <SelectValue placeholder="Pilih Warehouse" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">Semua Warehouse</SelectItem>
-                        {warehouses.map((warehouse) => (
-                            <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
-                                {warehouse.name}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+<Select
+    // Gunakan nullish coalescing dan pastikan string
+    // Kita paksa string agar match dengan SelectItem value
+    value={filters?.warehouse_id?.toString() || 'all'}
+    onValueChange={onWarehouseChange}
+>
+    <SelectTrigger className="h-10">
+        {/* SelectValue akan otomatis mengambil teks dari SelectItem yang match dengan value di atas */}
+        <SelectValue placeholder="Pilih Warehouse" />
+    </SelectTrigger>
+    <SelectContent>
+        <SelectItem value="all">Semua Warehouse</SelectItem>
+        {warehouses.map((warehouse) => (
+            <SelectItem
+                key={warehouse.id}
+                value={warehouse.id.toString()}
+            >
+                {warehouse.name}
+            </SelectItem>
+        ))}
+    </SelectContent>
+</Select>
             </div>
 
             {hasActiveFilters && (

@@ -17,22 +17,22 @@ export default function Index({
     stockHistories,
     warehouses,
     products,
-    initialFilters = {},
+    filters = {},
 }: {
     stockHistories: PageProps;
     warehouses: Array<{ id: number; name: string }>;
     products: Array<{ id: number; name: string }>;
-    initialFilters?: Filters;
+    filters?: Filters;
 }) {
     const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
         route: '/dashboard/stock-history',
         initialFilters: {
-            search: initialFilters?.search || '',
-            warehouse_id: initialFilters?.warehouse_id || '',
-            product_id: initialFilters?.product_id || '',
-            reference_type: initialFilters?.reference_type || '',
-            start_date: initialFilters?.start_date || '',
-            end_date: initialFilters?.end_date || '',
+            search: filters?.search || '',
+            warehouse_id: filters?.warehouse_id || '',
+            product_id: filters?.product_id || '',
+            reference_type: filters?.reference_type || '',
+            start_date: filters?.start_date || '',
+            end_date: filters?.end_date || '',
         },
     });
 
