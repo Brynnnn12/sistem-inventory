@@ -4,12 +4,15 @@ use App\Services\ReportService;
 use App\Models\Warehouse;
 use App\Models\Stock;
 use App\Models\Product;
+use Carbon\Carbon;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
 
 test('super-admin dapat melihat halaman laporan stok dan menerima data dari service', function () {
+    Carbon::setTestNow('2026-04-26 10:00:00');
+
     $superAdmin = createSuperAdmin();
 
     $fakeReport = [
@@ -30,11 +33,16 @@ test('super-admin dapat melihat halaman laporan stok dan menerima data dari serv
             ->component('reports/stock')
             ->where('stockReport', $fakeReport)
             ->has('warehouses')
-            ->has('filters')
+            ->where('filters.warehouse_id', null)
+            ->where('filters.start_date', '2026-04-01')
+            ->where('filters.end_date', '2026-04-30')
         );
+
+    Carbon::setTestNow();
 });
 
 test('user tanpa peran tidak bisa mengakses halaman laporan', function () {
+    /** @var \App\Models\User $user */
     $user = \App\Models\User::factory()->create();
 
     $response = actingAs($user)->get(route('reports.stock'));
@@ -43,6 +51,8 @@ test('user tanpa peran tidak bisa mengakses halaman laporan', function () {
 });
 
 test('transactions page memanggil service dan menampilkan hasil', function () {
+    Carbon::setTestNow('2026-04-26 10:00:00');
+
     $superAdmin = createSuperAdmin();
 
     $fakeTx = [
@@ -63,8 +73,13 @@ test('transactions page memanggil service dan menampilkan hasil', function () {
             ->component('reports/transactions')
             ->where('transactionReport', $fakeTx)
             ->has('warehouses')
-            ->has('filters')
+            ->where('filters.type', 'all')
+            ->where('filters.warehouse_id', null)
+            ->where('filters.start_date', '2026-04-01')
+            ->where('filters.end_date', '2026-04-30')
         );
+
+    Carbon::setTestNow();
 });
 
 test('alerts page mengembalikan alerts sesuai warehouse user', function () {

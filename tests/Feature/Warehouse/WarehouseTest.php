@@ -78,7 +78,6 @@ test('super-admin bisa buat gudang', function () {
     $superAdmin = createSuperAdmin();
 
     $response = actingAs($superAdmin)->post(route('warehouses.store'), [
-        'code' => 'WHS-100',
         'name' => 'Gudang Baru',
         'address' => 'Jl. Contoh Alamat No.123, Kota',
         'phone' => '+6281234567890',

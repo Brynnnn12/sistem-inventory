@@ -28,6 +28,14 @@ class ReportController extends Controller
         $warehouseIds = $isSuperAdmin ? null : $user->warehouses->pluck('id')->toArray();
 
         $warehouseId = $request->get('warehouse_id');
+        if ($warehouseId === 'all' || $warehouseId === '' || $warehouseId == 0) {
+            $warehouseId = null;
+        }
+
+        if ($warehouseId !== null) {
+            $warehouseId = (int) $warehouseId;
+        }
+
         $startDate = $request->get('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = $request->get('end_date', now()->endOfMonth()->format('Y-m-d'));
 
@@ -39,7 +47,11 @@ class ReportController extends Controller
         return Inertia::render('reports/stock', [
             'stockReport' => $stockReport,
             'warehouses' => $warehouses,
-            'filters' => $request->only(['warehouse_id', 'start_date', 'end_date']),
+            'filters' => [
+                'warehouse_id' => $warehouseId,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ],
         ]);
     }
 
@@ -68,7 +80,12 @@ class ReportController extends Controller
         return Inertia::render('reports/transactions', [
             'transactionReport' => $transactionReport,
             'warehouses' => $warehouses,
-            'filters' => $request->only(['type', 'warehouse_id', 'start_date', 'end_date']),
+            'filters' => [
+                'type' => $type,
+                'warehouse_id' => $warehouseId,
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ],
         ]);
     }
 
@@ -104,6 +121,14 @@ class ReportController extends Controller
         $warehouseIds = $isSuperAdmin ? null : $user->warehouses->pluck('id')->toArray();
 
         $warehouseId = $request->get('warehouse_id');
+        if ($warehouseId === 'all' || $warehouseId === '' || $warehouseId == 0) {
+            $warehouseId = null;
+        }
+
+        if ($warehouseId !== null) {
+            $warehouseId = (int) $warehouseId;
+        }
+
         $startDate = $request->get('start_date', now()->startOfMonth()->format('Y-m-d'));
         $endDate = $request->get('end_date', now()->endOfMonth()->format('Y-m-d'));
         $format = $request->get('format', 'pdf');

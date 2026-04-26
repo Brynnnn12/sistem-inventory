@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
+import { formatCurrency } from '@/lib/utils';
 import { exportMethod } from '@/routes/reports/stock';
 import { type BreadcrumbItem } from '@/types';
 
@@ -63,13 +64,13 @@ interface Props {
 }
 
 export default function StockReport({ stockReport, warehouses, filters }: Props) {
-    const [selectedWarehouse, setSelectedWarehouse] = useState(filters.warehouse_id || '');
-    const [startDate, setStartDate] = useState(filters.start_date || format(new Date(), 'yyyy-MM-dd', { locale: id }));
-    const [endDate, setEndDate] = useState(filters.end_date || format(new Date(), 'yyyy-MM-dd', { locale: id }));
+    const [selectedWarehouse, setSelectedWarehouse] = useState(filters.warehouse_id || 'all');
+    const [startDate, setStartDate] = useState(filters.start_date || stockReport.period.start_date);
+    const [endDate, setEndDate] = useState(filters.end_date || stockReport.period.end_date);
 
     const handleFilter = () => {
         router.get('/dashboard/reports/stock', {
-            warehouse_id: selectedWarehouse || undefined,
+            warehouse_id: selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
             start_date: startDate,
             end_date: endDate,
         }, {
@@ -79,12 +80,12 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
 
     const handleExport = (format: 'pdf' | 'excel') => {
         const params = {
-            warehouse_id: selectedWarehouse || undefined,
+            warehouse_id: selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
             start_date: startDate,
             end_date: endDate,
             format,
         };
-        window.open(exportMethod.url({ query: params }));
+        window.open(exportMethod.url({ query: params }), '_blank');
     };
 
     const getStatusBadge = (status: string) => {
@@ -96,13 +97,6 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
             default:
                 return <Badge variant="default">Normal</Badge>;
         }
-    };
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
-        }).format(amount);
     };
 
     const renderStockTable = (data: StockItem[]) => (
@@ -227,7 +221,7 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Value</CardTitle>
+                            <CardTitle className="text-sm font-medium">Total Nilai</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold">{formatCurrency(stockReport.summary.total_value)}</div>
@@ -256,7 +250,7 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                     <CardHeader>
                         <CardTitle>Detail Stok</CardTitle>
                         <CardDescription>
-                            Data stok {selectedWarehouse ? 'per gudang' : 'semua gudang'}
+                            Data stok {selectedWarehouse !== 'all' ? 'per gudang' : 'semua gudang'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>

@@ -43,9 +43,6 @@ class UserSeeder extends Seeder
             'phone_number' => '6285150704897',
         ])->create()->assignRole('viewer');
 
-        // 5 additional random users with random roles
-        User::factory(5)->create()->each(function ($user) {
-            $user->assignRole(['admin', 'viewer'][rand(0, 1)]);
-        });
+
     }
 }

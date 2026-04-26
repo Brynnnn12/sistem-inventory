@@ -84,20 +84,20 @@ export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormMo
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse-code">
-                                    Kode Gudang <span className="text-destructive">*</span>
-                                </Label>
-                                <Input
-                                    id="warehouse-code"
-                                    value={form.data.code}
-                                    onChange={(e) => form.setData('code', e.target.value.toUpperCase())}
-                                    placeholder="WHS-001"
-                                    className="font-mono"
-                                    disabled={isEdit}
-                                    required={!isEdit}
-                                    autoFocus={!isEdit}
-                                />
-                                <InputError message={form.errors.code} />
-                            </div>
+                                Kode Gudang
+                            </Label>
+                            <Input
+                                id="warehouse-code"
+                                value={form.data.code}
+                                placeholder={isEdit ? 'WHS-001' : 'Otomatis dibuat oleh sistem'}
+                                className="font-mono"
+                                disabled
+                            />
+                            {!isEdit && (
+                                <p className="text-sm text-muted-foreground">
+                                    Kode gudang akan dibuat otomatis saat disimpan.
+                                </p>
+                            )}
 
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse-name">

@@ -7,7 +7,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { formatQuantity, formatDate } from '@/lib/utils';
+import { formatQuantity, formatDate, formatCurrency } from '@/lib/utils';
 import type { InboundTransaction } from '@/types/models/inbound';
 
 interface InboundShowModalProps {
@@ -59,13 +59,13 @@ export function InboundShowModal({
                         <div>
                             <Label className="text-sm font-medium">Harga Satuan</Label>
                             <p className="text-sm text-muted-foreground">
-                                {inbound.unit_price ? `Rp ${inbound.unit_price.toLocaleString('id-ID')}` : '-'}
+                                {inbound.unit_price ? formatCurrency(inbound.unit_price) : '-'}
                             </p>
                         </div>
                         <div>
                             <Label className="text-sm font-medium">Total</Label>
                             <p className="text-sm text-muted-foreground">
-                                {inbound.unit_price ? `Rp ${(inbound.quantity * inbound.unit_price).toLocaleString('id-ID')}` : '-'}
+                                {inbound.unit_price ? formatCurrency(inbound.quantity * inbound.unit_price) : '-'}
                             </p>
                         </div>
                     </div>
