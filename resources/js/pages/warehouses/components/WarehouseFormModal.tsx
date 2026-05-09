@@ -98,6 +98,7 @@ export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormMo
                                     Kode gudang akan dibuat otomatis saat disimpan.
                                 </p>
                             )}
+                            </div>
 
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse-name">

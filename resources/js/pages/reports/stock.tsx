@@ -1,7 +1,7 @@
 import { Head, router } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import { Download, Filter } from 'lucide-react';
+import {  Filter } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { formatCurrency } from '@/lib/utils';
-import { exportMethod } from '@/routes/reports/stock';
+// import { exportMethod } from '@/routes/reports/stock';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -78,15 +78,15 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
         });
     };
 
-    const handleExport = (format: 'pdf' | 'excel') => {
-        const params = {
-            warehouse_id: selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
-            start_date: startDate,
-            end_date: endDate,
-            format,
-        };
-        window.open(exportMethod.url({ query: params }), '_blank');
-    };
+    // const handleExport = (format: 'pdf' | 'excel') => {
+    //     const params = {
+    //         warehouse_id: selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
+    //         start_date: startDate,
+    //         end_date: endDate,
+    //         format,
+    //     };
+    //     window.open(exportMethod.url({ query: params }), '_blank');
+    // };
 
     const getStatusBadge = (status: string) => {
         switch (status) {
@@ -146,7 +146,7 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                             Periode: {format(new Date(stockReport.period.start_date), 'dd/MM/yyyy', { locale: id })} - {format(new Date(stockReport.period.end_date), 'dd/MM/yyyy', { locale: id })}
                         </p>
                     </div>
-                    <div className="flex gap-2">
+                    {/* <div className="flex gap-2">
                         <Button variant="outline" onClick={() => handleExport('pdf')}>
                             <Download className="mr-2 h-4 w-4" />
                             Export PDF
@@ -155,7 +155,7 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                             <Download className="mr-2 h-4 w-4" />
                             Export Excel
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Filters */}
@@ -209,41 +209,6 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                     </CardContent>
                 </Card>
 
-                {/* Summary Cards */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Items</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{stockReport.summary.total_items}</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Nilai</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{formatCurrency(stockReport.summary.total_value)}</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Stok Rendah</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold text-yellow-600">{stockReport.summary.low_stock_items}</div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Stok Habis</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold text-red-600">{stockReport.summary.out_of_stock_items}</div>
-                        </CardContent>
-                    </Card>
-                </div>
 
                 {/* Stock Table */}
                 <Card>

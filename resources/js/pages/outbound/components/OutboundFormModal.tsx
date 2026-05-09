@@ -66,7 +66,6 @@ export function OutboundFormModal({
         unit_price: outbound?.unit_price || '',
         sale_date: outbound?.sale_date || new Date().toISOString().split('T')[0],
         notes: outbound?.notes || '',
-        attachment: null as File | null,
     });
 
     const selectedCustomer = useMemo(

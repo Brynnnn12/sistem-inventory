@@ -1,5 +1,5 @@
 import { Head, router } from '@inertiajs/react';
-import { Download, Filter, ArrowUpRight, ArrowDownLeft, ArrowRightLeft } from 'lucide-react';
+import {  Filter, ArrowUpRight, ArrowDownLeft, ArrowRightLeft } from 'lucide-react';
 import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
@@ -16,7 +16,7 @@ import {
     formatQuantity,
 } from '@/lib/utils';
 
-import { exportMethod } from '@/routes/reports/transactions';
+// import { exportMethod } from '@/routes/reports/transactions';
 import { type BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -110,20 +110,20 @@ export default function TransactionReport({
         );
     };
 
-    const handleExport = (format: 'pdf' | 'excel') => {
-        const params = {
-            type: selectedType !== 'all' ? selectedType : undefined,
-            warehouse_id:
-                selectedWarehouse !== 'all'
-                    ? selectedWarehouse
-                    : undefined,
-            start_date: startDate,
-            end_date: endDate,
-            format,
-        };
+    // const handleExport = (format: 'pdf' | 'excel') => {
+    //     const params = {
+    //         type: selectedType !== 'all' ? selectedType : undefined,
+    //         warehouse_id:
+    //             selectedWarehouse !== 'all'
+    //                 ? selectedWarehouse
+    //                 : undefined,
+    //         start_date: startDate,
+    //         end_date: endDate,
+    //         format,
+    //     };
 
-        window.open(exportMethod.url({ query: params }), '_blank');
-    };
+    //     window.open(exportMethod.url({ query: params }), '_blank');
+    // };
 
     const getTypeIcon = (type: string) => {
         switch (type) {
@@ -221,7 +221,7 @@ export default function TransactionReport({
                         </p>
                     </div>
 
-                    <div className="flex gap-2">
+                    {/* <div className="flex gap-2">
                         <Button
                             variant="outline"
                             onClick={() => handleExport('pdf')}
@@ -237,7 +237,7 @@ export default function TransactionReport({
                             <Download className="mr-2 h-4 w-4" />
                             Export Excel
                         </Button>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Filter */}

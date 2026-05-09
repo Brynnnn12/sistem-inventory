@@ -35,16 +35,25 @@ export function SupplierFormModal({ open, supplier, onClose }: SupplierFormModal
     });
 
     useEffect(() => {
-        if (supplier) {
+        if (supplier && (
+            form.data.code !== (supplier.code || '') ||
+            form.data.name !== (supplier.name || '') ||
+            form.data.contact_person !== (supplier.contact_person || '') ||
+            form.data.phone !== (supplier.phone || '') ||
+            form.data.email !== (supplier.email || '') ||
+            form.data.address !== (supplier.address || '') ||
+            form.data.tax_id !== (supplier.tax_id || '') ||
+            form.data.is_active !== (supplier.is_active ?? true)
+        )) {
             form.setData({
-                code: supplier.code,
-                name: supplier.name,
-                contact_person: supplier.contact_person,
-                phone: supplier.phone,
-                email: supplier.email,
-                address: supplier.address,
-                tax_id: supplier.tax_id,
-                is_active: supplier.is_active,
+                code: supplier.code || '',
+                name: supplier.name || '',
+                contact_person: supplier.contact_person || '',
+                phone: supplier.phone || '',
+                email: supplier.email || '',
+                address: supplier.address || '',
+                tax_id: supplier.tax_id || '',
+                is_active: supplier.is_active ?? true,
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

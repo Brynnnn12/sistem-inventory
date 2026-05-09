@@ -35,18 +35,26 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
     });
 
     useEffect(() => {
-        if (customer) {
+        if (customer && (
+            form.data.code !== (customer.code || '') ||
+            form.data.name !== (customer.name || '') ||
+            form.data.contact_person !== (customer.contact_person || '') ||
+            form.data.phone !== (customer.phone || '') ||
+            form.data.email !== (customer.email || '') ||
+            form.data.address !== (customer.address || '') ||
+            form.data.is_active !== (customer.is_active ?? true)
+        )) {
             form.setData({
-                code: customer.code,
-                name: customer.name,
+                code: customer.code || '',
+                name: customer.name || '',
                 contact_person: customer.contact_person || '',
                 phone: customer.phone || '',
                 email: customer.email || '',
                 address: customer.address || '',
-                is_active: customer.is_active,
+                is_active: customer.is_active ?? true,
             });
         }
-    }, [customer, form]);
+    }, [customer]);
 
     const handleClose = () => {
         form.reset();
