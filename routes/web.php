@@ -15,7 +15,7 @@ Route::get('auth/google/callback', [ProfileController::class, 'google_callback']
     ->name('google.callback');
 
 Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('dashboard');
 
 Route::prefix('dashboard')->middleware(['auth'])->group(function () {

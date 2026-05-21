@@ -30,13 +30,13 @@ class CreateEmployeeAction
                 $user->assignRole($input['role']);
             }
 
-            $verificationUrl = URL::temporarySignedRoute(
-                'verification.verify',
-                now()->addMinutes(60),
-                ['id' => $user->getKey(), 'hash' => sha1($user->getEmailForVerification())]
-            );
+            // $verificationUrl = URL::temporarySignedRoute(
+            //     'verification.verify',
+            //     now()->addMinutes(60),
+            //     ['id' => $user->getKey(), 'hash' => sha1($user->getEmailForVerification())]
+            // );
 
-            Mail::to($user->email)->queue(new VerifyEmailMail($user->name, $verificationUrl));
+            // Mail::to($user->email)->queue(new VerifyEmailMail($user->name, $verificationUrl));
 
             return $user;
         });
