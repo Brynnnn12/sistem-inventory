@@ -379,19 +379,6 @@ export function OutboundFormModal({
                             />
                             {errors.notes && <p className="text-sm text-destructive">{errors.notes}</p>}
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="attachment">Lampiran (PDF/Gambar)</Label>
-                            <Input
-                                id="attachment"
-                                type="file"
-                                accept=".pdf,.jpg,.jpeg,.png"
-                                onChange={(e) => setData('attachment', e.target.files?.[0] || null)}
-                            />
-                            <p className="text-sm text-muted-foreground">
-                                Upload surat jalan atau invoice (maksimal 2MB)
-                            </p>
-                            {errors.attachment && <p className="text-sm text-destructive">{errors.attachment}</p>}
-                        </div>
                     </div>
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={handleClose}>
