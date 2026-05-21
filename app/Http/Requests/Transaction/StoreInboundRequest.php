@@ -30,7 +30,6 @@ class StoreInboundRequest extends FormRequest
             'unit_price' => 'nullable|numeric|min:0',
             'received_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:500',
-            'attachment' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ];
     }
 
@@ -47,8 +46,6 @@ class StoreInboundRequest extends FormRequest
             'quantity.min' => 'Jumlah harus lebih dari 0.',
             'received_date.required' => 'Tanggal penerimaan harus diisi.',
             'received_date.before_or_equal' => 'Tanggal penerimaan tidak boleh di masa depan.',
-            'attachment.mimes' => 'File harus berupa PDF atau gambar.',
-            'attachment.max' => 'Ukuran file maksimal 2MB.',
         ];
     }
 

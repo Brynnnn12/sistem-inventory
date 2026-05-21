@@ -21,7 +21,6 @@ class OutboundTransaction extends Model
         'unit_price',
         'sale_date',
         'notes',
-        'attachment',
         'created_by',
     ];
 

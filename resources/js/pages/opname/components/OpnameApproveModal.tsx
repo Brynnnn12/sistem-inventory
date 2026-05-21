@@ -24,8 +24,6 @@ export function OpnameApproveModal({ open, opname, onClose }: OpnameApproveModal
         router.post(`/dashboard/opname/${opname.id}/approve`, {}, {
             onSuccess: () => {
                 onClose();
-                // Refresh the page to show updated status
-                window.location.reload();
             },
         });
     };

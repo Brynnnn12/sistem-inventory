@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            // Kode supplier (SPL001) - Kita buat unique agar tidak kembar
             $table->string('code', 20)->unique();
 
             $table->string('name', 60)->index();

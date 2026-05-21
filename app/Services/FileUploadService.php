@@ -11,7 +11,7 @@ class FileUploadService
     /**
      * Upload file dengan validasi dan generate nama unik.
      *
-     * @param  string  $folder  Folder tujuan (contoh: 'products', 'attachments/outbound')
+     * @param  string  $folder  Folder tujuan (contoh: 'products')
      * @param  string  $disk  Disk storage (default: 'public')
      * @param  array  $allowedMimes  Array MIME types yang diizinkan
      * @param  int  $maxSize  Ukuran maksimal dalam KB (default: 2048 = 2MB)

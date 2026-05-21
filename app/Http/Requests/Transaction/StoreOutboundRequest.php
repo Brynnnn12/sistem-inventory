@@ -30,7 +30,6 @@ class StoreOutboundRequest extends FormRequest
             'unit_price' => 'nullable|numeric|min:0',
             'sale_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:500',
-            'attachment' => 'nullable|file|mimes:pdf,jpg|max:2048',
         ];
     }
 
@@ -47,8 +46,6 @@ class StoreOutboundRequest extends FormRequest
             'quantity.min' => 'Jumlah harus lebih dari 0.',
             'sale_date.required' => 'Tanggal penjualan harus diisi.',
             'sale_date.before_or_equal' => 'Tanggal penjualan tidak boleh di masa depan.',
-            'attachment.mimes' => 'File harus berupa PDF atau gambar.',
-            'attachment.max' => 'Ukuran file maksimal 2MB.',
         ];
     }
 
@@ -57,7 +54,7 @@ class StoreOutboundRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        // Set warehouse_id based on user role
+        //ini akan diisi jika ada kebutuhan untuk memanipulasi data sebelum validasi, misalnya mengatur warehouse_id berdasarkan user yang login jika tidak disediakan
         /** @var \App\Models\User $user */
         $user = Auth::user();
         if (! $user->hasRole('super-admin') && ! $this->has('warehouse_id')) {

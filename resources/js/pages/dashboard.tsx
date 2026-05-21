@@ -2,7 +2,6 @@ import { Head, Link } from '@inertiajs/react';
 import {
     Package,
     Warehouse,
-    TrendingUp,
     AlertTriangle,
     PackageX,
     ArrowUpRight,
@@ -23,7 +22,6 @@ import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 
 import type { DashboardProps } from '@/types/models/dashboard';
-import { formatCurrency } from '@/utils/format';
 
 
 
@@ -95,7 +93,7 @@ export default function Dashboard({
                 </div>
 
                 {/* Stock Summary Cards */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Total Produk</CardTitle>
@@ -114,15 +112,7 @@ export default function Dashboard({
                             <div className="text-2xl font-bold">{stockSummary.total_warehouses}</div>
                         </CardContent>
                     </Card>
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Nilai Stok</CardTitle>
-                            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">{formatCurrency(stockSummary.total_stock_value)}</div>
-                        </CardContent>
-                    </Card>
+
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">Stok Rendah</CardTitle>

@@ -58,7 +58,6 @@ class OutboundController extends Controller
         $customers = Customer::active()->get();
         $products = Product::active()->get();
 
-        // Get stocks for product filtering
         $stocks = \App\Models\Stock::with(['product', 'warehouse'])
             ->whereHas('warehouse', function ($q) use ($warehouses) {
                 $q->whereIn('id', $warehouses->pluck('id'));
@@ -92,7 +91,6 @@ class OutboundController extends Controller
                 unitPrice: $validated['unit_price'] ?? 0,
                 saleDate: $validated['sale_date'],
                 notes: $validated['notes'] ?? null,
-                attachment: $request->hasFile('attachment') ? $request->file('attachment') : null,
             );
 
             // Get stock change info
