@@ -23,7 +23,6 @@ return new class extends Migration
             $table->date('received_date');
             $table->foreignId('created_by')->constrained('users');
             $table->text('notes')->nullable();
-            $table->string('attachment', 255)->nullable();
             $table->timestamps();
 
             // Indexes

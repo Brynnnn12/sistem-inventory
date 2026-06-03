@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace App\Actions\Transaction;
 
-use App\Actions\Stock\CheckStockAvailabilityAction;
 use App\Actions\Stock\UpdateStockAction;
+use App\Actions\Transaction\Concerns\GeneratesTransactionCode;
+use App\Models\Stock;
 use App\Models\StockMutation;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
 
 class CreateMutationAction
 {
+    use GeneratesTransactionCode;
+
+    private const PREFIX = 'MT';
+
     public function __construct(
         private readonly UpdateStockAction $updateStockAction,
-        private readonly CheckStockAvailabilityAction $checkStockAvailabilityAction,
         private readonly StockMutation $stockMutation,
     ) {}
 
@@ -26,143 +30,159 @@ class CreateMutationAction
         int $productId,
         float $quantity,
         ?string $notes = null,
+        ?int $createdBy = null,
     ): StockMutation {
-        return DB::transaction(function () use ($fromWarehouseId, $toWarehouseId, $productId, $quantity, $notes) {
-            try {
-                if ($quantity <= 0) {
-                    throw new Exception('Jumlah harus lebih besar dari 0');
-                }
+        $this->validateSendInputs($fromWarehouseId, $toWarehouseId, $quantity);
 
-                if ($fromWarehouseId === $toWarehouseId) {
-                    throw new Exception('Gudang asal dan tujuan tidak boleh sama');
-                }
+        $createdBy ??= (int) Auth::id();
 
-                if (! \App\Models\Warehouse::find($fromWarehouseId)) {
-                    throw new Exception('Gudang asal tidak ditemukan');
-                }
+        return DB::transaction(function () use ($fromWarehouseId, $toWarehouseId, $productId, $quantity, $notes, $createdBy) {
+            $stock = Stock::where('warehouse_id', $fromWarehouseId)
+                ->where('product_id', $productId)
+                ->first();
 
-                if (! \App\Models\Warehouse::find($toWarehouseId)) {
-                    throw new Exception('Gudang tujuan tidak ditemukan');
-                }
+            $available = $stock ? $stock->available_qty : 0;
 
-                if (! \App\Models\Product::find($productId)) {
-                    throw new Exception('Produk tidak ditemukan');
-                }
-
-                $stockInfo = $this->checkStockAvailabilityAction->getStockInfo($fromWarehouseId, $productId);
-
-                if (! $stockInfo['is_available'] || $stockInfo['available'] < $quantity) {
-                    throw ValidationException::withMessages([
-                        'quantity' => 'Stok gudang asal tidak cukup. Tersedia: '.$stockInfo['available'].', diminta: '.$quantity,
-                    ]);
-                }
-
-                $code = $this->generateMutationCode();
-
-                $mutation = $this->stockMutation->create([
-                    'code' => $code,
-                    'from_warehouse' => $fromWarehouseId,
-                    'to_warehouse' => $toWarehouseId,
-                    'product_id' => $productId,
-                    'quantity' => $quantity,
-                    'received_qty' => 0,
-                    'damaged_qty' => 0,
-                    'status' => 'dikirim',
-                    'sent_at' => now(),
-                    'notes' => $notes,
-                    'created_by' => Auth::id(),
+            if ($available < $quantity) {
+                throw ValidationException::withMessages([
+                    'quantity' => 'Stok gudang asal tidak cukup. Tersedia: '.$available.', diminta: '.$quantity,
                 ]);
-
-                return $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator']);
-
-            } catch (ValidationException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                throw new Exception("Failed to send mutation: {$e->getMessage()}");
             }
+
+            $code = $this->generateTransactionCode(self::PREFIX, $this->stockMutation);
+
+            $mutation = $this->stockMutation->create([
+                'code' => $code,
+                'from_warehouse' => $fromWarehouseId,
+                'to_warehouse' => $toWarehouseId,
+                'product_id' => $productId,
+                'quantity' => $quantity,
+                'received_qty' => 0,
+                'damaged_qty' => 0,
+                'status' => 'sent',
+                'sent_at' => now(),
+                'notes' => $notes,
+                'created_by' => $createdBy,
+            ]);
+
+            $this->updateStockAction->execute(
+                warehouseId: $fromWarehouseId,
+                productId: $productId,
+                quantity: -$quantity,
+                type: 'mutation_sent',
+                referenceId: $mutation->id,
+                referenceCode: $code,
+                notes: "Mutation sent: {$code}",
+                updatedBy: $createdBy,
+            );
+
+            return $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator']);
         });
+    }
+
+    private function validateSendInputs(
+        int $fromWarehouseId,
+        int $toWarehouseId,
+        float $quantity,
+    ): void {
+        if ($quantity <= 0) {
+            throw new InvalidArgumentException('Jumlah harus lebih besar dari 0');
+        }
+
+        if ($fromWarehouseId === $toWarehouseId) {
+            throw new InvalidArgumentException('Gudang asal dan tujuan tidak boleh sama');
+        }
     }
 
     public function receive(
         int $mutationId,
         float $receivedQty,
         float $damagedQty = 0,
+        ?int $receivedBy = null,
     ): StockMutation {
-        return DB::transaction(function () use ($mutationId, $receivedQty, $damagedQty) {
-            try {
-                $mutation = $this->stockMutation->findOrFail($mutationId);
+        $receivedBy ??= (int) Auth::id();
 
-                if ($mutation->status !== 'dikirim') {
-                    throw new Exception('Mutation sudah diterima atau tidak valid untuk diterima');
-                }
+        return DB::transaction(function () use ($mutationId, $receivedQty, $damagedQty, $receivedBy) {
+            $mutation = $this->stockMutation->findOrFail($mutationId);
 
-                $totalReceived = $receivedQty + $damagedQty;
+            if ($mutation->status_display !== 'sent') {
+                throw new InvalidArgumentException('Mutation sudah diterima atau tidak valid untuk diterima');
+            }
 
-                if ($totalReceived > $mutation->quantity) {
-                    throw ValidationException::withMessages([
-                        'received_qty' => 'Jumlah diterima melebihi quantity mutation: '.$mutation->quantity,
-                    ]);
-                }
+            $totalReceived = $receivedQty + $damagedQty;
 
-                $mutation->update([
-                    'received_qty' => $receivedQty,
-                    'damaged_qty' => $damagedQty,
-                    'status' => 'completed', // Use English status for mutator
-                    'received_at' => now(),
-                    'received_by' => Auth::id(),
+            if ($totalReceived > $mutation->quantity) {
+                throw ValidationException::withMessages([
+                    'received_qty' => 'Jumlah diterima melebihi quantity mutation: '.$mutation->quantity,
                 ]);
+            }
 
-                // Reduce stock from source warehouse
+            $mutation->update([
+                'received_qty' => $receivedQty,
+                'damaged_qty' => $damagedQty,
+                'status' => 'completed',
+                'received_at' => now(),
+                'received_by' => $receivedBy,
+            ]);
+
+            // Stock was already deducted from source on send.
+            // Only add received stock to destination.
+            if ($receivedQty > 0) {
                 $this->updateStockAction->execute(
-                    warehouseId: $mutation->from_warehouse,
+                    warehouseId: $mutation->to_warehouse,
                     productId: $mutation->product_id,
-                    quantity: -$mutation->quantity, // Negative for outgoing
-                    type: 'mutation_sent',
+                    quantity: $receivedQty,
+                    type: 'mutation_received',
                     referenceId: $mutation->id,
                     referenceCode: $mutation->code,
-                    notes: "Mutation sent: {$mutation->code}"
+                    notes: "Mutation received: {$mutation->code}",
+                    updatedBy: $receivedBy,
                 );
-
-                // Add stock to destination warehouse (only received quantity, damaged doesn't add stock)
-                if ($receivedQty > 0) {
-                    $this->updateStockAction->execute(
-                        warehouseId: $mutation->to_warehouse,
-                        productId: $mutation->product_id,
-                        quantity: $receivedQty, // Positive for incoming
-                        type: 'mutation_received',
-                        referenceId: $mutation->id,
-                        referenceCode: $mutation->code,
-                        notes: "Mutation received: {$mutation->code}"
-                    );
-                }
-
-                return $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator', 'receiver']);
-
-            } catch (ValidationException $e) {
-                throw $e;
-            } catch (Exception $e) {
-                throw new Exception("Failed to receive mutation: {$e->getMessage()}");
             }
+
+            return $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator', 'receiver']);
         });
     }
 
-    private function generateMutationCode(): string
-    {
-        $date = now()->format('Ymd');
-        $prefix = 'MT';
+    public function reject(
+        int $mutationId,
+        ?string $notes = null,
+        ?int $rejectedBy = null,
+    ): StockMutation {
+        $rejectedBy ??= (int) Auth::id();
 
-        $lastMutation = $this->stockMutation
-            ->where('code', 'like', "{$prefix}-{$date}-%")
-            ->orderBy('code', 'desc')
-            ->first();
+        return DB::transaction(function () use ($mutationId, $notes, $rejectedBy) {
+            $mutation = $this->stockMutation->findOrFail($mutationId);
 
-        if ($lastMutation) {
-            $lastNumber = (int) substr($lastMutation->code, -3);
-            $newNumber = $lastNumber + 1;
-        } else {
-            $newNumber = 1;
-        }
+            if ($mutation->status_display !== 'sent') {
+                throw new InvalidArgumentException('Mutation sudah diproses atau tidak valid untuk ditolak');
+            }
 
-        return sprintf('%s-%s-%03d', $prefix, $date, $newNumber);
+            $data = [
+                'status' => 'rejected',
+                'rejected_at' => now(),
+                'rejected_by' => $rejectedBy,
+            ];
+
+            if ($notes !== null) {
+                $data['notes'] = $notes;
+            }
+
+            $mutation->update($data);
+
+            // Return stock to source warehouse
+            $this->updateStockAction->execute(
+                warehouseId: $mutation->from_warehouse,
+                productId: $mutation->product_id,
+                quantity: (float) $mutation->quantity,
+                type: 'mutation_rejected',
+                referenceId: $mutation->id,
+                referenceCode: $mutation->code,
+                notes: "Mutation rejected: {$mutation->code}",
+                updatedBy: $rejectedBy,
+            );
+
+            return $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator']);
+        });
     }
 }

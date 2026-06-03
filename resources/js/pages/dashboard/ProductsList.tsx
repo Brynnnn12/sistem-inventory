@@ -1,6 +1,7 @@
 import { Package } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatCurrency } from '@/utils/format';
 
 interface Product {
     id: number;
@@ -58,7 +59,7 @@ export function ProductsList({ products }: ProductsListProps) {
                                 </div>
                                 <div className="text-right">
                                     <div className="font-medium">
-                                        Rp {product.price?.toLocaleString('id-ID') || '0'}
+                                        {formatCurrency(product.price ?? 0)}
                                     </div>
                                     <Badge
                                         variant={product.is_active ? "default" : "secondary"}

@@ -192,18 +192,16 @@ class MutationController extends Controller
         ]);
 
         try {
-            $mutation->update([
-                'status' => 'rejected',
-                'rejected_at' => now(),
-                'rejected_by' => Auth::id(),
-                'notes' => $request->notes,
-            ]);
+            $this->createMutationAction->reject(
+                mutationId: $mutation->getKey(),
+                notes: $request->notes,
+            );
 
             return redirect()->route('mutations.index')
                 ->with('success', 'Mutation berhasil ditolak.');
-        } catch (Exception $e) {
+        } catch (ValidationException $e) {
             return redirect()->back()
-                ->withErrors(['error' => 'Gagal menolak mutation: '.$e->getMessage()]);
+                ->withErrors($e->errors());
         }
     }
 }

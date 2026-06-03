@@ -1,13 +1,13 @@
 <?php
 
-// declare(strict_types=1);
+declare(strict_types=1);
 
 namespace App\Actions\Opname;
 
 use App\Actions\Stock\UpdateStockAction;
 use App\Models\Opname;
-use Exception;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class ApproveOpnameAction
 {
@@ -20,17 +20,12 @@ class ApproveOpnameAction
         return DB::transaction(function () use ($opnameId) {
             $opname = Opname::findOrFail($opnameId);
 
-            // Validasi
             if ($opname->status !== 'draft') {
-                throw new Exception('Opname hanya bisa diapprove jika status pending.');
+                throw new InvalidArgumentException('Opname hanya bisa diapprove jika status draft.');
             }
 
-            $existingAdjustment = $opname->stockHistories()
-                ->where('reference_type', 'adjustment')
-                ->exists();
-
-            if ($existingAdjustment) {
-                throw new Exception('Opname sudah diapprove sebelumnya.');
+            if ($opname->stockHistories()->exists()) {
+                throw new InvalidArgumentException('Opname sudah diapprove sebelumnya.');
             }
 
             if ($opname->difference_type !== 'sama') {
@@ -45,7 +40,7 @@ class ApproveOpnameAction
                     type: 'adjustment',
                     referenceId: $opname->id,
                     referenceCode: $opname->code,
-                    notes: "Stock adjustment from opname: {$opname->code}"
+                    notes: "Stock adjustment from opname: {$opname->code}",
                 );
             }
 

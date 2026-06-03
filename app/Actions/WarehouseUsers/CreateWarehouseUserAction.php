@@ -1,25 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\WarehouseUsers;
 
+use App\Models\User;
+use App\Models\Warehouse;
 use App\Models\WarehouseUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class CreateWarehouseUserAction
 {
     public function execute(array $input): WarehouseUser
     {
         return DB::transaction(function () use ($input) {
-            $warehouseId = $input['warehouse_id'];
-            $userId = $input['user_id'];
+            $warehouseId = (int) $input['warehouse_id'];
+            $userId = (int) $input['user_id'];
 
-            if (! \App\Models\Warehouse::find($warehouseId)) {
-                throw new \Exception('Gudang tidak ditemukan');
+            if (! Warehouse::where('id', $warehouseId)->exists()) {
+                throw new InvalidArgumentException('Gudang tidak ditemukan');
             }
 
-            if (! \App\Models\User::find($userId)) {
-                throw new \Exception('Pengguna tidak ditemukan');
+            if (! User::where('id', $userId)->exists()) {
+                throw new InvalidArgumentException('Pengguna tidak ditemukan');
             }
 
             $assignedBy = $input['assigned_by'] ?? Auth::id();

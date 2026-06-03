@@ -90,7 +90,7 @@ export function EmployeeToolbar({
                     <SelectContent>
                         <SelectItem value="all">Semua Peran</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
-                        <SelectItem value="user">User</SelectItem>
+                        <SelectItem value="viewer">Viewer</SelectItem>
                     </SelectContent>
                 </Select>
                 <div className="flex gap-2">

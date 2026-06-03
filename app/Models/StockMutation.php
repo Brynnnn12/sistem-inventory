@@ -113,7 +113,7 @@ class StockMutation extends Model
     public function stockHistories(): HasMany
     {
         return $this->hasMany(StockHistory::class, 'reference_id')
-            ->whereIn('reference_type', ['mutation_sent', 'mutation_received']);
+            ->whereIn('reference_type', ['mutation_sent', 'mutation_received', 'mutation_rejected']);
     }
 
     public function scopeByFromWarehouse($query, $warehouseId)

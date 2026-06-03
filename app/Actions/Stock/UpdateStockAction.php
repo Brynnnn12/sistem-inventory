@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Actions\Stock;
 
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockHistory;
+use App\Models\Warehouse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class UpdateStockAction
 {
@@ -24,14 +27,17 @@ class UpdateStockAction
         int $referenceId,
         string $referenceCode,
         ?string $notes = null,
+        ?int $updatedBy = null,
     ): Stock {
-        return DB::transaction(function () use ($warehouseId, $productId, $quantity, $type, $referenceId, $referenceCode, $notes) {
-            if (! \App\Models\Warehouse::find($warehouseId)) {
-                throw new \Exception('Gudang tidak ditemukan');
+        $updatedBy ??= (int) Auth::id();
+
+        return DB::transaction(function () use ($warehouseId, $productId, $quantity, $type, $referenceId, $referenceCode, $notes, $updatedBy) {
+            if (! Warehouse::where('id', $warehouseId)->exists()) {
+                throw new InvalidArgumentException('Gudang tidak ditemukan');
             }
 
-            if (! \App\Models\Product::find($productId)) {
-                throw new \Exception('Produk tidak ditemukan');
+            if (! Product::where('id', $productId)->exists()) {
+                throw new InvalidArgumentException('Produk tidak ditemukan');
             }
 
             $stock = $this->stock->firstOrCreate(
@@ -43,7 +49,7 @@ class UpdateStockAction
                     'quantity' => 0,
                     'reserved_qty' => 0,
                     'last_updated' => now(),
-                    'updated_by' => (int) (Auth::id() ?? 1),
+                    'updated_by' => $updatedBy,
                 ]
             );
 
@@ -51,14 +57,14 @@ class UpdateStockAction
             $newQty = $previousQty + $quantity;
 
             if ($newQty < 0 && $type !== 'adjustment') {
-                throw new \Exception('Stok tidak boleh negatif. Stok saat ini: '.(string) $previousQty.', perubahan: '.(string) $quantity);
+                throw new InvalidArgumentException('Stok tidak boleh negatif. Stok saat ini: '.(string) $previousQty.', perubahan: '.(string) $quantity);
             }
 
             $stock->update([
                 'quantity' => $newQty,
                 'available_qty' => $stock->available_qty + $quantity,
                 'last_updated' => now(),
-                'updated_by' => Auth::id(),
+                'updated_by' => $updatedBy,
             ]);
 
             $this->stockHistory->create([
@@ -72,7 +78,7 @@ class UpdateStockAction
                 'reference_id' => $referenceId,
                 'reference_code' => $referenceCode,
                 'notes' => $notes,
-                'created_by' => (int) (Auth::id() ?? 1),
+                'created_by' => $updatedBy,
             ]);
 
             return $stock;

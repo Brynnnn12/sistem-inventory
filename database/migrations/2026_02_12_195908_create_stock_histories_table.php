@@ -19,7 +19,7 @@ return new class extends Migration
             $table->decimal('previous_qty', 10, 2);
             $table->decimal('new_qty', 10, 2);
             $table->decimal('change_qty', 10, 2);
-            $table->enum('reference_type', ['inbound', 'outbound', 'mutation_sent', 'mutation_received', 'adjustment', 'opname']);
+            $table->enum('reference_type', ['inbound', 'outbound', 'mutation_sent', 'mutation_received', 'mutation_rejected', 'adjustment', 'opname']);
             $table->unsignedBigInteger('reference_id');
             $table->string('reference_code', 50);
             $table->text('notes')->nullable();

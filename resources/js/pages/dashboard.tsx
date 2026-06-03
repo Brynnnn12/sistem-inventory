@@ -22,6 +22,7 @@ import { dashboard } from '@/routes';
 import type { BreadcrumbItem } from '@/types';
 
 import type { DashboardProps } from '@/types/models/dashboard';
+import { formatQuantity } from '@/utils/format';
 
 
 
@@ -179,7 +180,7 @@ export default function Dashboard({
                                                 )}
                                             </p>
                                             <p className="text-xs text-muted-foreground">
-                                                {transaction.code} • Qty: {transaction.quantity}
+                                                {transaction.code} • Qty: {formatQuantity(transaction.quantity)}
                                             </p>
                                         </div>
                                     </div>

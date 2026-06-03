@@ -23,7 +23,6 @@ return new class extends Migration
             $table->date('sale_date');
             $table->foreignId('created_by')->constrained('users');
             $table->text('notes')->nullable();
-            $table->string('attachment')->nullable();
             $table->timestamps();
 
             // Indexes

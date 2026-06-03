@@ -5,13 +5,18 @@ declare(strict_types=1);
 namespace App\Actions\Transaction;
 
 use App\Actions\Stock\UpdateStockAction;
+use App\Actions\Transaction\Concerns\GeneratesTransactionCode;
 use App\Models\InboundTransaction;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class CreateInboundTransactionAction
 {
+    use GeneratesTransactionCode;
+
+    private const PREFIX = 'BM';
+
     public function __construct(
         private readonly UpdateStockAction $updateStockAction,
         private readonly InboundTransaction $inboundTransaction,
@@ -25,84 +30,56 @@ class CreateInboundTransactionAction
         float $unitPrice,
         string $receivedDate,
         ?string $notes = null,
+        ?int $createdBy = null,
     ): InboundTransaction {
-        return DB::transaction(function () use ($supplierId, $warehouseId, $productId, $quantity, $unitPrice, $receivedDate, $notes) {
-            try {
-                if ($quantity <= 0) {
-                    throw new Exception('Jumlah harus lebih besar dari 0');
-                }
+        $this->validateInputs($quantity, $unitPrice, $receivedDate);
 
-                if ($unitPrice <= 0) {
-                    throw new Exception('Harga satuan harus lebih besar dari 0');
-                }
+        $createdBy ??= (int) Auth::id();
 
-                if (! \App\Models\Supplier::find($supplierId)) {
-                    throw new Exception('Supplier tidak ditemukan');
-                }
+        return DB::transaction(function () use ($supplierId, $warehouseId, $productId, $quantity, $unitPrice, $receivedDate, $notes, $createdBy) {
+            $code = $this->generateTransactionCode(self::PREFIX, $this->inboundTransaction);
 
-                if (! \App\Models\Warehouse::find($warehouseId)) {
-                    throw new Exception('Gudang tidak ditemukan');
-                }
+            $transaction = $this->inboundTransaction->create([
+                'code' => $code,
+                'supplier_id' => $supplierId,
+                'warehouse_id' => $warehouseId,
+                'product_id' => $productId,
+                'quantity' => $quantity,
+                'unit_price' => $unitPrice,
+                'received_date' => $receivedDate,
+                'notes' => $notes,
+                'created_by' => $createdBy,
+            ]);
 
-                if (! \App\Models\Product::find($productId)) {
-                    throw new Exception('Produk tidak ditemukan');
-                }
+            $this->updateStockAction->execute(
+                warehouseId: $warehouseId,
+                productId: $productId,
+                quantity: $quantity,
+                type: 'inbound',
+                referenceId: $transaction->id,
+                referenceCode: $code,
+                notes: "Inbound transaction: {$code}",
+            );
 
-                if (! strtotime($receivedDate)) {
-                    throw new Exception('Tanggal diterima tidak valid');
-                }
-
-                $code = $this->generateTransactionCode();
-
-                $transaction = $this->inboundTransaction->create([
-                    'code' => $code,
-                    'supplier_id' => $supplierId,
-                    'warehouse_id' => $warehouseId,
-                    'product_id' => $productId,
-                    'quantity' => $quantity,
-                    'unit_price' => $unitPrice,
-                    'received_date' => $receivedDate,
-                    'notes' => $notes,
-                    'created_by' => Auth::id(),
-                ]);
-
-                $transaction->refresh();
-
-                $this->updateStockAction->execute(
-                    warehouseId: $warehouseId,
-                    productId: $productId,
-                    quantity: $quantity,
-                    type: 'inbound',
-                    referenceId: $transaction->id,
-                    referenceCode: $code,
-                    notes: "Inbound transaction: {$code}"
-                );
-
-                return $transaction->load(['supplier', 'warehouse', 'product', 'creator']);
-
-            } catch (Exception $e) {
-                throw new Exception("Failed to create inbound transaction: {$e->getMessage()}");
-            }
+            return $transaction->load(['supplier', 'warehouse', 'product', 'creator']);
         });
     }
 
-    private function generateTransactionCode(): string
-    {
-        $date = now()->format('Ymd');
-        $prefix = 'BM';
-
-        $lastTransaction = $this->inboundTransaction
-            ->where('code', 'like', "{$prefix}-{$date}-%")
-            ->orderBy('code', 'desc')
-            ->first();
-
-        if ($lastTransaction) {
-            $lastNumber = (int) substr($lastTransaction->code, -3);
-            $newNumber = $lastNumber + 1;
-        } else {
-            $newNumber = 1;
+    private function validateInputs(
+        float $quantity,
+        float $unitPrice,
+        string $receivedDate,
+    ): void {
+        if ($quantity <= 0) {
+            throw new InvalidArgumentException('Jumlah harus lebih besar dari 0');
         }
 
-        return sprintf('%s-%s-%03d', $prefix, $date, $newNumber);
+        if ($unitPrice <= 0) {
+            throw new InvalidArgumentException('Harga satuan harus lebih besar dari 0');
+        }
+
+        if (! strtotime($receivedDate)) {
+            throw new InvalidArgumentException('Tanggal diterima tidak valid');
+        }
     }
 }

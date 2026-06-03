@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Actions\Stock;
 
+use App\Models\Product;
 use App\Models\Stock;
+use App\Models\Warehouse;
+use InvalidArgumentException;
 
 class CheckStockAvailabilityAction
 {
@@ -14,16 +17,16 @@ class CheckStockAvailabilityAction
 
     public function execute(int $warehouseId, int $productId, float $requestedQty): bool
     {
-        if (! \App\Models\Warehouse::find($warehouseId)) {
-            throw new \Exception('Gudang tidak ditemukan');
+        if (! Warehouse::where('id', $warehouseId)->exists()) {
+            throw new InvalidArgumentException('Gudang tidak ditemukan');
         }
 
-        if (! \App\Models\Product::find($productId)) {
-            throw new \Exception('Produk tidak ditemukan');
+        if (! Product::where('id', $productId)->exists()) {
+            throw new InvalidArgumentException('Produk tidak ditemukan');
         }
 
         if ($requestedQty <= 0) {
-            throw new \Exception('Jumlah diminta harus lebih besar dari 0');
+            throw new InvalidArgumentException('Jumlah diminta harus lebih besar dari 0');
         }
 
         $stock = $this->stock
@@ -40,12 +43,12 @@ class CheckStockAvailabilityAction
 
     public function getStockInfo(int $warehouseId, int $productId): array
     {
-        if (! \App\Models\Warehouse::find($warehouseId)) {
-            throw new \Exception('Gudang tidak ditemukan');
+        if (! Warehouse::where('id', $warehouseId)->exists()) {
+            throw new InvalidArgumentException('Gudang tidak ditemukan');
         }
 
-        if (! \App\Models\Product::find($productId)) {
-            throw new \Exception('Produk tidak ditemukan');
+        if (! Product::where('id', $productId)->exists()) {
+            throw new InvalidArgumentException('Produk tidak ditemukan');
         }
 
         $stock = $this->stock

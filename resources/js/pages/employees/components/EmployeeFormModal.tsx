@@ -196,10 +196,10 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
                                                 <span>Admin</span>
                                             </div>
                                         </SelectItem>
-                                        <SelectItem value="user">
+                                        <SelectItem value="viewer">
                                             <div className="flex items-center gap-2">
                                                 <User className="h-4 w-4 text-blue-500" />
-                                                <span>User</span>
+                                                <span>Viewer</span>
                                             </div>
                                         </SelectItem>
                                     </SelectContent>

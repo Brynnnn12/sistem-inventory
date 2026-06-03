@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\Warehouses;
 
 use App\Models\Warehouse;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class BulkDeleteWarehousesAction
 {
@@ -12,20 +15,19 @@ class BulkDeleteWarehousesAction
      *
      * @param  array<int>  $ids
      *
-     * @throws \Exception
+     * @throws InvalidArgumentException
      */
     public function execute(array $ids): int
     {
         return DB::transaction(function () use ($ids) {
             $warehouses = Warehouse::whereIn('id', $ids)->lockForUpdate()->get();
 
-
             $warehousesWithUsers = $warehouses->filter(fn ($wh) => $wh->users()->exists())
                 ->pluck('name')
                 ->toArray();
 
             if (! empty($warehousesWithUsers)) {
-                throw new \Exception(
+                throw new InvalidArgumentException(
                     'Tidak dapat menghapus gudang yang masih memiliki pengguna terkait: '.implode(', ', $warehousesWithUsers).
                     '. Silakan lepaskan pengguna terlebih dahulu.'
                 );

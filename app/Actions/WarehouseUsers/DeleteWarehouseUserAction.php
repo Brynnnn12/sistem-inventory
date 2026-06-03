@@ -1,22 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\WarehouseUsers;
 
 use App\Models\WarehouseUser;
 
 class DeleteWarehouseUserAction
 {
-    /**
-     * Delete a warehouse user (mark as ended).
-     */
     public function execute(WarehouseUser $warehouseUser): void
     {
-        if (! $warehouseUser) {
-            throw new \Exception('Warehouse user tidak ditemukan');
-        }
-
-        $warehouseUser->update(['end_date' => now()->format('Y-m-d')]);
-
         $warehouseUser->delete();
     }
 }

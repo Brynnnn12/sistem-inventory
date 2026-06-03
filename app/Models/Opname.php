@@ -51,7 +51,7 @@ class Opname extends Model
     public function stockHistories(): HasMany
     {
         return $this->hasMany(StockHistory::class, 'reference_id')
-            ->where('reference_type', 'opname');
+            ->where('reference_type', 'adjustment');
     }
 
     public function scopeByWarehouse($query, $warehouseId)

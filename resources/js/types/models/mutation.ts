@@ -1,8 +1,16 @@
 export interface StockMutation {
     id: number;
     code: string;
-    from_warehouse: number;
-    to_warehouse: number;
+    from_warehouse: {
+        id: number;
+        name: string;
+        code: string;
+    };
+    to_warehouse: {
+        id: number;
+        name: string;
+        code: string;
+    };
     product_id: number;
     quantity: number;
     status: 'dikirim' | 'diterima' | 'ditolak' | 'selesai';
@@ -17,16 +25,6 @@ export interface StockMutation {
     rejected_by: number | null;
     created_at: string;
     updated_at: string;
-    from_warehouse: {
-        id: number;
-        name: string;
-        code: string;
-    };
-    to_warehouse: {
-        id: number;
-        name: string;
-        code: string;
-    };
     product: {
         id: number;
         name: string;

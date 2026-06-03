@@ -1,11 +1,18 @@
-export function formatCurrency(amount: number): string {
-    const isWhole = Math.round(amount) === amount;
+function toNumber(value: number | string): number {
+    return typeof value === 'string' ? parseFloat(value) : value;
+}
+
+export function formatCurrency(amount: number | string): string {
+    const num = toNumber(amount);
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
-        minimumFractionDigits: isWhole ? 0 : 2,
+        minimumFractionDigits: Number.isInteger(num) ? 0 : 2,
         maximumFractionDigits: 2,
-    }).format(amount);
+    }).format(num);
 }
 
-//cara pakai: formatCurrency(1500000) => "Rp 1.500.000"
+export function formatQuantity(qty: number | string): string {
+    const num = toNumber(qty);
+    return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+}

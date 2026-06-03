@@ -1,9 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Actions\WarehouseUsers;
 
 use App\Models\WarehouseUser;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
 
 class SwapWarehouseUsersAction
 {
@@ -11,14 +14,14 @@ class SwapWarehouseUsersAction
     {
         return DB::transaction(function () use ($warehouseUser1Id, $warehouseUser2Id) {
             if ($warehouseUser1Id === $warehouseUser2Id) {
-                throw new \Exception('Tidak bisa swap dengan diri sendiri');
+                throw new InvalidArgumentException('Tidak bisa swap dengan diri sendiri');
             }
 
             $wu1 = WarehouseUser::findOrFail($warehouseUser1Id);
             $wu2 = WarehouseUser::findOrFail($warehouseUser2Id);
 
             if ($wu1->user_id === $wu2->user_id || $wu1->warehouse_id === $wu2->warehouse_id) {
-                throw new \Exception('Tidak bisa swap assignment yang sama.');
+                throw new InvalidArgumentException('Tidak bisa swap assignment yang sama.');
             }
 
             $tempWarehouseId = $wu1->warehouse_id;
