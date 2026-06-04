@@ -4,7 +4,11 @@ import { useFilters } from '@/hooks/useFilters';
 import { useGenericModals } from '@/hooks/useGenericModals';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { StockMutation, Filters, PageProps } from '@/types/models/mutation';
+import type {
+    StockMutation,
+    Filters,
+    PageProps,
+} from '@/types/models/mutation';
 import { MutationModals } from './components/MutationModals';
 import { MutationTable } from './components/MutationTable';
 import { MutationToolbar } from './components/MutationToolbar';
@@ -38,7 +42,13 @@ export default function Index({
     canSelectWarehouse: boolean;
     filters?: Filters;
 }) {
-    const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
+    const {
+        filters: filterState,
+        setFilter,
+        clearFilters,
+        isFiltering,
+        hasActiveFilters,
+    } = useFilters({
         route: '/dashboard/mutations',
         initialFilters: {
             search: filters?.search || '',
@@ -49,7 +59,7 @@ export default function Index({
 
     const { modals, openModal, closeModal } = useGenericModals<StockMutation>({
         simple: ['create'],
-        withData: ['show', 'receive', 'reject']
+        withData: ['show', 'receive', 'reject'],
     });
 
     return (
@@ -61,42 +71,44 @@ export default function Index({
                     onSearchChange={(value) => setFilter('search', value)}
                     onAddClick={() => openModal('create')}
                     onClearFilters={clearFilters}
-                    onStatusChange={(status) => setFilter('status', status === 'all' ? '' : status)}
-                    onTypeChange={(type) => setFilter('type', type === 'all' ? '' : type)}
+                    onStatusChange={(status) =>
+                        setFilter('status', status === 'all' ? '' : status)
+                    }
+                    onTypeChange={(type) =>
+                        setFilter('type', type === 'all' ? '' : type)
+                    }
                     isSearching={isFiltering}
                     hasActiveFilters={hasActiveFilters}
                     filters={filterState}
                 />
 
-                <div className="space-y-6">
-                    {/* Mutations Table */}
-                    <div>
-                        <h2 className="text-lg font-semibold mb-4">Mutasi</h2>
-                        <MutationTable
-                            mutations={mutations.data}
-                            isLoading={false}
-                            onShowMutation={(mutation) => openModal('show', mutation)}
-                            onReceiveMutation={(mutation) => openModal('receive', mutation)}
-                            onRejectMutation={(mutation) => openModal('reject', mutation)}
-                        />
+                <MutationTable
+                    mutations={mutations.data}
+                    isLoading={false}
+                    onShowMutation={(mutation) => openModal('show', mutation)}
+                    onReceiveMutation={(mutation) =>
+                        openModal('receive', mutation)
+                    }
+                    onRejectMutation={(mutation) =>
+                        openModal('reject', mutation)
+                    }
+                />
 
-                        {mutations.total > 0 && (
-                            <div className="mt-6">
-                                <Pagination
-                                    links={mutations.links}
-                                    meta={{
-                                        current_page: mutations.current_page,
-                                        last_page: mutations.last_page,
-                                        per_page: mutations.per_page,
-                                        total: mutations.total,
-                                        from: mutations.from,
-                                        to: mutations.to,
-                                    }}
-                                />
-                            </div>
-                        )}
+                {mutations.total > 0 && (
+                    <div className="mt-6">
+                        <Pagination
+                            links={mutations.links}
+                            meta={{
+                                current_page: mutations.current_page,
+                                last_page: mutations.last_page,
+                                per_page: mutations.per_page,
+                                total: mutations.total,
+                                from: mutations.from,
+                                to: mutations.to,
+                            }}
+                        />
                     </div>
-                </div>
+                )}
 
                 <MutationModals
                     showModal={modals.show}

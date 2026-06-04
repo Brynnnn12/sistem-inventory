@@ -1,9 +1,7 @@
 import { Plus, Search, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import type {  CategoryToolbarProps } from '@/types/models/categories';
-
-
+import type { CategoryToolbarProps } from '@/types/models/categories';
 
 export function CategoryToolbar({
     searchValue,
@@ -18,15 +16,17 @@ export function CategoryToolbar({
     return (
         <>
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Kategori</h1>
+                    <h1 className="text-3xl font-bold tracking-tight">
+                        Kategori
+                    </h1>
                     {selectedCount > 0 ? (
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             {selectedCount} kategori dipilih
                         </p>
                     ) : (
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             Kelola kategori produk Anda
                         </p>
                     )}
@@ -52,12 +52,12 @@ export function CategoryToolbar({
             {/* Search */}
             <div className="mb-6 flex gap-2">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         placeholder="Cari berdasarkan nama kategori"
                         value={searchValue}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        className="pl-9 h-10"
+                        className="h-10 pl-9"
                         disabled={isSearching}
                     />
                 </div>

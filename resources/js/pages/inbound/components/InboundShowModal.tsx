@@ -35,21 +35,35 @@ export function InboundShowModal({
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label className="text-sm font-medium">Supplier</Label>
-                            <p className="text-sm text-muted-foreground">{inbound.supplier.name}</p>
+                            <Label className="text-sm font-medium">
+                                Supplier
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {inbound.supplier.name}
+                            </p>
                         </div>
                         <div>
-                            <Label className="text-sm font-medium">Warehouse</Label>
-                            <p className="text-sm text-muted-foreground">{inbound.warehouse.name}</p>
+                            <Label className="text-sm font-medium">
+                                Warehouse
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {inbound.warehouse.name}
+                            </p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label className="text-sm font-medium">Produk</Label>
-                            <p className="text-sm text-muted-foreground">{inbound.product.name}</p>
+                            <Label className="text-sm font-medium">
+                                Produk
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {inbound.product.name}
+                            </p>
                         </div>
                         <div>
-                            <Label className="text-sm font-medium">Quantity</Label>
+                            <Label className="text-sm font-medium">
+                                Quantity
+                            </Label>
                             <p className="text-sm text-muted-foreground">
                                 {formatQuantity(inbound.quantity)}
                             </p>
@@ -57,37 +71,57 @@ export function InboundShowModal({
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label className="text-sm font-medium">Harga Satuan</Label>
+                            <Label className="text-sm font-medium">
+                                Harga Satuan
+                            </Label>
                             <p className="text-sm text-muted-foreground">
-                                {inbound.unit_price ? formatCurrency(inbound.unit_price) : '-'}
+                                {inbound.unit_price
+                                    ? formatCurrency(inbound.unit_price)
+                                    : '-'}
                             </p>
                         </div>
                         <div>
                             <Label className="text-sm font-medium">Total</Label>
                             <p className="text-sm text-muted-foreground">
-                                {inbound.unit_price ? formatCurrency(inbound.quantity * inbound.unit_price) : '-'}
+                                {inbound.unit_price
+                                    ? formatCurrency(
+                                          inbound.quantity * inbound.unit_price,
+                                      )
+                                    : '-'}
                             </p>
                         </div>
                     </div>
                     <div>
-                        <Label className="text-sm font-medium">Tanggal Penerimaan</Label>
+                        <Label className="text-sm font-medium">
+                            Tanggal Penerimaan
+                        </Label>
                         <p className="text-sm text-muted-foreground">
                             {formatDate(inbound.received_date)}
                         </p>
                     </div>
                     {inbound.notes && (
                         <div>
-                            <Label className="text-sm font-medium">Catatan</Label>
-                            <p className="text-sm text-muted-foreground">{inbound.notes}</p>
+                            <Label className="text-sm font-medium">
+                                Catatan
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {inbound.notes}
+                            </p>
                         </div>
                     )}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label className="text-sm font-medium">Dibuat Oleh</Label>
-                            <p className="text-sm text-muted-foreground">{inbound.creator.name}</p>
+                            <Label className="text-sm font-medium">
+                                Dibuat Oleh
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {inbound.creator.name}
+                            </p>
                         </div>
                         <div>
-                            <Label className="text-sm font-medium">Tanggal Dibuat</Label>
+                            <Label className="text-sm font-medium">
+                                Tanggal Dibuat
+                            </Label>
                             <p className="text-sm text-muted-foreground">
                                 {formatDate(inbound.created_at)}
                             </p>

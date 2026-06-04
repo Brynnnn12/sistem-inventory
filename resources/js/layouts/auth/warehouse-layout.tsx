@@ -9,10 +9,13 @@ export default function WarehouseLayout({
 }: AuthLayoutProps) {
     return (
         <div className="min-h-screen w-full lg:grid lg:grid-cols-2">
-            <div className="flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-white">
+            <div className="flex items-center justify-center bg-white px-4 py-12 sm:px-6 lg:px-8">
                 <div className="mx-auto grid w-full max-w-100 gap-6">
                     <div className="grid gap-2 text-center">
-                        <Link href="/" className="mx-auto mb-4 flex items-center gap-2 font-bold text-xl text-blue-600 md:hidden">
+                        <Link
+                            href="/"
+                            className="mx-auto mb-4 flex items-center gap-2 text-xl font-bold text-blue-600 md:hidden"
+                        >
                             <Package2 className="h-6 w-6" />
                             GudangKu
                         </Link>
@@ -28,12 +31,12 @@ export default function WarehouseLayout({
                 </div>
             </div>
 
-            <div className="bg-slate-50 relative hidden flex-col items-center justify-center overflow-hidden p-8 lg:flex border-l border-slate-100">
-                <div className="absolute inset-0 bg-grid-slate-200/[0.5] bg-size-[60px_60px]" />
+            <div className="relative hidden flex-col items-center justify-center overflow-hidden border-l border-slate-100 bg-slate-50 p-8 lg:flex">
+                <div className="bg-grid-slate-200/[0.5] absolute inset-0 bg-size-[60px_60px]" />
                 <div className="absolute inset-0 bg-linear-to-t from-slate-50 to-transparent" />
 
                 <div className="relative z-10 flex max-w-md flex-col items-center gap-6 text-center">
-                    <div className="rounded-2xl bg-white p-4 shadow-xl shadow-slate-200/50 ring-1 ring-slate-200 backdrop-blur-sm">
+                    <div className="rounded-2xl bg-white p-4 shadow-xl ring-1 shadow-slate-200/50 ring-slate-200 backdrop-blur-sm">
                         <Package2 className="h-20 w-20 text-blue-600" />
                     </div>
 

@@ -1,7 +1,13 @@
 import { Search, X, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import type { MutationToolbarProps } from '@/types/models/mutation';
 
 export function MutationToolbar({
@@ -18,10 +24,12 @@ export function MutationToolbar({
     return (
         <>
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Mutasi</h1>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <h1 className="text-3xl font-bold tracking-tight">
+                        Mutasi
+                    </h1>
+                    <p className="mt-1 text-sm text-muted-foreground">
                         Kelola perpindahan stok antar gudang
                     </p>
                 </div>
@@ -32,18 +40,21 @@ export function MutationToolbar({
             </div>
 
             {/* Filters */}
-            <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         placeholder="Cari kode atau produk..."
                         value={searchValue}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        className="pl-9 h-10"
+                        className="h-10 pl-9"
                         disabled={isSearching}
                     />
                 </div>
-                <Select value={filters.status || 'all'} onValueChange={onStatusChange}>
+                <Select
+                    value={filters.status || 'all'}
+                    onValueChange={onStatusChange}
+                >
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Semua Status" />
                     </SelectTrigger>
@@ -54,7 +65,10 @@ export function MutationToolbar({
                         <SelectItem value="rejected">Ditolak</SelectItem>
                     </SelectContent>
                 </Select>
-                <Select value={filters.type || 'all'} onValueChange={onTypeChange}>
+                <Select
+                    value={filters.type || 'all'}
+                    onValueChange={onTypeChange}
+                >
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Semua Tipe" />
                     </SelectTrigger>

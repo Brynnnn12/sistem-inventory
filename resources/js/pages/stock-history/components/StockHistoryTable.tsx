@@ -1,5 +1,12 @@
 import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { formatDateTime, formatQuantity } from '@/lib/utils';
 import type { StockHistoryTableProps } from '@/types/models/stock-history';
 
@@ -9,8 +16,10 @@ export function StockHistoryTable({
 }: StockHistoryTableProps) {
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-32">
-                <div className="text-sm text-muted-foreground">Memuat data...</div>
+            <div className="flex h-32 items-center justify-center">
+                <div className="text-sm text-muted-foreground">
+                    Memuat data...
+                </div>
             </div>
         );
     }
@@ -22,8 +31,10 @@ export function StockHistoryTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <div className="h-10 w-10 rounded-full bg-muted-foreground/20" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada History</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-sm">
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada History
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                         History perubahan stok akan muncul di sini
                     </p>
                 </div>
@@ -39,9 +50,15 @@ export function StockHistoryTable({
                         <TableHead className="font-semibold">Waktu</TableHead>
                         <TableHead className="font-semibold">Produk</TableHead>
                         <TableHead className="font-semibold">Gudang</TableHead>
-                        <TableHead className="font-semibold">Perubahan</TableHead>
-                        <TableHead className="font-semibold">Dari → Ke</TableHead>
-                        <TableHead className="font-semibold">Referensi</TableHead>
+                        <TableHead className="font-semibold">
+                            Perubahan
+                        </TableHead>
+                        <TableHead className="font-semibold">
+                            Dari → Ke
+                        </TableHead>
+                        <TableHead className="font-semibold">
+                            Referensi
+                        </TableHead>
                         <TableHead className="font-semibold">Petugas</TableHead>
                     </TableRow>
                 </TableHeader>
@@ -52,25 +69,40 @@ export function StockHistoryTable({
                                 {formatDateTime(history.created_at)}
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{history.product?.name || '-'}</div>
+                                <div className="font-medium">
+                                    {history.product?.name || '-'}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{history.warehouse?.name || '-'}</div>
+                                <div className="font-medium">
+                                    {history.warehouse?.name || '-'}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className={`font-medium ${
-                                    history.change_qty > 0 ? 'text-green-600' :
-                                    history.change_qty < 0 ? 'text-red-600' : 'text-gray-600'
-                                }`}>
-                                    {history.change_qty > 0 ? '+' : ''}{formatQuantity(history.change_qty)}
+                                <div
+                                    className={`font-medium ${
+                                        history.change_qty > 0
+                                            ? 'text-green-600'
+                                            : history.change_qty < 0
+                                              ? 'text-red-600'
+                                              : 'text-gray-600'
+                                    }`}
+                                >
+                                    {history.change_qty > 0 ? '+' : ''}
+                                    {formatQuantity(history.change_qty)}
                                 </div>
                             </TableCell>
                             <TableCell className="font-mono text-sm">
-                                {formatQuantity(history.previous_qty)} → {formatQuantity(history.new_qty)}
+                                {formatQuantity(history.previous_qty)} →{' '}
+                                {formatQuantity(history.new_qty)}
                             </TableCell>
                             <TableCell>
-                                <Badge variant="outline" className="font-mono text-xs">
-                                    {history.reference_code || `${history.reference_type}#${history.reference_id}`}
+                                <Badge
+                                    variant="outline"
+                                    className="font-mono text-xs"
+                                >
+                                    {history.reference_code ||
+                                        `${history.reference_type}#${history.reference_id}`}
                                 </Badge>
                             </TableCell>
                             <TableCell className="text-sm">

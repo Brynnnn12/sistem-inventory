@@ -75,46 +75,72 @@ export function MutationReceiveModal({
                 <DialogHeader>
                     <DialogTitle>Terima Mutasi - {mutation.code}</DialogTitle>
                     <DialogDescription>
-                        Konfirmasi penerimaan barang dari {mutation.from_warehouse?.name} ke {mutation.to_warehouse?.name}
+                        Konfirmasi penerimaan barang dari{' '}
+                        {mutation.from_warehouse?.name} ke{' '}
+                        {mutation.to_warehouse?.name}
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-sm font-medium text-muted-foreground">Produk</label>
-                                <p className="text-sm font-medium">{mutation.product?.name}</p>
+                                <label className="text-sm font-medium text-muted-foreground">
+                                    Produk
+                                </label>
+                                <p className="text-sm font-medium">
+                                    {mutation.product?.name}
+                                </p>
                             </div>
                             <div>
-                                <label className="text-sm font-medium text-muted-foreground">Jumlah Dikirim</label>
-                                <p className="text-sm font-medium">{mutation.quantity} {mutation.product?.unit}</p>
+                                <label className="text-sm font-medium text-muted-foreground">
+                                    Jumlah Dikirim
+                                </label>
+                                <p className="text-sm font-medium">
+                                    {mutation.quantity} {mutation.product?.unit}
+                                </p>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="received_qty">Jumlah Diterima</Label>
+                                <Label htmlFor="received_qty">
+                                    Jumlah Diterima
+                                </Label>
                                 <Input
                                     id="received_qty"
                                     type="number"
                                     step="0.01"
                                     value={data.received_qty}
-                                    onChange={(e) => setData('received_qty', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('received_qty', e.target.value)
+                                    }
                                     placeholder="0.00"
                                 />
-                                {errors.received_qty && <p className="text-sm text-destructive">{errors.received_qty}</p>}
+                                {errors.received_qty && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.received_qty}
+                                    </p>
+                                )}
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="damaged_qty">Jumlah Rusak</Label>
+                                <Label htmlFor="damaged_qty">
+                                    Jumlah Rusak
+                                </Label>
                                 <Input
                                     id="damaged_qty"
                                     type="number"
                                     step="0.01"
                                     value={data.damaged_qty}
-                                    onChange={(e) => setData('damaged_qty', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('damaged_qty', e.target.value)
+                                    }
                                     placeholder="0.00"
                                 />
-                                {errors.damaged_qty && <p className="text-sm text-destructive">{errors.damaged_qty}</p>}
+                                {errors.damaged_qty && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.damaged_qty}
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -123,21 +149,44 @@ export function MutationReceiveModal({
                             <Textarea
                                 id="notes"
                                 value={data.notes}
-                                onChange={(e) => setData('notes', e.target.value)}
+                                onChange={(e) =>
+                                    setData('notes', e.target.value)
+                                }
                                 placeholder="Catatan tambahan (opsional)"
                                 rows={3}
                             />
-                            {errors.notes && <p className="text-sm text-destructive">{errors.notes}</p>}
+                            {errors.notes && (
+                                <p className="text-sm text-destructive">
+                                    {errors.notes}
+                                </p>
+                            )}
                         </div>
 
-                        <div className="bg-muted p-3 rounded-lg">
+                        <div className="rounded-lg bg-muted p-3">
                             <p className="text-sm text-muted-foreground">
-                                Total diterima: <span className="font-medium">
-                                    {(parseFloat(data.received_qty || '0') + parseFloat(data.damaged_qty || '0')).toFixed(2)} {mutation.product?.unit}
+                                Total diterima:{' '}
+                                <span className="font-medium">
+                                    {(
+                                        parseFloat(data.received_qty || '0') +
+                                        parseFloat(data.damaged_qty || '0')
+                                    ).toFixed(2)}{' '}
+                                    {mutation.product?.unit}
                                 </span>
-                                {parseFloat(data.received_qty || '0') + parseFloat(data.damaged_qty || '0') !== mutation.quantity && (
-                                    <span className="text-orange-600 ml-2">
-                                        (Selisih: {(parseFloat(data.received_qty || '0') + parseFloat(data.damaged_qty || '0') - mutation.quantity).toFixed(2)})
+                                {parseFloat(data.received_qty || '0') +
+                                    parseFloat(data.damaged_qty || '0') !==
+                                    mutation.quantity && (
+                                    <span className="ml-2 text-orange-600">
+                                        (Selisih:{' '}
+                                        {(
+                                            parseFloat(
+                                                data.received_qty || '0',
+                                            ) +
+                                            parseFloat(
+                                                data.damaged_qty || '0',
+                                            ) -
+                                            mutation.quantity
+                                        ).toFixed(2)}
+                                        )
                                     </span>
                                 )}
                             </p>

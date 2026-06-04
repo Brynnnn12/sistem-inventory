@@ -1,7 +1,13 @@
 import { Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import type { StocksToolbarProps } from '@/types/models/stocks';
 
 export function StocksToolbar({
@@ -19,34 +25,32 @@ export function StocksToolbar({
     return (
         <>
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Stok</h1>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <p className="mt-1 text-sm text-muted-foreground">
                         Lihat stok produk per gudang
                     </p>
                 </div>
             </div>
 
             {/* Filters */}
-            <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         placeholder="Cari produk..."
                         value={searchValue}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        className="pl-9 h-10"
+                        className="h-10 pl-9"
                         disabled={isSearching}
                     />
                 </div>
                 <Select
-
                     value={filters?.warehouse_id?.toString() || 'all'}
                     onValueChange={onWarehouseChange}
                 >
                     <SelectTrigger className="h-10">
-
                         <SelectValue placeholder="Pilih Warehouse" />
                     </SelectTrigger>
                     <SelectContent>
@@ -61,9 +65,16 @@ export function StocksToolbar({
                         ))}
                     </SelectContent>
                 </Select>
-                <Select value={filters.product_id ? filters.product_id.toString() : 'all'} onValueChange={(value) => {
-                    onProductChange(value === 'all' ? '' : value);
-                }}>
+                <Select
+                    value={
+                        filters.product_id
+                            ? filters.product_id.toString()
+                            : 'all'
+                    }
+                    onValueChange={(value) => {
+                        onProductChange(value === 'all' ? '' : value);
+                    }}
+                >
                     <SelectTrigger className="h-10">
                         <SelectValue placeholder="Pilih Produk" />
                     </SelectTrigger>

@@ -1,6 +1,12 @@
 import { Package } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { formatCurrency } from '@/utils/format';
 
 interface Product {
@@ -34,24 +40,34 @@ export function ProductsList({ products }: ProductsListProps) {
             <CardContent>
                 <div className="space-y-4">
                     {products.length === 0 ? (
-                        <div className="text-center py-8 text-muted-foreground">
+                        <div className="py-8 text-center text-muted-foreground">
                             Belum ada produk terdaftar
                         </div>
                     ) : (
                         products.slice(0, 5).map((product) => (
-                            <div key={product.id} className="flex items-center justify-between p-3 rounded-lg border">
+                            <div
+                                key={product.id}
+                                className="flex items-center justify-between rounded-lg border p-3"
+                            >
                                 <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
                                         <Package className="h-5 w-5 text-muted-foreground" />
                                     </div>
                                     <div>
-                                        <div className="font-medium">{product.name}</div>
+                                        <div className="font-medium">
+                                            {product.name}
+                                        </div>
                                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <Badge variant="secondary" className="font-mono text-xs">
+                                            <Badge
+                                                variant="secondary"
+                                                className="font-mono text-xs"
+                                            >
                                                 {product.code}
                                             </Badge>
                                             <span>•</span>
-                                            <span>{product.category?.name}</span>
+                                            <span>
+                                                {product.category?.name}
+                                            </span>
                                             <span>•</span>
                                             <span>{product.unit}</span>
                                         </div>
@@ -62,10 +78,16 @@ export function ProductsList({ products }: ProductsListProps) {
                                         {formatCurrency(product.price ?? 0)}
                                     </div>
                                     <Badge
-                                        variant={product.is_active ? "default" : "secondary"}
+                                        variant={
+                                            product.is_active
+                                                ? 'default'
+                                                : 'secondary'
+                                        }
                                         className="text-xs"
                                     >
-                                        {product.is_active ? 'Aktif' : 'Tidak Aktif'}
+                                        {product.is_active
+                                            ? 'Aktif'
+                                            : 'Tidak Aktif'}
                                     </Badge>
                                 </div>
                             </div>

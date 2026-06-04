@@ -5,7 +5,11 @@ import { useGenericModals } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { InboundTransaction, Filters, PageProps } from '@/types/models/inbound';
+import type {
+    InboundTransaction,
+    Filters,
+    PageProps,
+} from '@/types/models/inbound';
 import { InboundModals } from './components/InboundModals';
 import { InboundTable } from './components/InboundTable';
 import { InboundToolbar } from './components/InboundToolbar';
@@ -30,7 +34,13 @@ export default function Index({
     canSelectWarehouse: boolean;
     filters?: Filters;
 }) {
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const {
+        searchValue,
+        setSearchValue,
+        clearSearch,
+        isSearching,
+        hasActiveSearch,
+    } = useSearch({
         route: '/dashboard/inbound',
         initialSearch: filters.search || '',
     });
@@ -43,10 +53,11 @@ export default function Index({
         only: ['inbounds', 'filters'],
     });
 
-    const { modals, openModal, closeModal } = useGenericModals<InboundTransaction>({
-        simple: ['create'],
-        withData: ['show']
-    });
+    const { modals, openModal, closeModal } =
+        useGenericModals<InboundTransaction>({
+            simple: ['create'],
+            withData: ['show'],
+        });
 
     const clearFiltersHandler = () => {
         clearSearch();
@@ -63,7 +74,9 @@ export default function Index({
                     onAddClick={() => openModal('create')}
                     onClearFilters={clearFiltersHandler}
                     // Pastikan nilai 'all' ditangani dengan benar saat pengiriman filter
-                    onWarehouseChange={(value) => setFilter('warehouse_id', value === 'all' ? '' : value)}
+                    onWarehouseChange={(value) =>
+                        setFilter('warehouse_id', value === 'all' ? '' : value)
+                    }
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                     // Kirim filters langsung dari props

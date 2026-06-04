@@ -4,10 +4,10 @@ interface AuthImageSectionProps {
 
 export default function AuthImageSection({ alt }: AuthImageSectionProps) {
     return (
-        <div className="hidden md:block w-full h-full flex items-center bg-[#000842] rounded-xl p-8">
+        <div className="flex hidden h-full w-full items-center rounded-xl bg-[#000842] p-8 md:block">
             <img
                 src="/images/login.jpg"
-                className="w-full h-full object-cover rounded-lg"
+                className="h-full w-full rounded-lg object-cover"
                 alt={alt}
             />
         </div>

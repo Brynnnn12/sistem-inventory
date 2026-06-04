@@ -19,14 +19,20 @@ import {
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { NavItem } from '@/types';
 
-export function NavMain({ items = [], title }: { items: NavItem[]; title?: string }) {
+export function NavMain({
+    items = [],
+    title,
+}: {
+    items: NavItem[];
+    title?: string;
+}) {
     const { isCurrentUrl } = useCurrentUrl();
     const [openItems, setOpenItems] = useState<Record<string, boolean>>(() => {
         const initial: Record<string, boolean> = {};
         items.forEach((item) => {
             if (item.items?.length) {
                 initial[item.title] = item.items.some((subItem) =>
-                    window.location.pathname.startsWith(subItem.href)
+                    window.location.pathname.startsWith(subItem.href),
                 );
             }
         });

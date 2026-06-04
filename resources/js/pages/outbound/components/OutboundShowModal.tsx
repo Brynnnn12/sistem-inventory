@@ -35,57 +35,91 @@ export function OutboundShowModal({
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label className="text-sm font-medium">Customer</Label>
-                            <p className="text-sm text-muted-foreground">{outbound.customer.name}</p>
-                        </div>
-                        <div>
-                            <Label className="text-sm font-medium">Warehouse</Label>
-                            <p className="text-sm text-muted-foreground">{outbound.warehouse.name}</p>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label className="text-sm font-medium">Produk</Label>
-                            <p className="text-sm text-muted-foreground">{outbound.product.name}</p>
-                        </div>
-                        <div>
-                            <Label className="text-sm font-medium">Quantity</Label>
-                            <p className="text-sm text-muted-foreground">{formatQuantity(outbound.quantity)}</p>
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <Label className="text-sm font-medium">Harga Satuan</Label>
+                            <Label className="text-sm font-medium">
+                                Customer
+                            </Label>
                             <p className="text-sm text-muted-foreground">
-                                {outbound.unit_price ? `Rp ${outbound.unit_price.toLocaleString('id-ID')}` : '-'}
+                                {outbound.customer.name}
+                            </p>
+                        </div>
+                        <div>
+                            <Label className="text-sm font-medium">
+                                Warehouse
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {outbound.warehouse.name}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <Label className="text-sm font-medium">
+                                Produk
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {outbound.product.name}
+                            </p>
+                        </div>
+                        <div>
+                            <Label className="text-sm font-medium">
+                                Quantity
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {formatQuantity(outbound.quantity)}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <Label className="text-sm font-medium">
+                                Harga Satuan
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {outbound.unit_price
+                                    ? `Rp ${outbound.unit_price.toLocaleString('id-ID')}`
+                                    : '-'}
                             </p>
                         </div>
                         <div>
                             <Label className="text-sm font-medium">Total</Label>
                             <p className="text-sm text-muted-foreground">
-                                {outbound.unit_price ? `Rp ${(outbound.quantity * outbound.unit_price).toLocaleString('id-ID')}` : '-'}
+                                {outbound.unit_price
+                                    ? `Rp ${(outbound.quantity * outbound.unit_price).toLocaleString('id-ID')}`
+                                    : '-'}
                             </p>
                         </div>
                     </div>
                     <div>
-                        <Label className="text-sm font-medium">Tanggal Penjualan</Label>
+                        <Label className="text-sm font-medium">
+                            Tanggal Penjualan
+                        </Label>
                         <p className="text-sm text-muted-foreground">
                             {formatDate(outbound.sale_date)}
                         </p>
                     </div>
                     {outbound.notes && (
                         <div>
-                            <Label className="text-sm font-medium">Catatan</Label>
-                            <p className="text-sm text-muted-foreground">{outbound.notes}</p>
+                            <Label className="text-sm font-medium">
+                                Catatan
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {outbound.notes}
+                            </p>
                         </div>
                     )}
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <Label className="text-sm font-medium">Dibuat Oleh</Label>
-                            <p className="text-sm text-muted-foreground">{outbound.creator.name}</p>
+                            <Label className="text-sm font-medium">
+                                Dibuat Oleh
+                            </Label>
+                            <p className="text-sm text-muted-foreground">
+                                {outbound.creator.name}
+                            </p>
                         </div>
                         <div>
-                            <Label className="text-sm font-medium">Tanggal Dibuat</Label>
+                            <Label className="text-sm font-medium">
+                                Tanggal Dibuat
+                            </Label>
                             <p className="text-sm text-muted-foreground">
                                 {formatDate(outbound.created_at)}
                             </p>

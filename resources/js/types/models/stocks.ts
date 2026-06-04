@@ -39,7 +39,13 @@ export interface StockHistory {
     previous_qty: number;
     new_qty: number;
     change_qty: number;
-    reference_type: 'inbound' | 'outbound' | 'mutation_sent' | 'mutation_received' | 'adjustment' | 'opname';
+    reference_type:
+        | 'inbound'
+        | 'outbound'
+        | 'mutation_sent'
+        | 'mutation_received'
+        | 'adjustment'
+        | 'opname';
     reference_id: number;
     reference_code: string;
     notes: string | null;

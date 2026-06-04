@@ -38,8 +38,10 @@ export function WarehouseUserTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <UserCircle className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Penugasan</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-sm">
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada Penugasan
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                         Mulai dengan menugaskan pengguna pertama ke gudang
                     </p>
                 </div>
@@ -57,69 +59,94 @@ export function WarehouseUserTable({
                                 checked={allSelected}
                                 onCheckedChange={onSelectAll}
                                 aria-label="Pilih semua"
-                                className={someSelected ? 'data-[state=checked]:bg-muted-foreground' : ''}
+                                className={
+                                    someSelected
+                                        ? 'data-[state=checked]:bg-muted-foreground'
+                                        : ''
+                                }
                             />
                         </TableHead>
                         <TableHead className="font-semibold">Gudang</TableHead>
-                        <TableHead className="font-semibold">Pengguna</TableHead>
+                        <TableHead className="font-semibold">
+                            Pengguna
+                        </TableHead>
                         <TableHead className="font-semibold">Email</TableHead>
                         <TableHead className="font-semibold">Status</TableHead>
-                        <TableHead className="font-semibold">Ditugaskan Pada</TableHead>
-                        <TableHead className="text-right font-semibold">Aksi</TableHead>
+                        <TableHead className="font-semibold">
+                            Ditugaskan Pada
+                        </TableHead>
+                        <TableHead className="text-right font-semibold">
+                            Aksi
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {warehouseUsers.map((warehouseUser) => (
-                            <TableRow key={warehouseUser.id} className="group">
-                                <TableCell>
-                                    <Checkbox
-                                        checked={selectedIds.includes(warehouseUser.id)}
-                                        onCheckedChange={(checked) => onSelectOne(warehouseUser.id, checked as boolean)}
-                                        aria-label={`Pilih ${warehouseUser.warehouse?.name}`}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        <WarehouseIcon className="h-4 w-4 text-muted-foreground" />
-                                        <span className="font-medium">{warehouseUser.warehouse?.name}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        <UserCircle className="h-4 w-4 text-muted-foreground" />
-                                        <span>{warehouseUser.user?.name}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="text-muted-foreground">
-                                    {warehouseUser.user?.email}
-                                </TableCell>
-                                <TableCell>
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        <TableRow key={warehouseUser.id} className="group">
+                            <TableCell>
+                                <Checkbox
+                                    checked={selectedIds.includes(
+                                        warehouseUser.id,
+                                    )}
+                                    onCheckedChange={(checked) =>
+                                        onSelectOne(
+                                            warehouseUser.id,
+                                            checked as boolean,
+                                        )
+                                    }
+                                    aria-label={`Pilih ${warehouseUser.warehouse?.name}`}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                    <WarehouseIcon className="h-4 w-4 text-muted-foreground" />
+                                    <span className="font-medium">
+                                        {warehouseUser.warehouse?.name}
+                                    </span>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                    <UserCircle className="h-4 w-4 text-muted-foreground" />
+                                    <span>{warehouseUser.user?.name}</span>
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                                {warehouseUser.user?.email}
+                            </TableCell>
+                            <TableCell>
+                                <span
+                                    className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                                         warehouseUser.is_primary
                                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                                             : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300'
-                                    }`}>
-                                        {warehouseUser.is_primary ? 'Utama' : 'Cadangan'}
-                                    </span>
-                                </TableCell>
-                                <TableCell className="text-muted-foreground text-sm">
-                                    {formatDate(warehouseUser.assigned_at)}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="h-8 gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
-                                            onClick={() => onDelete(warehouseUser)}
-                                        >
-                                            <Trash2 className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only">Hapus</span>
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                    }`}
+                                >
+                                    {warehouseUser.is_primary
+                                        ? 'Utama'
+                                        : 'Cadangan'}
+                                </span>
+                            </TableCell>
+                            <TableCell className="text-sm text-muted-foreground">
+                                {formatDate(warehouseUser.assigned_at)}
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                        onClick={() => onDelete(warehouseUser)}
+                                    >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                        <span className="sr-only sm:not-sr-only">
+                                            Hapus
+                                        </span>
+                                    </Button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>

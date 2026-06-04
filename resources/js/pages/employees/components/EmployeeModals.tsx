@@ -65,7 +65,7 @@ export function EmployeeModals({
     return (
         <>
             <EmployeeFormModal
-                open={modals.create as boolean || editModal.isOpen}
+                open={(modals.create as boolean) || editModal.isOpen}
                 employee={modals.create ? null : editModal.data}
                 onClose={() => {
                     if (modals.create) {

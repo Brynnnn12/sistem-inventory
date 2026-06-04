@@ -9,11 +9,17 @@ import {
     ArrowRightLeft,
     BarChart3,
     FileText,
-    Bell
+    Bell,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { EmployeesList } from '@/pages/dashboard/EmployeesList';
 import MonthlyChart from '@/pages/dashboard/MonthlyChart';
@@ -23,8 +29,6 @@ import type { BreadcrumbItem } from '@/types';
 
 import type { DashboardProps } from '@/types/models/dashboard';
 import { formatQuantity } from '@/utils/format';
-
-
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -41,7 +45,6 @@ export default function Dashboard({
     stockAlerts,
     monthlyChart,
 }: DashboardProps) {
-
     const getTransactionIcon = (type: string) => {
         switch (type) {
             case 'inbound':
@@ -58,11 +61,32 @@ export default function Dashboard({
     const getTransactionBadge = (type: string) => {
         switch (type) {
             case 'inbound':
-                return <Badge variant="default" className="bg-green-100 text-green-800">Masuk</Badge>;
+                return (
+                    <Badge
+                        variant="default"
+                        className="bg-green-100 text-green-800"
+                    >
+                        Masuk
+                    </Badge>
+                );
             case 'outbound':
-                return <Badge variant="default" className="bg-red-100 text-red-800">Keluar</Badge>;
+                return (
+                    <Badge
+                        variant="default"
+                        className="bg-red-100 text-red-800"
+                    >
+                        Keluar
+                    </Badge>
+                );
             case 'mutation':
-                return <Badge variant="default" className="bg-blue-100 text-blue-800">Mutasi</Badge>;
+                return (
+                    <Badge
+                        variant="default"
+                        className="bg-blue-100 text-blue-800"
+                    >
+                        Mutasi
+                    </Badge>
+                );
             default:
                 return <Badge variant="secondary">{type}</Badge>;
         }
@@ -74,8 +98,12 @@ export default function Dashboard({
             <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">Dashboard GudangKu</h1>
-                        <p className="text-muted-foreground">Ringkasan inventory dan aktivitas terbaru</p>
+                        <h1 className="text-3xl font-bold tracking-tight">
+                            Dashboard GudangKu
+                        </h1>
+                        <p className="text-muted-foreground">
+                            Ringkasan inventory dan aktivitas terbaru
+                        </p>
                     </div>
                     <div className="flex gap-2">
                         <Button variant="outline" asChild>
@@ -97,39 +125,55 @@ export default function Dashboard({
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Produk</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Total Produk
+                            </CardTitle>
                             <Package className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stockSummary.total_products}</div>
+                            <div className="text-2xl font-bold">
+                                {stockSummary.total_products}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Total Gudang</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Total Gudang
+                            </CardTitle>
                             <Warehouse className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{stockSummary.total_warehouses}</div>
+                            <div className="text-2xl font-bold">
+                                {stockSummary.total_warehouses}
+                            </div>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Stok Rendah</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Stok Rendah
+                            </CardTitle>
                             <AlertTriangle className="h-4 w-4 text-yellow-600" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-yellow-600">{stockSummary.low_stock_count}</div>
+                            <div className="text-2xl font-bold text-yellow-600">
+                                {stockSummary.low_stock_count}
+                            </div>
                         </CardContent>
                     </Card>
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium">Stok Habis</CardTitle>
+                            <CardTitle className="text-sm font-medium">
+                                Stok Habis
+                            </CardTitle>
                             <PackageX className="h-4 w-4 text-red-600" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-red-600">{stockSummary.out_of_stock_count}</div>
+                            <div className="text-2xl font-bold text-red-600">
+                                {stockSummary.out_of_stock_count}
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -162,29 +206,42 @@ export default function Dashboard({
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-4">
-                                {recentTransactions.map((transaction, index) => (
-                                    <div key={index} className="flex items-start gap-3">
-                                        <div className="mt-1">
-                                            {getTransactionIcon(transaction.type)}
-                                        </div>
-                                        <div className="flex-1 space-y-1">
-                                            <div className="flex items-center gap-2">
-                                                <p className="text-sm font-medium">{transaction.product}</p>
-                                                {getTransactionBadge(transaction.type)}
-                                            </div>
-                                            <p className="text-xs text-muted-foreground">
-                                                {transaction.type === 'mutation' ? (
-                                                    `${transaction.from_warehouse} → ${transaction.to_warehouse}`
-                                                ) : (
-                                                    transaction.warehouse
+                                {recentTransactions.map(
+                                    (transaction, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex items-start gap-3"
+                                        >
+                                            <div className="mt-1">
+                                                {getTransactionIcon(
+                                                    transaction.type,
                                                 )}
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {transaction.code} • Qty: {formatQuantity(transaction.quantity)}
-                                            </p>
+                                            </div>
+                                            <div className="flex-1 space-y-1">
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-sm font-medium">
+                                                        {transaction.product}
+                                                    </p>
+                                                    {getTransactionBadge(
+                                                        transaction.type,
+                                                    )}
+                                                </div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {transaction.type ===
+                                                    'mutation'
+                                                        ? `${transaction.from_warehouse} → ${transaction.to_warehouse}`
+                                                        : transaction.warehouse}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {transaction.code} • Qty:{' '}
+                                                    {formatQuantity(
+                                                        transaction.quantity,
+                                                    )}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ),
+                                )}
                             </div>
                         </CardContent>
                     </Card>
@@ -205,7 +262,10 @@ export default function Dashboard({
                         <CardContent>
                             <div className="space-y-3">
                                 {stockAlerts.slice(0, 3).map((alert, index) => (
-                                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                                    <div
+                                        key={index}
+                                        className="flex items-center justify-between rounded-lg border p-3"
+                                    >
                                         <div className="flex items-center gap-3">
                                             {alert.type === 'low_stock' ? (
                                                 <AlertTriangle className="h-4 w-4 text-yellow-600" />
@@ -213,22 +273,39 @@ export default function Dashboard({
                                                 <PackageX className="h-4 w-4 text-red-600" />
                                             )}
                                             <div>
-                                                <p className="text-sm font-medium">{alert.message}</p>
+                                                <p className="text-sm font-medium">
+                                                    {alert.message}
+                                                </p>
                                                 <p className="text-xs text-muted-foreground">
-                                                    Stok: {alert.current_qty} {alert.unit} (Min: {alert.min_stock})
+                                                    Stok: {alert.current_qty}{' '}
+                                                    {alert.unit} (Min:{' '}
+                                                    {alert.min_stock})
                                                 </p>
                                             </div>
                                         </div>
-                                        <Badge variant={alert.type === 'low_stock' ? 'secondary' : 'destructive'}>
-                                            {alert.type === 'low_stock' ? 'Rendah' : 'Habis'}
+                                        <Badge
+                                            variant={
+                                                alert.type === 'low_stock'
+                                                    ? 'secondary'
+                                                    : 'destructive'
+                                            }
+                                        >
+                                            {alert.type === 'low_stock'
+                                                ? 'Rendah'
+                                                : 'Habis'}
                                         </Badge>
                                     </div>
                                 ))}
                                 {stockAlerts.length > 3 && (
-                                    <div className="text-center pt-2">
-                                        <Button variant="outline" size="sm" asChild>
+                                    <div className="pt-2 text-center">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            asChild
+                                        >
                                             <Link href="/dashboard/reports/alerts">
-                                                Lihat Semua ({stockAlerts.length})
+                                                Lihat Semua (
+                                                {stockAlerts.length})
                                             </Link>
                                         </Button>
                                     </div>

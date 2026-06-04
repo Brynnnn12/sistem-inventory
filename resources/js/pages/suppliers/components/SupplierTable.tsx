@@ -40,9 +40,12 @@ export function SupplierTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <Users className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Supplier</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-sm">
-                        Mulai dengan menambahkan supplier pertama ke inventaris Anda
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada Supplier
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                        Mulai dengan menambahkan supplier pertama ke inventaris
+                        Anda
                     </p>
                 </div>
             </div>
@@ -59,16 +62,26 @@ export function SupplierTable({
                                 checked={allSelected}
                                 onCheckedChange={onSelectAll}
                                 aria-label="Pilih semua"
-                                className={someSelected ? 'data-[state=checked]:bg-muted-foreground' : ''}
+                                className={
+                                    someSelected
+                                        ? 'data-[state=checked]:bg-muted-foreground'
+                                        : ''
+                                }
                             />
                         </TableHead>
                         <TableHead className="font-semibold">Kode</TableHead>
-                        <TableHead className="font-semibold">Nama Supplier</TableHead>
-                        <TableHead className="font-semibold">Kontak Person</TableHead>
+                        <TableHead className="font-semibold">
+                            Nama Supplier
+                        </TableHead>
+                        <TableHead className="font-semibold">
+                            Kontak Person
+                        </TableHead>
                         <TableHead className="font-semibold">Telepon</TableHead>
                         <TableHead className="font-semibold">Email</TableHead>
                         <TableHead className="font-semibold">Status</TableHead>
-                        <TableHead className="text-right font-semibold">Aksi</TableHead>
+                        <TableHead className="text-right font-semibold">
+                            Aksi
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -77,16 +90,26 @@ export function SupplierTable({
                             <TableCell>
                                 <Checkbox
                                     checked={selectedIds.includes(supplier.id)}
-                                    onCheckedChange={(checked) => onSelectOne(supplier.id, checked as boolean)}
+                                    onCheckedChange={(checked) =>
+                                        onSelectOne(
+                                            supplier.id,
+                                            checked as boolean,
+                                        )
+                                    }
                                     aria-label={`Pilih ${supplier.name}`}
                                 />
                             </TableCell>
                             <TableCell>
-                                <Badge variant="secondary" className="font-mono text-xs">
+                                <Badge
+                                    variant="secondary"
+                                    className="font-mono text-xs"
+                                >
                                     {supplier.code}
                                 </Badge>
                             </TableCell>
-                            <TableCell className="font-medium">{supplier.name}</TableCell>
+                            <TableCell className="font-medium">
+                                {supplier.name}
+                            </TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-2">
                                     <Users className="h-4 w-4 text-muted-foreground" />
@@ -100,12 +123,16 @@ export function SupplierTable({
                                 {supplier.email || '-'}
                             </TableCell>
                             <TableCell>
-                                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                    supplier.is_active
-                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
-                                        : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                                }`}>
-                                    {supplier.is_active ? 'Aktif' : 'Tidak Aktif'}
+                                <span
+                                    className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
+                                        supplier.is_active
+                                            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                                            : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                                    }`}
+                                >
+                                    {supplier.is_active
+                                        ? 'Aktif'
+                                        : 'Tidak Aktif'}
                                 </span>
                             </TableCell>
                             <TableCell className="text-right">
@@ -117,16 +144,20 @@ export function SupplierTable({
                                         onClick={() => onEdit(supplier)}
                                     >
                                         <Edit className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only">Edit</span>
+                                        <span className="sr-only sm:not-sr-only">
+                                            Edit
+                                        </span>
                                     </Button>
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        className="h-8 gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
+                                        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
                                         onClick={() => onDelete(supplier)}
                                     >
                                         <Trash2 className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only">Hapus</span>
+                                        <span className="sr-only sm:not-sr-only">
+                                            Hapus
+                                        </span>
                                     </Button>
                                 </div>
                             </TableCell>

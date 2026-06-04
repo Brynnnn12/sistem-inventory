@@ -17,15 +17,23 @@ interface OpnameApproveModalProps {
     onClose: () => void;
 }
 
-export function OpnameApproveModal({ open, opname, onClose }: OpnameApproveModalProps) {
+export function OpnameApproveModal({
+    open,
+    opname,
+    onClose,
+}: OpnameApproveModalProps) {
     if (!opname) return null;
 
     const handleApprove = () => {
-        router.post(`/dashboard/opname/${opname.id}/approve`, {}, {
-            onSuccess: () => {
-                onClose();
+        router.post(
+            `/dashboard/opname/${opname.id}/approve`,
+            {},
+            {
+                onSuccess: () => {
+                    onClose();
+                },
             },
-        });
+        );
     };
 
     return (
@@ -37,8 +45,10 @@ export function OpnameApproveModal({ open, opname, onClose }: OpnameApproveModal
                         Approve Opname
                     </DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to approve opname <strong>{opname.code}</strong>?
-                        This action will adjust stock levels based on the opname results and cannot be undone.
+                        Are you sure you want to approve opname{' '}
+                        <strong>{opname.code}</strong>? This action will adjust
+                        stock levels based on the opname results and cannot be
+                        undone.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -49,12 +59,20 @@ export function OpnameApproveModal({ open, opname, onClose }: OpnameApproveModal
                             <span className="font-medium">{opname.code}</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-muted-foreground">Warehouse:</span>
-                            <span className="font-medium">{opname.warehouse?.name}</span>
+                            <span className="text-muted-foreground">
+                                Warehouse:
+                            </span>
+                            <span className="font-medium">
+                                {opname.warehouse?.name}
+                            </span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-muted-foreground">Product:</span>
-                            <span className="font-medium">{opname.product?.name}</span>
+                            <span className="text-muted-foreground">
+                                Product:
+                            </span>
+                            <span className="font-medium">
+                                {opname.product?.name}
+                            </span>
                         </div>
                     </div>
                 </div>

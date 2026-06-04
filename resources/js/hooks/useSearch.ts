@@ -47,16 +47,12 @@ export function useSearch({
                 delete params.search;
             }
 
-            router.get(
-                route,
-                params,
-                {
-                    preserveState: true,
-                    preserveScroll: true,
-                    replace: true,
-                    ...(only && only.length > 0 && { only }),
-                }
-            );
+            router.get(route, params, {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+                ...(only && only.length > 0 && { only }),
+            });
         }, debounceMs);
 
         return () => clearTimeout(timer);

@@ -1,20 +1,39 @@
 import { Head, router } from '@inertiajs/react';
-import {  Filter, ArrowUpRight, ArrowDownLeft, ArrowRightLeft } from 'lucide-react';
+import {
+    Filter,
+    ArrowUpRight,
+    ArrowDownLeft,
+    ArrowRightLeft,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 
 import AppLayout from '@/layouts/app-layout';
-import {
-    cn,
-    formatCurrency,
-    formatDate,
-    formatQuantity,
-} from '@/lib/utils';
+import { cn, formatCurrency, formatDate, formatQuantity } from '@/lib/utils';
 
 // import { exportMethod } from '@/routes/reports/transactions';
 import { type BreadcrumbItem } from '@/types';
@@ -97,9 +116,7 @@ export default function TransactionReport({
             {
                 type: selectedType !== 'all' ? selectedType : undefined,
                 warehouse_id:
-                    selectedWarehouse !== 'all'
-                        ? selectedWarehouse
-                        : undefined,
+                    selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
                 start_date: startDate,
                 end_date: endDate,
             },
@@ -128,19 +145,13 @@ export default function TransactionReport({
     const getTypeIcon = (type: string) => {
         switch (type) {
             case 'inbound':
-                return (
-                    <ArrowDownLeft className="h-4 w-4 text-green-600" />
-                );
+                return <ArrowDownLeft className="h-4 w-4 text-green-600" />;
 
             case 'outbound':
-                return (
-                    <ArrowUpRight className="h-4 w-4 text-red-600" />
-                );
+                return <ArrowUpRight className="h-4 w-4 text-red-600" />;
 
             case 'mutation':
-                return (
-                    <ArrowRightLeft className="h-4 w-4 text-blue-600" />
-                );
+                return <ArrowRightLeft className="h-4 w-4 text-blue-600" />;
 
             default:
                 return null;
@@ -151,23 +162,17 @@ export default function TransactionReport({
         switch (type) {
             case 'inbound':
                 return (
-                    <Badge className="bg-green-100 text-green-800">
-                        Masuk
-                    </Badge>
+                    <Badge className="bg-green-100 text-green-800">Masuk</Badge>
                 );
 
             case 'outbound':
                 return (
-                    <Badge className="bg-red-100 text-red-800">
-                        Keluar
-                    </Badge>
+                    <Badge className="bg-red-100 text-red-800">Keluar</Badge>
                 );
 
             case 'mutation':
                 return (
-                    <Badge className="bg-blue-100 text-blue-800">
-                        Mutasi
-                    </Badge>
+                    <Badge className="bg-blue-100 text-blue-800">Mutasi</Badge>
                 );
 
             default:
@@ -211,13 +216,8 @@ export default function TransactionReport({
 
                         <p className="text-sm text-muted-foreground">
                             Periode:{' '}
-                            {formatDate(
-                                transactionReport.period.start_date,
-                            )}{' '}
-                            -{' '}
-                            {formatDate(
-                                transactionReport.period.end_date,
-                            )}
+                            {formatDate(transactionReport.period.start_date)} -{' '}
+                            {formatDate(transactionReport.period.end_date)}
                         </p>
                     </div>
 
@@ -335,9 +335,7 @@ export default function TransactionReport({
                                     type="date"
                                     className="w-full rounded-md border px-3 py-2 text-sm"
                                     value={endDate}
-                                    onChange={(e) =>
-                                        setEndDate(e.target.value)
-                                    }
+                                    onChange={(e) => setEndDate(e.target.value)}
                                 />
                             </div>
 
@@ -417,8 +415,7 @@ export default function TransactionReport({
                         <CardContent>
                             <div className="text-2xl font-bold text-blue-600">
                                 {formatQuantity(
-                                    transactionReport.summary
-                                        .total_mutations,
+                                    transactionReport.summary.total_mutations,
                                 )}
                             </div>
 
@@ -442,18 +439,16 @@ export default function TransactionReport({
                             <div
                                 className={cn(
                                     'text-2xl font-bold',
-                                    transactionReport.summary
-                                        .net_movement >= 0
+                                    transactionReport.summary.net_movement >= 0
                                         ? 'text-green-600'
                                         : 'text-red-600',
                                 )}
                             >
-                                {transactionReport.summary
-                                    .net_movement >= 0 && '+'}
+                                {transactionReport.summary.net_movement >= 0 &&
+                                    '+'}
 
                                 {formatQuantity(
-                                    transactionReport.summary
-                                        .net_movement,
+                                    transactionReport.summary.net_movement,
                                 )}
                             </div>
                         </CardContent>
@@ -552,7 +547,7 @@ export default function TransactionReport({
 
                                                 <TableCell className="text-right">
                                                     {transaction.type ===
-                                                    'mutation' &&
+                                                        'mutation' &&
                                                     transaction.received_qty !==
                                                         undefined ? (
                                                         <div className="text-sm">

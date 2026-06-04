@@ -57,10 +57,10 @@ export default function TwoFactor({
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <Badge variant="default">Aktif</Badge>
                             <p className="text-muted-foreground">
-                                Dengan autentikasi dua faktor diaktifkan, Anda akan
-                                diminta untuk memasukkan pin yang aman dan acak saat
-                                login, yang dapat Anda ambil dari aplikasi yang
-                                mendukung TOTP di ponsel Anda.
+                                Dengan autentikasi dua faktor diaktifkan, Anda
+                                akan diminta untuk memasukkan pin yang aman dan
+                                acak saat login, yang dapat Anda ambil dari
+                                aplikasi yang mendukung TOTP di ponsel Anda.
                             </p>
 
                             <TwoFactorRecoveryCodes
@@ -87,10 +87,10 @@ export default function TwoFactor({
                         <div className="flex flex-col items-start justify-start space-y-4">
                             <Badge variant="destructive">Nonaktif</Badge>
                             <p className="text-muted-foreground">
-                                Saat Anda mengaktifkan autentikasi dua faktor, Anda
-                                akan diminta untuk memasukkan pin yang aman saat
-                                login. Pin ini dapat diambil dari aplikasi yang
-                                mendukung TOTP di ponsel Anda.
+                                Saat Anda mengaktifkan autentikasi dua faktor,
+                                Anda akan diminta untuk memasukkan pin yang aman
+                                saat login. Pin ini dapat diambil dari aplikasi
+                                yang mendukung TOTP di ponsel Anda.
                             </p>
 
                             <div>

@@ -32,7 +32,11 @@ export function OutboundModals({
     return (
         <>
             <OutboundFormModal
-                open={typeof modals.create === 'boolean' ? modals.create : modals.create.isOpen}
+                open={
+                    typeof modals.create === 'boolean'
+                        ? modals.create
+                        : modals.create.isOpen
+                }
                 onClose={() => onCloseModal('create')}
                 warehouses={warehouses}
                 customers={customers}
@@ -42,8 +46,12 @@ export function OutboundModals({
             />
 
             <OutboundShowModal
-                open={(modals.show as ModalWithData<OutboundTransaction>).isOpen}
-                outbound={(modals.show as ModalWithData<OutboundTransaction>).data}
+                open={
+                    (modals.show as ModalWithData<OutboundTransaction>).isOpen
+                }
+                outbound={
+                    (modals.show as ModalWithData<OutboundTransaction>).data
+                }
                 onClose={() => onCloseModal('show')}
             />
         </>

@@ -22,14 +22,20 @@ export default function Index({
     categories: PageProps;
     filters?: Filters;
 }) {
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const {
+        searchValue,
+        setSearchValue,
+        clearSearch,
+        isSearching,
+        hasActiveSearch,
+    } = useSearch({
         route: '/dashboard/categories',
         initialSearch: filters.search || '',
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Category>({
         simple: ['create', 'bulkDelete'],
-        withData: ['edit', 'delete']
+        withData: ['edit', 'delete'],
     });
     const {
         selectedIds,

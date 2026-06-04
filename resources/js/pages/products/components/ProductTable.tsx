@@ -41,9 +41,12 @@ export function ProductTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <Package className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Produk</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-sm">
-                        Mulai dengan menambahkan produk pertama ke inventaris Anda
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada Produk
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                        Mulai dengan menambahkan produk pertama ke inventaris
+                        Anda
                     </p>
                 </div>
             </div>
@@ -60,77 +63,103 @@ export function ProductTable({
                                 checked={allSelected}
                                 onCheckedChange={onSelectAll}
                                 aria-label="Pilih semua"
-                                className={someSelected ? 'data-[state=checked]:bg-muted-foreground' : ''}
+                                className={
+                                    someSelected
+                                        ? 'data-[state=checked]:bg-muted-foreground'
+                                        : ''
+                                }
                             />
                         </TableHead>
                         <TableHead className="font-semibold">Kode</TableHead>
-                        <TableHead className="font-semibold">Nama Produk</TableHead>
-                        <TableHead className="font-semibold">Kategori</TableHead>
+                        <TableHead className="font-semibold">
+                            Nama Produk
+                        </TableHead>
+                        <TableHead className="font-semibold">
+                            Kategori
+                        </TableHead>
                         <TableHead className="font-semibold">Satuan</TableHead>
                         <TableHead className="font-semibold">Harga</TableHead>
                         <TableHead className="font-semibold">Status</TableHead>
-                        <TableHead className="text-right font-semibold">Aksi</TableHead>
+                        <TableHead className="text-right font-semibold">
+                            Aksi
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {products.map((product) => (
                         <TableRow key={product.id} className="group">
-                                <TableCell>
-                                    <Checkbox
-                                        checked={selectedIds.includes(product.id)}
-                                        onCheckedChange={(checked) => onSelectOne(product.id, checked as boolean)}
-                                        aria-label={`Pilih ${product.name}`}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <Badge variant="secondary" className="font-mono text-xs">
-                                        {product.code}
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="font-medium">{product.name}</TableCell>
-                                <TableCell>
-                                    <Badge variant="outline">{product.category?.name}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <div className="flex items-center gap-2">
-                                        <Package className="h-4 w-4 text-muted-foreground" />
-                                        <span>{product.unit}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="text-muted-foreground">
-                                    {formatIDR(product.price)}
-                                </TableCell>
-                                <TableCell>
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            <TableCell>
+                                <Checkbox
+                                    checked={selectedIds.includes(product.id)}
+                                    onCheckedChange={(checked) =>
+                                        onSelectOne(
+                                            product.id,
+                                            checked as boolean,
+                                        )
+                                    }
+                                    aria-label={`Pilih ${product.name}`}
+                                />
+                            </TableCell>
+                            <TableCell>
+                                <Badge
+                                    variant="secondary"
+                                    className="font-mono text-xs"
+                                >
+                                    {product.code}
+                                </Badge>
+                            </TableCell>
+                            <TableCell className="font-medium">
+                                {product.name}
+                            </TableCell>
+                            <TableCell>
+                                <Badge variant="outline">
+                                    {product.category?.name}
+                                </Badge>
+                            </TableCell>
+                            <TableCell>
+                                <div className="flex items-center gap-2">
+                                    <Package className="h-4 w-4 text-muted-foreground" />
+                                    <span>{product.unit}</span>
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                                {formatIDR(product.price)}
+                            </TableCell>
+                            <TableCell>
+                                <span
+                                    className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                                         product.is_active
                                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                                             : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                                    }`}>
-                                        {product.is_active ? 'Aktif' : 'Tidak Aktif'}
-                                    </span>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="h-8 gap-1.5"
-                                            onClick={() => onEdit(product)}
-                                        >
-                                            <Edit className="h-3.5 w-3.5" />
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="h-8 gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
-                                            onClick={() => onDelete(product)}
-                                        >
-                                            <Trash2 className="h-3.5 w-3.5" />
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                    }`}
+                                >
+                                    {product.is_active
+                                        ? 'Aktif'
+                                        : 'Tidak Aktif'}
+                                </span>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 gap-1.5"
+                                        onClick={() => onEdit(product)}
+                                    >
+                                        <Edit className="h-3.5 w-3.5" />
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                        onClick={() => onDelete(product)}
+                                    >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>

@@ -39,12 +39,22 @@ export const formatQuantity = (quantity: number | string): string => {
 export function formatDateTime(dateString: string): string {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return '-';
-    const day = date.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    const time = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    const day = date.toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+    });
+    const time = date.toLocaleTimeString('id-ID', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
     return `${day} ${time}`;
 }
 
-export function calculateMargin(costPrice: string | number, sellingPrice: string | number): string {
+export function calculateMargin(
+    costPrice: string | number,
+    sellingPrice: string | number,
+): string {
     const cost = Number(costPrice);
     const selling = Number(sellingPrice);
     const margin = ((selling - cost) / cost) * 100;

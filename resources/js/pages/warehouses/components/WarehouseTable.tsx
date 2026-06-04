@@ -39,8 +39,10 @@ export function WarehouseTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <WarehouseIcon className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Gudang</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-sm">
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada Gudang
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                         Mulai dengan menambahkan lokasi gudang pertama Anda
                     </p>
                 </div>
@@ -58,67 +60,94 @@ export function WarehouseTable({
                                 checked={allSelected}
                                 onCheckedChange={onSelectAll}
                                 aria-label="Pilih semua"
-                                className={someSelected ? 'data-[state=checked]:bg-muted-foreground' : ''}
+                                className={
+                                    someSelected
+                                        ? 'data-[state=checked]:bg-muted-foreground'
+                                        : ''
+                                }
                             />
                         </TableHead>
                         <TableHead className="font-semibold">Kode</TableHead>
-                        <TableHead className="font-semibold">Nama Gudang</TableHead>
+                        <TableHead className="font-semibold">
+                            Nama Gudang
+                        </TableHead>
                         <TableHead className="font-semibold">Alamat</TableHead>
                         <TableHead className="font-semibold">Status</TableHead>
-                        <TableHead className="text-right font-semibold">Aksi</TableHead>
+                        <TableHead className="text-right font-semibold">
+                            Aksi
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {warehouses.map((warehouse) => (
                         <TableRow key={warehouse.id} className="group">
-                                <TableCell>
-                                    <Checkbox
-                                        checked={selectedIds.includes(warehouse.id)}
-                                        onCheckedChange={(checked) => onSelectOne(warehouse.id, checked as boolean)}
-                                        aria-label={`Pilih ${warehouse.name}`}
-                                    />
-                                </TableCell>
-                                <TableCell className="font-mono text-sm">{warehouse.code}</TableCell>
-                                <TableCell className="font-medium">{warehouse.name}</TableCell>
-                                <TableCell className="text-muted-foreground">
-                                    <div className="flex items-start gap-2 max-w-md">
-                                        <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                                        <span className="line-clamp-2">{warehouse.address}</span>
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            <TableCell>
+                                <Checkbox
+                                    checked={selectedIds.includes(warehouse.id)}
+                                    onCheckedChange={(checked) =>
+                                        onSelectOne(
+                                            warehouse.id,
+                                            checked as boolean,
+                                        )
+                                    }
+                                    aria-label={`Pilih ${warehouse.name}`}
+                                />
+                            </TableCell>
+                            <TableCell className="font-mono text-sm">
+                                {warehouse.code}
+                            </TableCell>
+                            <TableCell className="font-medium">
+                                {warehouse.name}
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                                <div className="flex max-w-md items-start gap-2">
+                                    <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+                                    <span className="line-clamp-2">
+                                        {warehouse.address}
+                                    </span>
+                                </div>
+                            </TableCell>
+                            <TableCell>
+                                <span
+                                    className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${
                                         warehouse.is_active
                                             ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                                             : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
-                                    }`}>
-                                        {warehouse.is_active ? 'Aktif' : 'Tidak Aktif'}
-                                    </span>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <div className="flex items-center justify-end gap-2">
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="h-8 gap-1.5"
-                                            onClick={() => onEdit(warehouse)}
-                                        >
-                                            <Edit className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only">Edit</span>
-                                        </Button>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            className="h-8 gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
-                                            onClick={() => onDelete(warehouse)}
-                                        >
-                                            <Trash2 className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only">Hapus</span>
-                                        </Button>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                                    }`}
+                                >
+                                    {warehouse.is_active
+                                        ? 'Aktif'
+                                        : 'Tidak Aktif'}
+                                </span>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <div className="flex items-center justify-end gap-2">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 gap-1.5"
+                                        onClick={() => onEdit(warehouse)}
+                                    >
+                                        <Edit className="h-3.5 w-3.5" />
+                                        <span className="sr-only sm:not-sr-only">
+                                            Edit
+                                        </span>
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                        onClick={() => onDelete(warehouse)}
+                                    >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                        <span className="sr-only sm:not-sr-only">
+                                            Hapus
+                                        </span>
+                                    </Button>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                    ))}
                 </TableBody>
             </Table>
         </div>

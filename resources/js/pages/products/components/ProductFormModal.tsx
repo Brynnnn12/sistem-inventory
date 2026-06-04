@@ -4,11 +4,7 @@ import { useEffect } from 'react';
 import InputError from '@/components/input-error';
 import { ModalHeader } from '@/components/modal-header';
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -21,7 +17,6 @@ import {
 } from '@/components/ui/select';
 import type { Product, Category } from '@/types/models/products';
 
-
 interface ProductFormModalProps {
     open: boolean;
     product?: Product | null;
@@ -29,9 +24,24 @@ interface ProductFormModalProps {
     onClose: () => void;
 }
 
-const UNITS = ['Karton', 'Box', 'Pcs', 'Liter', 'Kg', 'Meter', 'Buah', 'Lusin', 'Pack'];
+const UNITS = [
+    'Karton',
+    'Box',
+    'Pcs',
+    'Liter',
+    'Kg',
+    'Meter',
+    'Buah',
+    'Lusin',
+    'Pack',
+];
 
-export function ProductFormModal({ open, product, categories, onClose }: ProductFormModalProps) {
+export function ProductFormModal({
+    open,
+    product,
+    categories,
+    onClose,
+}: ProductFormModalProps) {
     const isEditing = !!product;
 
     const form = useForm({
@@ -91,30 +101,40 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
 
     return (
         <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
                 <form onSubmit={handleSubmit}>
                     <ModalHeader
                         icon={Package}
                         title={isEditing ? 'Edit Produk' : 'Tambah Produk'}
-                        description={isEditing ? 'Perbarui informasi produk' : 'Tambahkan produk baru ke inventaris Anda'}
+                        description={
+                            isEditing
+                                ? 'Perbarui informasi produk'
+                                : 'Tambahkan produk baru ke inventaris Anda'
+                        }
                     />
                     <div className="space-y-6 py-4">
                         {/* Row 1: Category & Name */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="space-y-2">
                                 <Label htmlFor="product-category">
-                                    Kategori <span className="text-destructive">*</span>
+                                    Kategori{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <Select
                                     value={form.data.category_id}
-                                    onValueChange={(value) => form.setData('category_id', value)}
+                                    onValueChange={(value) =>
+                                        form.setData('category_id', value)
+                                    }
                                 >
                                     <SelectTrigger id="product-category">
                                         <SelectValue placeholder="Pilih kategori" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {categories.map((category) => (
-                                            <SelectItem key={category.id} value={category.id.toString()}>
+                                            <SelectItem
+                                                key={category.id}
+                                                value={category.id.toString()}
+                                            >
                                                 {category.name}
                                             </SelectItem>
                                         ))}
@@ -125,12 +145,15 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
 
                             <div className="space-y-2">
                                 <Label htmlFor="product-name">
-                                    Nama Produk <span className="text-destructive">*</span>
+                                    Nama Produk{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <Input
                                     id="product-name"
                                     value={form.data.name}
-                                    onChange={(e) => form.setData('name', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData('name', e.target.value)
+                                    }
                                     placeholder="Contoh: Samsung Galaxy S24"
                                     required
                                     maxLength={255}
@@ -140,14 +163,17 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
                         </div>
 
                         {/* Row 2: Unit & Status */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="space-y-2">
                                 <Label htmlFor="product-unit">
-                                    Satuan <span className="text-destructive">*</span>
+                                    Satuan{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <Select
                                     value={form.data.unit}
-                                    onValueChange={(value) => form.setData('unit', value)}
+                                    onValueChange={(value) =>
+                                        form.setData('unit', value)
+                                    }
                                 >
                                     <SelectTrigger id="product-unit">
                                         <SelectValue placeholder="Pilih satuan" />
@@ -164,16 +190,26 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-sm font-medium">Status</Label>
+                                <Label className="text-sm font-medium">
+                                    Status
+                                </Label>
                                 <div className="flex items-center space-x-2 pt-2">
                                     <input
                                         type="checkbox"
                                         id="product-is-active"
                                         checked={form.data.is_active}
-                                        onChange={(e) => form.setData('is_active', e.target.checked)}
+                                        onChange={(e) =>
+                                            form.setData(
+                                                'is_active',
+                                                e.target.checked,
+                                            )
+                                        }
                                         className="rounded border-gray-300"
                                     />
-                                    <Label htmlFor="product-is-active" className="text-sm">
+                                    <Label
+                                        htmlFor="product-is-active"
+                                        className="text-sm"
+                                    >
                                         Produk Aktif
                                     </Label>
                                 </div>
@@ -181,14 +217,24 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
                         </div>
 
                         {/* Row 3: Stock Levels */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="space-y-2">
-                                <Label htmlFor="product-min-stock">Stok Minimum</Label>
+                                <Label htmlFor="product-min-stock">
+                                    Stok Minimum
+                                </Label>
                                 <Input
                                     id="product-min-stock"
                                     type="number"
                                     value={form.data.min_stock}
-                                    onChange={(e) => form.setData('min_stock', e.target.value.replace(/[^\d]/g, ''))}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            'min_stock',
+                                            e.target.value.replace(
+                                                /[^\d]/g,
+                                                '',
+                                            ),
+                                        )
+                                    }
                                     placeholder="0"
                                     min="0"
                                 />
@@ -196,12 +242,22 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="product-max-stock">Stok Maksimum</Label>
+                                <Label htmlFor="product-max-stock">
+                                    Stok Maksimum
+                                </Label>
                                 <Input
                                     id="product-max-stock"
                                     type="number"
                                     value={form.data.max_stock}
-                                    onChange={(e) => form.setData('max_stock', e.target.value.replace(/[^\d]/g, ''))}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            'max_stock',
+                                            e.target.value.replace(
+                                                /[^\d]/g,
+                                                '',
+                                            ),
+                                        )
+                                    }
                                     placeholder="0"
                                     min="0"
                                 />
@@ -210,18 +266,22 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
                         </div>
 
                         {/* Row 4: Pricing */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="space-y-2">
-                                <Label htmlFor="product-cost">Harga Modal</Label>
+                                <Label htmlFor="product-cost">
+                                    Harga Modal
+                                </Label>
                                 <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                                    <span className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-muted-foreground">
                                         Rp
                                     </span>
                                     <Input
                                         id="product-cost"
                                         type="number"
                                         value={form.data.cost}
-                                        onChange={(e) => form.setData('cost', e.target.value)}
+                                        onChange={(e) =>
+                                            form.setData('cost', e.target.value)
+                                        }
                                         step="0.01"
                                         placeholder="0"
                                         min="0"
@@ -232,16 +292,23 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="product-price">Harga Jual</Label>
+                                <Label htmlFor="product-price">
+                                    Harga Jual
+                                </Label>
                                 <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                                    <span className="absolute top-1/2 left-3 -translate-y-1/2 text-sm text-muted-foreground">
                                         Rp
                                     </span>
                                     <Input
                                         id="product-price"
                                         type="number"
                                         value={form.data.price}
-                                        onChange={(e) => form.setData('price', e.target.value)}
+                                        onChange={(e) =>
+                                            form.setData(
+                                                'price',
+                                                e.target.value,
+                                            )
+                                        }
                                         step="0.01"
                                         placeholder="0"
                                         min="0"
@@ -254,11 +321,15 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
 
                         {/* Row 5: Description */}
                         <div className="space-y-2">
-                            <Label htmlFor="product-description">Deskripsi</Label>
+                            <Label htmlFor="product-description">
+                                Deskripsi
+                            </Label>
                             <textarea
                                 id="product-description"
                                 value={form.data.description}
-                                onChange={(e) => form.setData('description', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData('description', e.target.value)
+                                }
                                 placeholder="Deskripsi produk (opsional)"
                                 rows={2}
                                 className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
@@ -269,9 +340,15 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
 
                         {/* Info for new products */}
                         {!isEditing && (
-                            <div className="rounded-lg bg-blue-50 border border-blue-200 p-3">
+                            <div className="rounded-lg border border-blue-200 bg-blue-50 p-3">
                                 <p className="text-sm text-blue-800">
-                                    <span className="font-medium">Kode produk</span> akan dibuat otomatis dengan format <span className="font-mono">PRD-XXXXXX</span>
+                                    <span className="font-medium">
+                                        Kode produk
+                                    </span>{' '}
+                                    akan dibuat otomatis dengan format{' '}
+                                    <span className="font-mono">
+                                        PRD-XXXXXX
+                                    </span>
                                 </p>
                             </div>
                         )}
@@ -288,9 +365,12 @@ export function ProductFormModal({ open, product, categories, onClose }: Product
                         <Button type="submit" disabled={form.processing}>
                             <Save className="mr-2 h-4 w-4" />
                             {form.processing
-                                ? (isEditing ? 'Memperbarui...' : 'Menyimpan...')
-                                : (isEditing ? 'Perbarui' : 'Simpan')
-                            }
+                                ? isEditing
+                                    ? 'Memperbarui...'
+                                    : 'Menyimpan...'
+                                : isEditing
+                                  ? 'Perbarui'
+                                  : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>

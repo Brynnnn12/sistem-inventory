@@ -1,7 +1,13 @@
 import { Plus, Search, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 import type { OutboundToolbarProps } from '@/types/models/outbound';
 
 export function OutboundToolbar({
@@ -18,10 +24,12 @@ export function OutboundToolbar({
     return (
         <>
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Outbound</h1>
-                    <p className="text-sm text-muted-foreground mt-1">
+                    <h1 className="text-3xl font-bold tracking-tight">
+                        Outbound
+                    </h1>
+                    <p className="mt-1 text-sm text-muted-foreground">
                         Kelola transaksi outbound
                     </p>
                 </div>
@@ -34,39 +42,36 @@ export function OutboundToolbar({
             </div>
 
             {/* Filters */}
-            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         placeholder="Cari kode, customer, produk..."
                         value={searchValue}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        className="pl-9 h-10"
+                        className="h-10 pl-9"
                         disabled={isSearching}
                     />
                 </div>
-<Select
-    // Gunakan nullish coalescing dan pastikan string
-    // Kita paksa string agar match dengan SelectItem value
-    value={filters?.warehouse_id?.toString() || 'all'}
-    onValueChange={onWarehouseChange}
->
-    <SelectTrigger className="h-10">
-        {/* SelectValue akan otomatis mengambil teks dari SelectItem yang match dengan value di atas */}
-        <SelectValue placeholder="Pilih Warehouse" />
-    </SelectTrigger>
-    <SelectContent>
-        <SelectItem value="all">Semua Warehouse</SelectItem>
-        {warehouses.map((warehouse) => (
-            <SelectItem
-                key={warehouse.id}
-                value={warehouse.id.toString()}
-            >
-                {warehouse.name}
-            </SelectItem>
-        ))}
-    </SelectContent>
-</Select>
+                <Select
+                    value={filters?.warehouse_id?.toString() || 'all'}
+                    onValueChange={onWarehouseChange}
+                >
+                    <SelectTrigger className="h-10">
+                        <SelectValue placeholder="Pilih Warehouse" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="all">Semua Warehouse</SelectItem>
+                        {warehouses.map((warehouse) => (
+                            <SelectItem
+                                key={warehouse.id}
+                                value={warehouse.id.toString()}
+                            >
+                                {warehouse.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
             </div>
 
             {hasActiveFilters && (

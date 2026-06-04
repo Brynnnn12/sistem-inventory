@@ -75,4 +75,11 @@ interface InboundToolbarProps {
     }>;
 }
 
-export type { InboundTransaction, PageProps, Filters, InboundFormModalProps, InboundTableProps, InboundToolbarProps };
+export type {
+    InboundTransaction,
+    PageProps,
+    Filters,
+    InboundFormModalProps,
+    InboundTableProps,
+    InboundToolbarProps,
+};

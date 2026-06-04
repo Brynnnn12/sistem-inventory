@@ -5,11 +5,7 @@ import InputError from '@/components/input-error';
 import { ModalHeader } from '@/components/modal-header';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,7 +17,11 @@ interface CustomerFormModalProps {
     onClose: () => void;
 }
 
-export function CustomerFormModal({ open, customer, onClose }: CustomerFormModalProps) {
+export function CustomerFormModal({
+    open,
+    customer,
+    onClose,
+}: CustomerFormModalProps) {
     const isEditing = !!customer;
 
     const form = useForm({
@@ -35,15 +35,16 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
     });
 
     useEffect(() => {
-        if (customer && (
-            form.data.code !== (customer.code || '') ||
-            form.data.name !== (customer.name || '') ||
-            form.data.contact_person !== (customer.contact_person || '') ||
-            form.data.phone !== (customer.phone || '') ||
-            form.data.email !== (customer.email || '') ||
-            form.data.address !== (customer.address || '') ||
-            form.data.is_active !== (customer.is_active ?? true)
-        )) {
+        if (
+            customer &&
+            (form.data.code !== (customer.code || '') ||
+                form.data.name !== (customer.name || '') ||
+                form.data.contact_person !== (customer.contact_person || '') ||
+                form.data.phone !== (customer.phone || '') ||
+                form.data.email !== (customer.email || '') ||
+                form.data.address !== (customer.address || '') ||
+                form.data.is_active !== (customer.is_active ?? true))
+        ) {
             form.setData({
                 code: customer.code || '',
                 name: customer.name || '',
@@ -84,12 +85,16 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
 
     return (
         <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-            <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
                 <form onSubmit={handleSubmit}>
                     <ModalHeader
                         icon={Users}
                         title={isEditing ? 'Edit Customer' : 'Tambah Customer'}
-                        description={isEditing ? 'Perbarui informasi customer' : 'Tambahkan customer baru ke inventaris Anda'}
+                        description={
+                            isEditing
+                                ? 'Perbarui informasi customer'
+                                : 'Tambahkan customer baru ke inventaris Anda'
+                        }
                     />
                     <div className="space-y-6 py-4">
                         {/* Row 1: Code (Edit only) */}
@@ -102,21 +107,24 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
                                     id="customer-code"
                                     value={form.data.code}
                                     disabled
-                                    className="font-mono bg-muted"
+                                    className="bg-muted font-mono"
                                 />
                             </div>
                         )}
 
                         {/* Row 2: Name & Contact Person */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="space-y-2">
                                 <Label htmlFor="customer-name">
-                                    Nama Customer <span className="text-destructive">*</span>
+                                    Nama Customer{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <Input
                                     id="customer-name"
                                     value={form.data.name}
-                                    onChange={(e) => form.setData('name', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData('name', e.target.value)
+                                    }
                                     placeholder="Contoh: Toko Sembako Makmur"
                                     required
                                     maxLength={100}
@@ -131,16 +139,23 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
                                 <Input
                                     id="customer-contact-person"
                                     value={form.data.contact_person}
-                                    onChange={(e) => form.setData('contact_person', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            'contact_person',
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="Contoh: Ahmad Susanto"
                                     maxLength={100}
                                 />
-                                <InputError message={form.errors.contact_person} />
+                                <InputError
+                                    message={form.errors.contact_person}
+                                />
                             </div>
                         </div>
 
                         {/* Row 3: Phone & Email */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                             <div className="space-y-2">
                                 <Label htmlFor="customer-phone">
                                     Nomor Telepon
@@ -148,7 +163,9 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
                                 <Input
                                     id="customer-phone"
                                     value={form.data.phone}
-                                    onChange={(e) => form.setData('phone', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData('phone', e.target.value)
+                                    }
                                     placeholder="Contoh: 081234567890"
                                     maxLength={20}
                                 />
@@ -156,14 +173,14 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="customer-email">
-                                    Email
-                                </Label>
+                                <Label htmlFor="customer-email">Email</Label>
                                 <Input
                                     id="customer-email"
                                     type="email"
                                     value={form.data.email}
-                                    onChange={(e) => form.setData('email', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData('email', e.target.value)
+                                    }
                                     placeholder="Contoh: contact@tokomakmur.com"
                                     maxLength={100}
                                 />
@@ -173,13 +190,13 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
 
                         {/* Row 4: Address */}
                         <div className="space-y-2">
-                            <Label htmlFor="customer-address">
-                                Alamat
-                            </Label>
+                            <Label htmlFor="customer-address">Alamat</Label>
                             <Textarea
                                 id="customer-address"
                                 value={form.data.address}
-                                onChange={(e) => form.setData('address', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData('address', e.target.value)
+                                }
                                 placeholder="Masukkan alamat lengkap customer"
                                 rows={3}
                                 maxLength={1000}
@@ -192,9 +209,17 @@ export function CustomerFormModal({ open, customer, onClose }: CustomerFormModal
                             <Checkbox
                                 id="customer-is-active"
                                 checked={form.data.is_active}
-                                onCheckedChange={(checked) => form.setData('is_active', checked as boolean)}
+                                onCheckedChange={(checked) =>
+                                    form.setData(
+                                        'is_active',
+                                        checked as boolean,
+                                    )
+                                }
                             />
-                            <Label htmlFor="customer-is-active" className="text-sm font-medium">
+                            <Label
+                                htmlFor="customer-is-active"
+                                className="text-sm font-medium"
+                            >
                                 Customer Aktif
                             </Label>
                         </div>

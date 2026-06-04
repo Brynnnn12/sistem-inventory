@@ -4,7 +4,7 @@ import { useFilters } from '@/hooks/useFilters';
 
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type {  Filters, PageProps } from '@/types/models/stock-history';
+import type { Filters, PageProps } from '@/types/models/stock-history';
 import { StockHistoryTable } from './components/StockHistoryTable';
 import { StockHistoryToolbar } from './components/StockHistoryToolbar';
 
@@ -24,7 +24,13 @@ export default function Index({
     products: Array<{ id: number; name: string }>;
     filters?: Filters;
 }) {
-    const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
+    const {
+        filters: filterState,
+        setFilter,
+        clearFilters,
+        isFiltering,
+        hasActiveFilters,
+    } = useFilters({
         route: '/dashboard/stock-history',
         initialFilters: {
             search: filters?.search || '',
@@ -40,13 +46,6 @@ export default function Index({
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Stock History" />
             <div className="p-6">
-                <div className="mb-6">
-                    <h1 className="text-2xl font-bold">Stock History</h1>
-                    <p className="text-muted-foreground">
-                        Riwayat perubahan stok semua produk di semua gudang
-                    </p>
-                </div>
-
                 <StockHistoryToolbar
                     searchValue={filterState.search}
                     onSearchChange={(value) => setFilter('search', value)}
@@ -56,9 +55,18 @@ export default function Index({
                     filters={filterState}
                     warehouses={warehouses}
                     products={products}
-                    onWarehouseChange={(value) => setFilter('warehouse_id', value === 'all' ? '' : value)}
-                    onProductChange={(value) => setFilter('product_id', value === 'all' ? '' : value)}
-                    onReferenceTypeChange={(value) => setFilter('reference_type', value === 'all' ? '' : value)}
+                    onWarehouseChange={(value) =>
+                        setFilter('warehouse_id', value === 'all' ? '' : value)
+                    }
+                    onProductChange={(value) =>
+                        setFilter('product_id', value === 'all' ? '' : value)
+                    }
+                    onReferenceTypeChange={(value) =>
+                        setFilter(
+                            'reference_type',
+                            value === 'all' ? '' : value,
+                        )
+                    }
                 />
 
                 <StockHistoryTable

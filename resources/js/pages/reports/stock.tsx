@@ -1,13 +1,32 @@
 import { Head, router } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
-import {  Filter } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { formatCurrency } from '@/lib/utils';
 // import { exportMethod } from '@/routes/reports/stock';
@@ -63,19 +82,34 @@ interface Props {
     filters: Filters;
 }
 
-export default function StockReport({ stockReport, warehouses, filters }: Props) {
-    const [selectedWarehouse, setSelectedWarehouse] = useState(filters.warehouse_id || 'all');
-    const [startDate, setStartDate] = useState(filters.start_date || stockReport.period.start_date);
-    const [endDate, setEndDate] = useState(filters.end_date || stockReport.period.end_date);
+export default function StockReport({
+    stockReport,
+    warehouses,
+    filters,
+}: Props) {
+    const [selectedWarehouse, setSelectedWarehouse] = useState(
+        filters.warehouse_id || 'all',
+    );
+    const [startDate, setStartDate] = useState(
+        filters.start_date || stockReport.period.start_date,
+    );
+    const [endDate, setEndDate] = useState(
+        filters.end_date || stockReport.period.end_date,
+    );
 
     const handleFilter = () => {
-        router.get('/dashboard/reports/stock', {
-            warehouse_id: selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
-            start_date: startDate,
-            end_date: endDate,
-        }, {
-            preserveState: true,
-        });
+        router.get(
+            '/dashboard/reports/stock',
+            {
+                warehouse_id:
+                    selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
+                start_date: startDate,
+                end_date: endDate,
+            },
+            {
+                preserveState: true,
+            },
+        );
     };
 
     // const handleExport = (format: 'pdf' | 'excel') => {
@@ -122,11 +156,21 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                         <TableCell>{item.product_code}</TableCell>
                         <TableCell>{item.product_name}</TableCell>
                         <TableCell>{item.unit}</TableCell>
-                        <TableCell className="text-right">{item.quantity}</TableCell>
-                        <TableCell className="text-right">{item.available_qty}</TableCell>
-                        <TableCell className="text-right">{item.min_stock}</TableCell>
-                        <TableCell className="text-right">{formatCurrency(item.cost)}</TableCell>
-                        <TableCell className="text-right">{formatCurrency(item.value)}</TableCell>
+                        <TableCell className="text-right">
+                            {item.quantity}
+                        </TableCell>
+                        <TableCell className="text-right">
+                            {item.available_qty}
+                        </TableCell>
+                        <TableCell className="text-right">
+                            {item.min_stock}
+                        </TableCell>
+                        <TableCell className="text-right">
+                            {formatCurrency(item.cost)}
+                        </TableCell>
+                        <TableCell className="text-right">
+                            {formatCurrency(item.value)}
+                        </TableCell>
                         <TableCell>{getStatusBadge(item.status)}</TableCell>
                     </TableRow>
                 ))}
@@ -143,7 +187,18 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                     <div>
                         <h1 className="text-xl font-semibold">Laporan Stok</h1>
                         <p className="text-sm text-muted-foreground">
-                            Periode: {format(new Date(stockReport.period.start_date), 'dd/MM/yyyy', { locale: id })} - {format(new Date(stockReport.period.end_date), 'dd/MM/yyyy', { locale: id })}
+                            Periode:{' '}
+                            {format(
+                                new Date(stockReport.period.start_date),
+                                'dd/MM/yyyy',
+                                { locale: id },
+                            )}{' '}
+                            -{' '}
+                            {format(
+                                new Date(stockReport.period.end_date),
+                                'dd/MM/yyyy',
+                                { locale: id },
+                            )}
                         </p>
                     </div>
                     {/* <div className="flex gap-2">
@@ -169,15 +224,25 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                     <CardContent>
                         <div className="flex gap-4">
                             <div className="flex-1">
-                                <label className="text-sm font-medium">Gudang</label>
-                                <Select value={selectedWarehouse} onValueChange={setSelectedWarehouse}>
+                                <label className="text-sm font-medium">
+                                    Gudang
+                                </label>
+                                <Select
+                                    value={selectedWarehouse}
+                                    onValueChange={setSelectedWarehouse}
+                                >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Semua Gudang" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="all">Semua Gudang</SelectItem>
+                                        <SelectItem value="all">
+                                            Semua Gudang
+                                        </SelectItem>
                                         {warehouses.map((warehouse) => (
-                                            <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
+                                            <SelectItem
+                                                key={warehouse.id}
+                                                value={warehouse.id.toString()}
+                                            >
                                                 {warehouse.name}
                                             </SelectItem>
                                         ))}
@@ -185,16 +250,22 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                                 </Select>
                             </div>
                             <div className="flex-1">
-                                <label className="text-sm font-medium">Tanggal Mulai</label>
+                                <label className="text-sm font-medium">
+                                    Tanggal Mulai
+                                </label>
                                 <input
                                     type="date"
                                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                                     value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
+                                    onChange={(e) =>
+                                        setStartDate(e.target.value)
+                                    }
                                 />
                             </div>
                             <div className="flex-1">
-                                <label className="text-sm font-medium">Tanggal Akhir</label>
+                                <label className="text-sm font-medium">
+                                    Tanggal Akhir
+                                </label>
                                 <input
                                     type="date"
                                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -203,32 +274,40 @@ export default function StockReport({ stockReport, warehouses, filters }: Props)
                                 />
                             </div>
                             <div className="flex items-end">
-                                <Button onClick={handleFilter}>Terapkan Filter</Button>
+                                <Button onClick={handleFilter}>
+                                    Terapkan Filter
+                                </Button>
                             </div>
                         </div>
                     </CardContent>
                 </Card>
-
 
                 {/* Stock Table */}
                 <Card>
                     <CardHeader>
                         <CardTitle>Detail Stok</CardTitle>
                         <CardDescription>
-                            Data stok {selectedWarehouse !== 'all' ? 'per gudang' : 'semua gudang'}
+                            Data stok{' '}
+                            {selectedWarehouse !== 'all'
+                                ? 'per gudang'
+                                : 'semua gudang'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {Array.isArray(stockReport.data) ? (
-                            renderStockTable(stockReport.data)
-                        ) : (
-                            Object.entries(stockReport.data).map(([warehouse, items]) => (
-                                <div key={warehouse} className="mb-6">
-                                    <h3 className="text-lg font-semibold mb-4">{warehouse}</h3>
-                                    {renderStockTable(items as StockItem[])}
-                                </div>
-                            ))
-                        )}
+                        {Array.isArray(stockReport.data)
+                            ? renderStockTable(stockReport.data)
+                            : Object.entries(stockReport.data).map(
+                                  ([warehouse, items]) => (
+                                      <div key={warehouse} className="mb-6">
+                                          <h3 className="mb-4 text-lg font-semibold">
+                                              {warehouse}
+                                          </h3>
+                                          {renderStockTable(
+                                              items as StockItem[],
+                                          )}
+                                      </div>
+                                  ),
+                              )}
                     </CardContent>
                 </Card>
             </div>

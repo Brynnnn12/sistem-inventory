@@ -8,9 +8,16 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import type { ModalState as GenericModalState, ModalWithData } from '@/hooks/useGenericModals';
+import type {
+    ModalState as GenericModalState,
+    ModalWithData,
+} from '@/hooks/useGenericModals';
 import { WarehouseUserFormModal } from '@/pages/warehouse-users/components/WarehouseUserFormModal';
-import type { WarehouseUser, Warehouse, User } from '@/types/models/warehouse-users';
+import type {
+    WarehouseUser,
+    Warehouse,
+    User,
+} from '@/types/models/warehouse-users';
 
 const DeleteConfirmDialog = ({
     open,

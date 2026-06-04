@@ -53,8 +53,11 @@ interface CategoryToolbarProps {
     hasActiveFilters: boolean;
 }
 
-
-
-
-
-export type { Category, PageProps, Filters, CategoryFormModalProps, CategoryTableProps, CategoryToolbarProps };
+export type {
+    Category,
+    PageProps,
+    Filters,
+    CategoryFormModalProps,
+    CategoryTableProps,
+    CategoryToolbarProps,
+};

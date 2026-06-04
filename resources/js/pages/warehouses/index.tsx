@@ -5,7 +5,11 @@ import { useSearch } from '@/hooks/useSearch';
 import { useSelection } from '@/hooks/useSelection';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { Warehouse, WarehouseFilters, PageProps } from '@/types/models/warehouses';
+import type {
+    Warehouse,
+    WarehouseFilters,
+    PageProps,
+} from '@/types/models/warehouses';
 import { WarehouseModals } from './components/WarehouseModals';
 import { WarehouseTable } from './components/WarehouseTable';
 import { WarehouseToolbar } from './components/WarehouseToolbar';
@@ -22,14 +26,20 @@ export default function Index({
     warehouses: PageProps;
     filters?: WarehouseFilters;
 }) {
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const {
+        searchValue,
+        setSearchValue,
+        clearSearch,
+        isSearching,
+        hasActiveSearch,
+    } = useSearch({
         route: '/dashboard/warehouses',
         initialSearch: filters.search || '',
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Warehouse>({
         simple: ['create', 'bulkDelete'],
-        withData: ['edit', 'delete']
+        withData: ['edit', 'delete'],
     });
     const {
         selectedIds,

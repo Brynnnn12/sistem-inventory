@@ -23,7 +23,11 @@ export function InboundModals({
     return (
         <>
             <InboundFormModal
-                open={typeof modals.create === 'boolean' ? modals.create : modals.create.isOpen}
+                open={
+                    typeof modals.create === 'boolean'
+                        ? modals.create
+                        : modals.create.isOpen
+                }
                 onClose={() => onCloseModal('create')}
                 warehouses={warehouses}
                 suppliers={suppliers}
@@ -33,7 +37,9 @@ export function InboundModals({
 
             <InboundShowModal
                 open={(modals.show as ModalWithData<InboundTransaction>).isOpen}
-                inbound={(modals.show as ModalWithData<InboundTransaction>).data}
+                inbound={
+                    (modals.show as ModalWithData<InboundTransaction>).data
+                }
                 onClose={() => onCloseModal('show')}
             />
         </>

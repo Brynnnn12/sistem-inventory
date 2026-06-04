@@ -63,7 +63,11 @@ export function CategoryModals({
     return (
         <>
             <CategoryFormModal
-                open={typeof modals.create === 'boolean' ? modals.create : modals.create.isOpen}
+                open={
+                    typeof modals.create === 'boolean'
+                        ? modals.create
+                        : modals.create.isOpen
+                }
                 onClose={() => onCloseModal('create')}
             />
 
@@ -74,7 +78,11 @@ export function CategoryModals({
             />
 
             <DeleteConfirmDialog
-                open={typeof modals.bulkDelete === 'boolean' ? modals.bulkDelete : modals.bulkDelete.isOpen}
+                open={
+                    typeof modals.bulkDelete === 'boolean'
+                        ? modals.bulkDelete
+                        : modals.bulkDelete.isOpen
+                }
                 title="Hapus Beberapa Kategori"
                 description={`Apakah Anda yakin ingin menghapus ${selectedCount} kategori? Tindakan ini tidak dapat dibatalkan.`}
                 onConfirm={onConfirmBulkDelete}

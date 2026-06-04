@@ -37,15 +37,15 @@ export function EmployeeToolbar({
     return (
         <>
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+            <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 className="text-3xl font-bold">Karyawan</h1>
                     {selectedCount > 0 ? (
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             {selectedCount} karyawan dipilih
                         </p>
                     ) : (
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             Kelola data karyawan Anda
                         </p>
                     )}
@@ -55,22 +55,23 @@ export function EmployeeToolbar({
                         <Button
                             variant="destructive"
                             onClick={onBulkDeleteClick}
+                            className="gap-2"
                         >
-                            <Trash2 className="mr-2 h-4 w-4" />
+                            <Trash2 className="h-4 w-4" />
                             Hapus
                         </Button>
                     )}
-                    <Button onClick={onAddClick}>
-                        <Plus className="mr-2 h-4 w-4" />
+                    <Button onClick={onAddClick} className="gap-2">
+                        <Plus className="h-4 w-4" />
                         Tambah Karyawan
                     </Button>
                 </div>
             </div>
 
             {/* Search & Filters */}
-            <div className="mb-4 flex flex-col sm:flex-row gap-2">
+            <div className="mb-4 flex flex-col gap-2 sm:flex-row">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         placeholder="Cari berdasarkan nama atau email"
                         value={searchValue}

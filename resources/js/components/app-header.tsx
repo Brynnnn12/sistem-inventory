@@ -1,5 +1,12 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Boxes, LayoutGrid, Menu, Package, Search, Settings2 } from 'lucide-react';
+import {
+    Boxes,
+    LayoutGrid,
+    Menu,
+    Package,
+    Search,
+    Settings2,
+} from 'lucide-react';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -63,34 +70,48 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
             icon: Boxes,
             items: [
                 { title: 'Stok Gudang', href: '/dashboard/warehouse-stocks' },
-                { title: 'Transfer Barang', href: '/dashboard/stock-transfers' },
+                {
+                    title: 'Transfer Barang',
+                    href: '/dashboard/stock-transfers',
+                },
                 { title: 'Riwayat Mutasi', href: '/dashboard/stock-logs' },
             ],
         },
     ];
 
-    const adminNavItems: NavItem[] = isSuperAdmin ? [
-        {
-            title: 'Katalog Produk',
-            href: '#',
-            icon: Package,
-            items: [
-                { title: 'Daftar Produk', href: '/dashboard/products' },
-                { title: 'Kategori Produk', href: '/dashboard/categories' },
-                { title: 'Riwayat Harga', href: '/dashboard/product-prices' },
-            ],
-        },
-        {
-            title: 'Konfigurasi Sistem',
-            href: '#',
-            icon: Settings2,
-            items: [
-                { title: 'Daftar Gudang', href: '/dashboard/warehouses' },
-                { title: 'Data Karyawan', href: '/dashboard/employees' },
-                { title: 'Penugasan Staf', href: '/dashboard/warehouse-users' },
-            ],
-        },
-    ] : [];
+    const adminNavItems: NavItem[] = isSuperAdmin
+        ? [
+              {
+                  title: 'Katalog Produk',
+                  href: '#',
+                  icon: Package,
+                  items: [
+                      { title: 'Daftar Produk', href: '/dashboard/products' },
+                      {
+                          title: 'Kategori Produk',
+                          href: '/dashboard/categories',
+                      },
+                      {
+                          title: 'Riwayat Harga',
+                          href: '/dashboard/product-prices',
+                      },
+                  ],
+              },
+              {
+                  title: 'Konfigurasi Sistem',
+                  href: '#',
+                  icon: Settings2,
+                  items: [
+                      { title: 'Daftar Gudang', href: '/dashboard/warehouses' },
+                      { title: 'Data Karyawan', href: '/dashboard/employees' },
+                      {
+                          title: 'Penugasan Staf',
+                          href: '/dashboard/warehouse-users',
+                      },
+                  ],
+              },
+          ]
+        : [];
 
     const mainNavItems = [
         ...topNavItems,
@@ -127,25 +148,40 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                     <div className="flex h-full flex-col justify-between text-sm">
                                         <div className="flex flex-col space-y-4">
                                             {mainNavItems.map((item) => (
-                                                <div key={item.title} className="flex flex-col space-y-2">
+                                                <div
+                                                    key={item.title}
+                                                    className="flex flex-col space-y-2"
+                                                >
                                                     {item.items ? (
                                                         <>
                                                             <div className="flex items-center space-x-2 font-medium">
                                                                 {item.icon && (
                                                                     <item.icon className="h-5 w-5" />
                                                                 )}
-                                                                <span>{item.title}</span>
+                                                                <span>
+                                                                    {item.title}
+                                                                </span>
                                                             </div>
                                                             <div className="ml-7 flex flex-col space-y-3 border-l pl-3">
-                                                                {item.items.map((subItem) => (
-                                                                    <Link
-                                                                        key={subItem.title}
-                                                                        href={subItem.href}
-                                                                        className="font-medium text-muted-foreground hover:text-foreground"
-                                                                    >
-                                                                        {subItem.title}
-                                                                    </Link>
-                                                                ))}
+                                                                {item.items.map(
+                                                                    (
+                                                                        subItem,
+                                                                    ) => (
+                                                                        <Link
+                                                                            key={
+                                                                                subItem.title
+                                                                            }
+                                                                            href={
+                                                                                subItem.href
+                                                                            }
+                                                                            className="font-medium text-muted-foreground hover:text-foreground"
+                                                                        >
+                                                                            {
+                                                                                subItem.title
+                                                                            }
+                                                                        </Link>
+                                                                    ),
+                                                                )}
                                                             </div>
                                                         </>
                                                     ) : (
@@ -156,7 +192,9 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                             {item.icon && (
                                                                 <item.icon className="h-5 w-5" />
                                                             )}
-                                                            <span>{item.title}</span>
+                                                            <span>
+                                                                {item.title}
+                                                            </span>
                                                         </Link>
                                                     )}
                                                 </div>
@@ -164,7 +202,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                         </div>
 
                                         <div className="flex flex-col space-y-4 border-t pt-4">
-                                            <div className="text-xs font-semibold uppercase text-muted-foreground">
+                                            <div className="text-xs font-semibold text-muted-foreground uppercase">
                                                 Help & Support
                                             </div>
                                         </div>
@@ -200,21 +238,33 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                     {item.title}
                                                 </NavigationMenuTrigger>
                                                 <NavigationMenuContent>
-                                                    <ul className="grid w-100-3 p-4 md:w-125 md:grid-cols-2 lg:w-150 bg-popover text-popover-foreground">
-                                                        {item.items.map((subItem) => (
-                                                            <li key={subItem.title}>
-                                                                <NavigationMenuLink asChild>
-                                                                    <Link
-                                                                        href={subItem.href}
-                                                                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                                    <ul className="w-100-3 grid bg-popover p-4 text-popover-foreground md:w-125 md:grid-cols-2 lg:w-150">
+                                                        {item.items.map(
+                                                            (subItem) => (
+                                                                <li
+                                                                    key={
+                                                                        subItem.title
+                                                                    }
+                                                                >
+                                                                    <NavigationMenuLink
+                                                                        asChild
                                                                     >
-                                                                        <div className="text-sm font-medium leading-none">
-                                                                            {subItem.title}
-                                                                        </div>
-                                                                    </Link>
-                                                                </NavigationMenuLink>
-                                                            </li>
-                                                        ))}
+                                                                        <Link
+                                                                            href={
+                                                                                subItem.href
+                                                                            }
+                                                                            className="block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                                                                        >
+                                                                            <div className="text-sm leading-none font-medium">
+                                                                                {
+                                                                                    subItem.title
+                                                                                }
+                                                                            </div>
+                                                                        </Link>
+                                                                    </NavigationMenuLink>
+                                                                </li>
+                                                            ),
+                                                        )}
                                                     </ul>
                                                 </NavigationMenuContent>
                                             </>
@@ -236,9 +286,10 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                                 {item.title}
                                             </Link>
                                         )}
-                                        {!item.items && isCurrentUrl(item.href) && (
-                                            <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
-                                        )}
+                                        {!item.items &&
+                                            isCurrentUrl(item.href) && (
+                                                <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
+                                            )}
                                     </NavigationMenuItem>
                                 ))}
                             </NavigationMenuList>

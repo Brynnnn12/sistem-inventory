@@ -7,10 +7,13 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type {  CategoryFormModalProps } from '@/types/models/categories';
+import type { CategoryFormModalProps } from '@/types/models/categories';
 
-
-export function CategoryFormModal({ open, category, onClose }: CategoryFormModalProps) {
+export function CategoryFormModal({
+    open,
+    category,
+    onClose,
+}: CategoryFormModalProps) {
     const isEdit = !!category;
 
     const form = useForm({
@@ -56,35 +59,43 @@ export function CategoryFormModal({ open, category, onClose }: CategoryFormModal
                     <ModalHeader
                         icon={Tag}
                         title={isEdit ? 'Edit Kategori' : 'Tambah Kategori'}
-                        description={isEdit ? 'Perbarui informasi kategori' : 'Tambahkan kategori baru untuk mengatur produk Anda'}
+                        description={
+                            isEdit
+                                ? 'Perbarui informasi kategori'
+                                : 'Tambahkan kategori baru untuk mengatur produk Anda'
+                        }
                     />
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
                             <Label htmlFor="category-name">
-                                Nama Kategori <span className="text-destructive">*</span>
+                                Nama Kategori{' '}
+                                <span className="text-destructive">*</span>
                             </Label>
                             <Input
                                 id="category-name"
                                 value={form.data.name}
-                                onChange={(e) => form.setData('name', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData('name', e.target.value)
+                                }
                                 placeholder="Contoh: Elektronik, Pakaian, Makanan"
                                 required
                                 autoFocus
                             />
                             <InputError message={form.errors.name} />
                             {isEdit && category ? (
-                                <div className="rounded-lg bg-muted/50 p-3 border border-muted">
-                                    <p className="text-xs font-medium text-muted-foreground mb-1.5">
+                                <div className="rounded-lg border border-muted bg-muted/50 p-3">
+                                    <p className="mb-1.5 text-xs font-medium text-muted-foreground">
                                         Slug URL Saat Ini
                                     </p>
-                                    <code className="text-sm font-mono bg-muted-foreground/10 px-2 py-1 rounded">
+                                    <code className="rounded bg-muted-foreground/10 px-2 py-1 font-mono text-sm">
                                         {category.slug}
                                     </code>
                                 </div>
                             ) : (
-                                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                                <p className="flex items-center gap-1 text-xs text-muted-foreground">
                                     <span className="text-sm">💡</span>
-                                    Slug URL ramah mesin pencari akan dibuat otomatis
+                                    Slug URL ramah mesin pencari akan dibuat
+                                    otomatis
                                 </p>
                             )}
                         </div>
@@ -100,7 +111,11 @@ export function CategoryFormModal({ open, category, onClose }: CategoryFormModal
                         </Button>
                         <Button type="submit" disabled={form.processing}>
                             <Save className="mr-2 h-4 w-4" />
-                            {form.processing ? `${isEdit ? 'Memperbarui' : 'Menyimpan'}...` : isEdit ? 'Perbarui' : 'Simpan'}
+                            {form.processing
+                                ? `${isEdit ? 'Memperbarui' : 'Menyimpan'}...`
+                                : isEdit
+                                  ? 'Perbarui'
+                                  : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>

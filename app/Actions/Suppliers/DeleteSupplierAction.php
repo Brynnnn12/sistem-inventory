@@ -15,10 +15,9 @@ class DeleteSupplierAction
     public function execute(Supplier $supplier): void
     {
         DB::transaction(function () use ($supplier) {
-            // Lock for update to prevent race conditions
+
             $supplier = Supplier::where('id', $supplier->id)->lockForUpdate()->firstOrFail();
 
-            // Soft delete - preserves audit trail
             $supplier->delete();
         });
     }

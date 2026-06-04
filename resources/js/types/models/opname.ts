@@ -76,4 +76,11 @@ interface OpnameToolbarProps {
     }>;
 }
 
-export type { Opname, PageProps, Filters, OpnameFormModalProps, OpnameTableProps, OpnameToolbarProps };
+export type {
+    Opname,
+    PageProps,
+    Filters,
+    OpnameFormModalProps,
+    OpnameTableProps,
+    OpnameToolbarProps,
+};

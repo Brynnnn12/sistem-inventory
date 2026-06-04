@@ -1,8 +1,8 @@
 import { Head, router } from '@inertiajs/react';
-import { useState } from 'react';
 import { Pagination } from '@/components/pagination';
 import { useGenericModals, type ModalWithData } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
+import { useSelection } from '@/hooks/useSelection';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import type { Supplier, Filters, PageProps } from '@/types/models/suppliers';
@@ -22,16 +22,30 @@ export default function Index({
     suppliers: PageProps;
     filters?: Filters;
 }) {
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const {
+        searchValue,
+        setSearchValue,
+        clearSearch,
+        isSearching,
+        hasActiveSearch,
+    } = useSearch({
         route: '/dashboard/suppliers',
         initialSearch: filters.search || '',
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Supplier>({
         simple: ['create', 'bulkDelete'],
-        withData: ['edit', 'delete']
+        withData: ['edit', 'delete'],
     });
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const {
+        selectedIds,
+        toggleSelectAll,
+        toggleSelectOne,
+        clearSelection,
+        allSelected,
+        someSelected,
+        selectedCount,
+    } = useSelection(suppliers.data);
 
     const handleDelete = () => {
         const deleteModal = modals.delete as ModalWithData<Supplier>;
@@ -50,28 +64,15 @@ export default function Index({
             data: { ids: selectedIds },
             preserveScroll: true,
             onSuccess: () => {
-                setSelectedIds([]);
+                clearSelection();
                 closeModal('bulkDelete');
             },
         });
     };
 
-    const toggleSelectAll = (checked: boolean) => {
-        setSelectedIds(checked ? suppliers.data.map((s: Supplier) => s.id) : []);
-    };
-
-    const toggleSelectOne = (id: number, checked: boolean) => {
-        setSelectedIds(prev =>
-            checked ? [...prev, id] : prev.filter(selectedId => selectedId !== id)
-        );
-    };
-
     const clearFilters = () => {
         clearSearch();
     };
-
-    const allSelected = suppliers.data.length > 0 && selectedIds.length === suppliers.data.length;
-    const someSelected = selectedIds.length > 0 && selectedIds.length < suppliers.data.length;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -83,7 +84,7 @@ export default function Index({
                     onAddClick={() => openModal('create')}
                     onBulkDeleteClick={() => openModal('bulkDelete')}
                     onClearFilters={clearFilters}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                 />
@@ -94,7 +95,9 @@ export default function Index({
                     onSelectAll={toggleSelectAll}
                     onSelectOne={toggleSelectOne}
                     onEdit={(supplier: Supplier) => openModal('edit', supplier)}
-                    onDelete={(supplier: Supplier) => openModal('delete', supplier)}
+                    onDelete={(supplier: Supplier) =>
+                        openModal('delete', supplier)
+                    }
                     allSelected={allSelected}
                     someSelected={someSelected}
                 />
@@ -120,7 +123,7 @@ export default function Index({
                     onCloseModal={closeModal}
                     onConfirmDelete={handleDelete}
                     onConfirmBulkDelete={handleBulkDelete}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                 />
             </div>
         </AppLayout>

@@ -23,5 +23,3 @@ export type SharedData = {
     };
     [key: string]: unknown;
 };
-
-

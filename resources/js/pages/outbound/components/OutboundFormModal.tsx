@@ -1,5 +1,11 @@
 import { useForm } from '@inertiajs/react';
-import { Check, ChevronsUpDown, Package, ShoppingCart, Warehouse as WarehouseIcon } from 'lucide-react';
+import {
+    Check,
+    ChevronsUpDown,
+    Package,
+    ShoppingCart,
+    Warehouse as WarehouseIcon,
+} from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -64,23 +70,24 @@ export function OutboundFormModal({
         product_id: outbound?.product_id || '',
         quantity: outbound?.quantity || '',
         unit_price: outbound?.unit_price || '',
-        sale_date: outbound?.sale_date || new Date().toISOString().split('T')[0],
+        sale_date:
+            outbound?.sale_date || new Date().toISOString().split('T')[0],
         notes: outbound?.notes || '',
     });
 
     const selectedCustomer = useMemo(
         () => customers.find((c) => c.id.toString() === data.customer_id),
-        [data.customer_id, customers]
+        [data.customer_id, customers],
     );
 
     const selectedWarehouse = useMemo(
         () => warehouses.find((w) => w.id.toString() === data.warehouse_id),
-        [data.warehouse_id, warehouses]
+        [data.warehouse_id, warehouses],
     );
 
     const selectedProduct = useMemo(
         () => products.find((p) => p.id.toString() === data.product_id),
-        [data.product_id, products]
+        [data.product_id, products],
     );
 
     // Filter products based on selected warehouse and available stock
@@ -91,17 +98,25 @@ export function OutboundFormModal({
 
         // Get product IDs that have stock in the selected warehouse
         const stockedProductIds = stocks
-            .filter(stock => stock.warehouse_id.toString() === data.warehouse_id && stock.quantity > 0)
-            .map(stock => stock.product_id);
+            .filter(
+                (stock) =>
+                    stock.warehouse_id.toString() === data.warehouse_id &&
+                    stock.quantity > 0,
+            )
+            .map((stock) => stock.product_id);
 
         // Return products that have stock in the selected warehouse
-        return products.filter(product => stockedProductIds.includes(product.id));
+        return products.filter((product) =>
+            stockedProductIds.includes(product.id),
+        );
     }, [data.warehouse_id, products, stocks]);
 
     // Reset product selection when warehouse changes
     useEffect(() => {
         if (data.warehouse_id && data.product_id) {
-            const isProductAvailable = availableProducts.some(p => p.id.toString() === data.product_id);
+            const isProductAvailable = availableProducts.some(
+                (p) => p.id.toString() === data.product_id,
+            );
             if (!isProductAvailable) {
                 setData('product_id', '');
             }
@@ -109,7 +124,11 @@ export function OutboundFormModal({
     }, [data.warehouse_id, data.product_id, availableProducts, setData]);
 
     useEffect(() => {
-        if (!canSelectWarehouse && warehouses.length > 0 && !data.warehouse_id) {
+        if (
+            !canSelectWarehouse &&
+            warehouses.length > 0 &&
+            !data.warehouse_id
+        ) {
             setData('warehouse_id', warehouses[0].id.toString());
         }
     }, [canSelectWarehouse, warehouses, data.warehouse_id, setData]);
@@ -140,9 +159,13 @@ export function OutboundFormModal({
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="sm:max-w-150">
                 <DialogHeader>
-                    <DialogTitle>{outbound ? 'Edit Outbound' : 'Tambah Outbound'}</DialogTitle>
+                    <DialogTitle>
+                        {outbound ? 'Edit Outbound' : 'Tambah Outbound'}
+                    </DialogTitle>
                     <DialogDescription>
-                        {outbound ? 'Edit detail transaksi outbound.' : 'Tambahkan transaksi outbound baru.'}
+                        {outbound
+                            ? 'Edit detail transaksi outbound.'
+                            : 'Tambahkan transaksi outbound baru.'}
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
@@ -150,7 +173,10 @@ export function OutboundFormModal({
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="customer_id">Customer</Label>
-                                <Popover open={customerSearchOpen} onOpenChange={setCustomerSearchOpen}>
+                                <Popover
+                                    open={customerSearchOpen}
+                                    onOpenChange={setCustomerSearchOpen}
+                                >
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
@@ -164,7 +190,7 @@ export function OutboundFormModal({
                                                     {selectedCustomer.name}
                                                 </div>
                                             ) : (
-                                                "Pilih Customer"
+                                                'Pilih Customer'
                                             )}
                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
@@ -173,39 +199,64 @@ export function OutboundFormModal({
                                         <Command>
                                             <CommandInput placeholder="Cari customer..." />
                                             <CommandList>
-                                                <CommandEmpty>Customer tidak ditemukan</CommandEmpty>
+                                                <CommandEmpty>
+                                                    Customer tidak ditemukan
+                                                </CommandEmpty>
                                                 <CommandGroup>
-                                                    {customers.map((customer) => (
-                                                        <CommandItem
-                                                            key={customer.id}
-                                                            value={customer.name}
-                                                            onSelect={() => {
-                                                                setData('customer_id', customer.id.toString());
-                                                                setCustomerSearchOpen(false);
-                                                            }}
-                                                        >
-                                                            <Check
-                                                                className={cn(
-                                                                    "mr-2 h-4 w-4",
-                                                                    data.customer_id === customer.id.toString()
-                                                                        ? "opacity-100"
-                                                                        : "opacity-0"
-                                                                )}
-                                                            />
-                                                            <ShoppingCart className="mr-2 h-4 w-4" />
-                                                            {customer.name}
-                                                        </CommandItem>
-                                                    ))}
+                                                    {customers.map(
+                                                        (customer) => (
+                                                            <CommandItem
+                                                                key={
+                                                                    customer.id
+                                                                }
+                                                                value={
+                                                                    customer.name
+                                                                }
+                                                                onSelect={() => {
+                                                                    setData(
+                                                                        'customer_id',
+                                                                        customer.id.toString(),
+                                                                    );
+                                                                    setCustomerSearchOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Check
+                                                                    className={cn(
+                                                                        'mr-2 h-4 w-4',
+                                                                        data.customer_id ===
+                                                                            customer.id.toString()
+                                                                            ? 'opacity-100'
+                                                                            : 'opacity-0',
+                                                                    )}
+                                                                />
+                                                                <ShoppingCart className="mr-2 h-4 w-4" />
+                                                                {customer.name}
+                                                            </CommandItem>
+                                                        ),
+                                                    )}
                                                 </CommandGroup>
                                             </CommandList>
                                         </Command>
                                     </PopoverContent>
                                 </Popover>
-                                {errors.customer_id && <p className="text-sm text-destructive">{errors.customer_id}</p>}
+                                {errors.customer_id && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.customer_id}
+                                    </p>
+                                )}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse_id">Warehouse</Label>
-                                <Popover open={warehouseSearchOpen} onOpenChange={canSelectWarehouse ? setWarehouseSearchOpen : undefined}>
+                                <Popover
+                                    open={warehouseSearchOpen}
+                                    onOpenChange={
+                                        canSelectWarehouse
+                                            ? setWarehouseSearchOpen
+                                            : undefined
+                                    }
+                                >
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
@@ -220,7 +271,7 @@ export function OutboundFormModal({
                                                     {selectedWarehouse.name}
                                                 </div>
                                             ) : (
-                                                "Pilih Warehouse"
+                                                'Pilih Warehouse'
                                             )}
                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
@@ -229,41 +280,62 @@ export function OutboundFormModal({
                                         <Command>
                                             <CommandInput placeholder="Cari warehouse..." />
                                             <CommandList>
-                                                <CommandEmpty>Warehouse tidak ditemukan</CommandEmpty>
+                                                <CommandEmpty>
+                                                    Warehouse tidak ditemukan
+                                                </CommandEmpty>
                                                 <CommandGroup>
-                                                    {warehouses.map((warehouse) => (
-                                                        <CommandItem
-                                                            key={warehouse.id}
-                                                            value={warehouse.name}
-                                                            onSelect={() => {
-                                                                setData('warehouse_id', warehouse.id.toString());
-                                                                setWarehouseSearchOpen(false);
-                                                            }}
-                                                        >
-                                                            <Check
-                                                                className={cn(
-                                                                    "mr-2 h-4 w-4",
-                                                                    data.warehouse_id === warehouse.id.toString()
-                                                                        ? "opacity-100"
-                                                                        : "opacity-0"
-                                                                )}
-                                                            />
-                                                            <WarehouseIcon className="mr-2 h-4 w-4" />
-                                                            {warehouse.name}
-                                                        </CommandItem>
-                                                    ))}
+                                                    {warehouses.map(
+                                                        (warehouse) => (
+                                                            <CommandItem
+                                                                key={
+                                                                    warehouse.id
+                                                                }
+                                                                value={
+                                                                    warehouse.name
+                                                                }
+                                                                onSelect={() => {
+                                                                    setData(
+                                                                        'warehouse_id',
+                                                                        warehouse.id.toString(),
+                                                                    );
+                                                                    setWarehouseSearchOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Check
+                                                                    className={cn(
+                                                                        'mr-2 h-4 w-4',
+                                                                        data.warehouse_id ===
+                                                                            warehouse.id.toString()
+                                                                            ? 'opacity-100'
+                                                                            : 'opacity-0',
+                                                                    )}
+                                                                />
+                                                                <WarehouseIcon className="mr-2 h-4 w-4" />
+                                                                {warehouse.name}
+                                                            </CommandItem>
+                                                        ),
+                                                    )}
                                                 </CommandGroup>
                                             </CommandList>
                                         </Command>
                                     </PopoverContent>
                                 </Popover>
-                                {errors.warehouse_id && <p className="text-sm text-destructive">{errors.warehouse_id}</p>}
+                                {errors.warehouse_id && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.warehouse_id}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="product_id">Produk</Label>
-                                <Popover open={productSearchOpen} onOpenChange={setProductSearchOpen}>
+                                <Popover
+                                    open={productSearchOpen}
+                                    onOpenChange={setProductSearchOpen}
+                                >
                                     <PopoverTrigger asChild>
                                         <Button
                                             variant="outline"
@@ -277,10 +349,10 @@ export function OutboundFormModal({
                                                     <Package className="h-4 w-4" />
                                                     {selectedProduct.name}
                                                 </div>
+                                            ) : data.warehouse_id ? (
+                                                'Pilih Produk'
                                             ) : (
-                                                data.warehouse_id
-                                                    ? "Pilih Produk"
-                                                    : "Pilih Gudang terlebih dahulu"
+                                                'Pilih Gudang terlebih dahulu'
                                             )}
                                             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                         </Button>
@@ -291,38 +363,51 @@ export function OutboundFormModal({
                                             <CommandList>
                                                 <CommandEmpty>
                                                     {data.warehouse_id
-                                                        ? "Tidak ada produk dengan stok di gudang ini"
-                                                        : "Pilih gudang terlebih dahulu"
-                                                    }
+                                                        ? 'Tidak ada produk dengan stok di gudang ini'
+                                                        : 'Pilih gudang terlebih dahulu'}
                                                 </CommandEmpty>
                                                 <CommandGroup>
-                                                    {availableProducts.map((product) => (
-                                                        <CommandItem
-                                                            key={product.id}
-                                                            value={product.name}
-                                                            onSelect={() => {
-                                                                setData('product_id', product.id.toString());
-                                                                setProductSearchOpen(false);
-                                                            }}
-                                                        >
-                                                            <Check
-                                                                className={cn(
-                                                                    "mr-2 h-4 w-4",
-                                                                    data.product_id === product.id.toString()
-                                                                        ? "opacity-100"
-                                                                        : "opacity-0"
-                                                                )}
-                                                            />
-                                                            <Package className="mr-2 h-4 w-4" />
-                                                            {product.name}
-                                                        </CommandItem>
-                                                    ))}
+                                                    {availableProducts.map(
+                                                        (product) => (
+                                                            <CommandItem
+                                                                key={product.id}
+                                                                value={
+                                                                    product.name
+                                                                }
+                                                                onSelect={() => {
+                                                                    setData(
+                                                                        'product_id',
+                                                                        product.id.toString(),
+                                                                    );
+                                                                    setProductSearchOpen(
+                                                                        false,
+                                                                    );
+                                                                }}
+                                                            >
+                                                                <Check
+                                                                    className={cn(
+                                                                        'mr-2 h-4 w-4',
+                                                                        data.product_id ===
+                                                                            product.id.toString()
+                                                                            ? 'opacity-100'
+                                                                            : 'opacity-0',
+                                                                    )}
+                                                                />
+                                                                <Package className="mr-2 h-4 w-4" />
+                                                                {product.name}
+                                                            </CommandItem>
+                                                        ),
+                                                    )}
                                                 </CommandGroup>
                                             </CommandList>
                                         </Command>
                                     </PopoverContent>
                                 </Popover>
-                                {errors.product_id && <p className="text-sm text-destructive">{errors.product_id}</p>}
+                                {errors.product_id && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.product_id}
+                                    </p>
+                                )}
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="quantity">Quantity</Label>
@@ -330,10 +415,16 @@ export function OutboundFormModal({
                                     id="quantity"
                                     type="number"
                                     value={data.quantity}
-                                    onChange={(e) => setData('quantity', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('quantity', e.target.value)
+                                    }
                                     placeholder="0"
                                 />
-                                {errors.quantity && <p className="text-sm text-destructive">{errors.quantity}</p>}
+                                {errors.quantity && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.quantity}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -344,28 +435,46 @@ export function OutboundFormModal({
                                     type="number"
                                     step="0.01"
                                     value={data.unit_price}
-                                    onChange={(e) => setData('unit_price', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('unit_price', e.target.value)
+                                    }
                                     placeholder="0.00"
                                 />
-                                {errors.unit_price && <p className="text-sm text-destructive">{errors.unit_price}</p>}
+                                {errors.unit_price && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.unit_price}
+                                    </p>
+                                )}
 
                                 {/* Live total preview */}
-                                <div className="flex items-center justify-between mt-2">
-                                    <p className="text-sm text-muted-foreground">Total (preview)</p>
+                                <div className="mt-2 flex items-center justify-between">
+                                    <p className="text-sm text-muted-foreground">
+                                        Total (preview)
+                                    </p>
                                     <p className="text-sm font-medium">
-                                        {previewTotal > 0 ? `Rp ${previewTotal.toLocaleString('id-ID')}` : '-'}
+                                        {previewTotal > 0
+                                            ? `Rp ${previewTotal.toLocaleString('id-ID')}`
+                                            : '-'}
                                     </p>
                                 </div>
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="sale_date">Tanggal Penjualan</Label>
+                                <Label htmlFor="sale_date">
+                                    Tanggal Penjualan
+                                </Label>
                                 <Input
                                     id="sale_date"
                                     type="date"
                                     value={data.sale_date}
-                                    onChange={(e) => setData('sale_date', e.target.value)}
+                                    onChange={(e) =>
+                                        setData('sale_date', e.target.value)
+                                    }
                                 />
-                                {errors.sale_date && <p className="text-sm text-destructive">{errors.sale_date}</p>}
+                                {errors.sale_date && (
+                                    <p className="text-sm text-destructive">
+                                        {errors.sale_date}
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className="space-y-2">
@@ -373,19 +482,33 @@ export function OutboundFormModal({
                             <Textarea
                                 id="notes"
                                 value={data.notes}
-                                onChange={(e) => setData('notes', e.target.value)}
+                                onChange={(e) =>
+                                    setData('notes', e.target.value)
+                                }
                                 placeholder="Catatan opsional..."
                                 rows={3}
                             />
-                            {errors.notes && <p className="text-sm text-destructive">{errors.notes}</p>}
+                            {errors.notes && (
+                                <p className="text-sm text-destructive">
+                                    {errors.notes}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button type="button" variant="outline" onClick={handleClose}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleClose}
+                        >
                             Batal
                         </Button>
                         <Button type="submit" disabled={processing}>
-                            {processing ? 'Menyimpan...' : (outbound ? 'Update' : 'Simpan')}
+                            {processing
+                                ? 'Menyimpan...'
+                                : outbound
+                                  ? 'Update'
+                                  : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>

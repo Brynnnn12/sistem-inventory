@@ -1,11 +1,16 @@
 import { Head, router } from '@inertiajs/react';
-import { useState } from 'react';
 import { Pagination } from '@/components/pagination';
 import { useGenericModals, type ModalWithData } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
+import { useSelection } from '@/hooks/useSelection';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { Product, Filters, PageProps, Category } from '@/types/models/products';
+import type {
+    Product,
+    Filters,
+    PageProps,
+    Category,
+} from '@/types/models/products';
 import { ProductModals } from './components/ProductModals';
 import { ProductTable } from './components/ProductTable';
 import { ProductToolbar } from './components/ProductToolbar';
@@ -24,16 +29,30 @@ export default function Index({
     categories: Category[];
     filters?: Filters;
 }) {
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const {
+        searchValue,
+        setSearchValue,
+        clearSearch,
+        isSearching,
+        hasActiveSearch,
+    } = useSearch({
         route: '/dashboard/products',
         initialSearch: filters.search || '',
     });
 
     const { modals, openModal, closeModal } = useGenericModals<Product>({
         simple: ['create', 'bulkDelete'],
-        withData: ['edit', 'delete']
+        withData: ['edit', 'delete'],
     });
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const {
+        selectedIds,
+        toggleSelectAll,
+        toggleSelectOne,
+        clearSelection,
+        allSelected,
+        someSelected,
+        selectedCount,
+    } = useSelection(products.data);
 
     const handleDelete = () => {
         const deleteModal = modals.delete as ModalWithData<Product>;
@@ -52,28 +71,15 @@ export default function Index({
             data: { ids: selectedIds },
             preserveScroll: true,
             onSuccess: () => {
-                setSelectedIds([]);
+                clearSelection();
                 closeModal('bulkDelete');
             },
         });
     };
 
-    const toggleSelectAll = (checked: boolean) => {
-        setSelectedIds(checked ? products.data.map((p: Product) => p.id) : []);
-    };
-
-    const toggleSelectOne = (id: number, checked: boolean) => {
-        setSelectedIds(prev =>
-            checked ? [...prev, id] : prev.filter(selectedId => selectedId !== id)
-        );
-    };
-
     const clearFilters = () => {
         clearSearch();
     };
-
-    const allSelected = products.data.length > 0 && selectedIds.length === products.data.length;
-    const someSelected = selectedIds.length > 0 && selectedIds.length < products.data.length;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -85,7 +91,7 @@ export default function Index({
                     onAddClick={() => openModal('create')}
                     onBulkDeleteClick={() => openModal('bulkDelete')}
                     onClearFilters={clearFilters}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                 />
@@ -96,7 +102,9 @@ export default function Index({
                     onSelectAll={toggleSelectAll}
                     onSelectOne={toggleSelectOne}
                     onEdit={(product: Product) => openModal('edit', product)}
-                    onDelete={(product: Product) => openModal('delete', product)}
+                    onDelete={(product: Product) =>
+                        openModal('delete', product)
+                    }
                     allSelected={allSelected}
                     someSelected={someSelected}
                 />
@@ -123,7 +131,7 @@ export default function Index({
                     onCloseModal={closeModal}
                     onConfirmDelete={handleDelete}
                     onConfirmBulkDelete={handleBulkDelete}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                 />
             </div>
         </AppLayout>

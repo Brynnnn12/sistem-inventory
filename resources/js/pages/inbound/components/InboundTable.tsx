@@ -12,10 +12,7 @@ import {
 import { formatQuantity, formatDate } from '@/lib/utils';
 import type { InboundTableProps } from '@/types/models/inbound';
 
-export function InboundTable({
-    inbounds,
-    onShow,
-}: InboundTableProps) {
+export function InboundTable({ inbounds, onShow }: InboundTableProps) {
     if (inbounds.length === 0) {
         return (
             <div className="rounded-lg border border-dashed bg-card">
@@ -23,9 +20,12 @@ export function InboundTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <FolderOpen className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Transaksi Barang Masuk</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-sm">
-                        Mulai dengan menambahkan transaksi Barang Masuk untuk mencatat penerimaan barang ke dalam gudang Anda.
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada Transaksi Barang Masuk
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                        Mulai dengan menambahkan transaksi Barang Masuk untuk
+                        mencatat penerimaan barang ke dalam gudang Anda.
                     </p>
                 </div>
             </div>
@@ -38,30 +38,43 @@ export function InboundTable({
                 <TableHeader>
                     <TableRow className="hover:bg-transparent">
                         <TableHead className="font-semibold">Kode</TableHead>
-                        <TableHead className="font-semibold">Supplier</TableHead>
+                        <TableHead className="font-semibold">
+                            Supplier
+                        </TableHead>
                         <TableHead className="font-semibold">Produk</TableHead>
                         <TableHead className="font-semibold">Gudang</TableHead>
                         <TableHead className="font-semibold">Jumlah</TableHead>
                         <TableHead className="font-semibold">Tanggal</TableHead>
-                        <TableHead className="text-right font-semibold">Aksi</TableHead>
+                        <TableHead className="text-right font-semibold">
+                            Aksi
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {inbounds.map((inbound) => (
                         <TableRow key={inbound.id} className="group">
                             <TableCell>
-                                <Badge variant="secondary" className="font-mono text-xs">
+                                <Badge
+                                    variant="secondary"
+                                    className="font-mono text-xs"
+                                >
                                     {inbound.code}
                                 </Badge>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{inbound.supplier.name}</div>
+                                <div className="font-medium">
+                                    {inbound.supplier.name}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{inbound.product.name}</div>
+                                <div className="font-medium">
+                                    {inbound.product.name}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{inbound.warehouse.name}</div>
+                                <div className="font-medium">
+                                    {inbound.warehouse.name}
+                                </div>
                             </TableCell>
                             <TableCell>
                                 <div className="font-medium">
@@ -69,7 +82,9 @@ export function InboundTable({
                                 </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{formatDate(inbound.received_date)}</div>
+                                <div className="font-medium">
+                                    {formatDate(inbound.received_date)}
+                                </div>
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">
@@ -80,7 +95,9 @@ export function InboundTable({
                                         className="h-8 gap-1.5"
                                     >
                                         <Eye className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only">Lihat</span>
+                                        <span className="sr-only sm:not-sr-only">
+                                            Lihat
+                                        </span>
                                     </Button>
                                 </div>
                             </TableCell>

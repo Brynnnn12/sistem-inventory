@@ -13,8 +13,6 @@ type Props = {
 export function AppShell({ children, variant = 'header' }: Props) {
     const isOpen = usePage<SharedData>().props.sidebarOpen;
 
-
-
     if (variant === 'header') {
         return (
             <>
@@ -32,7 +30,6 @@ export function AppShell({ children, variant = 'header' }: Props) {
             </>
         );
     }
-
 
     return (
         <>

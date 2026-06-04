@@ -31,7 +31,11 @@ export function OpnameModals({
     return (
         <>
             <OpnameFormModal
-                open={typeof modals.create === 'boolean' ? modals.create : modals.create.isOpen}
+                open={
+                    typeof modals.create === 'boolean'
+                        ? modals.create
+                        : modals.create.isOpen
+                }
                 onClose={() => onCloseModal('create')}
                 warehouses={warehouses}
                 products={products}

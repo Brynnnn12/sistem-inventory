@@ -1,5 +1,9 @@
 import type { LucideIcon } from 'lucide-react';
-import { DialogDescription, DialogHeader as ShadcnDialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+    DialogDescription,
+    DialogHeader as ShadcnDialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 
 interface ModalHeaderProps {
     icon: LucideIcon;
@@ -7,7 +11,11 @@ interface ModalHeaderProps {
     description: string;
 }
 
-export function ModalHeader({ icon: Icon, title, description }: ModalHeaderProps) {
+export function ModalHeader({
+    icon: Icon,
+    title,
+    description,
+}: ModalHeaderProps) {
     return (
         <ShadcnDialogHeader>
             <div className="flex items-center gap-3">

@@ -4,11 +4,7 @@ import { useEffect } from 'react';
 import InputError from '@/components/input-error';
 import { ModalHeader } from '@/components/modal-header';
 import { Button } from '@/components/ui/button';
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -27,7 +23,11 @@ interface EmployeeFormModalProps {
     onClose: () => void;
 }
 
-export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModalProps) {
+export function EmployeeFormModal({
+    open,
+    employee,
+    onClose,
+}: EmployeeFormModalProps) {
     const isEditing = !!employee;
 
     const form = useForm({
@@ -97,12 +97,16 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
 
     return (
         <Dialog open={open} onOpenChange={(isOpen) => !isOpen && handleClose()}>
-            <DialogContent className="sm:max-w-150 max-h-[90vh] overflow-y-auto">
+            <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-150">
                 <form onSubmit={handleSubmit}>
                     <ModalHeader
                         icon={User}
                         title={isEditing ? 'Edit Karyawan' : 'Tambah Karyawan'}
-                        description={isEditing ? 'Perbarui informasi karyawan' : 'Tambahkan karyawan baru ke sistem'}
+                        description={
+                            isEditing
+                                ? 'Perbarui informasi karyawan'
+                                : 'Tambahkan karyawan baru ke sistem'
+                        }
                     />
 
                     <div className="space-y-6 py-4">
@@ -115,15 +119,20 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
                             <Separator />
 
                             <div className="space-y-2">
-                                <Label htmlFor={`${isEditing ? 'edit' : 'create'}-name`}>
-                                    Nama Lengkap <span className="text-destructive">*</span>
+                                <Label
+                                    htmlFor={`${isEditing ? 'edit' : 'create'}-name`}
+                                >
+                                    Nama Lengkap{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <User className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
                                         id={`${isEditing ? 'edit' : 'create'}-name`}
                                         value={form.data.name}
-                                        onChange={(e) => form.setData('name', e.target.value)}
+                                        onChange={(e) =>
+                                            form.setData('name', e.target.value)
+                                        }
                                         placeholder="Contoh: John Doe, Ahmad Suharto"
                                         required
                                         className="pl-9"
@@ -133,16 +142,24 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor={`${isEditing ? 'edit' : 'create'}-email`}>
-                                    Alamat Email <span className="text-destructive">*</span>
+                                <Label
+                                    htmlFor={`${isEditing ? 'edit' : 'create'}-email`}
+                                >
+                                    Alamat Email{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                    <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                     <Input
                                         id={`${isEditing ? 'edit' : 'create'}-email`}
                                         type="email"
                                         value={form.data.email}
-                                        onChange={(e) => form.setData('email', e.target.value)}
+                                        onChange={(e) =>
+                                            form.setData(
+                                                'email',
+                                                e.target.value,
+                                            )
+                                        }
                                         placeholder="contoh@email.com"
                                         required
                                         className="pl-9"
@@ -152,20 +169,31 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor={`${isEditing ? 'edit' : 'create'}-phone`}>
-                                    Nomor HP (WhatsApp) <span className="text-destructive">*</span>
+                                <Label
+                                    htmlFor={`${isEditing ? 'edit' : 'create'}-phone`}
+                                >
+                                    Nomor HP (WhatsApp){' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <Input
                                     id={`${isEditing ? 'edit' : 'create'}-phone`}
                                     type="tel"
                                     value={form.data.phone_number}
-                                    onChange={(e) => form.setData('phone_number', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData(
+                                            'phone_number',
+                                            e.target.value,
+                                        )
+                                    }
                                     placeholder="628123456789"
                                     required
                                 />
-                                <InputError message={form.errors.phone_number} />
+                                <InputError
+                                    message={form.errors.phone_number}
+                                />
                                 <p className="text-xs text-muted-foreground">
-                                    💡 Format: 628xxxxxxxxxx (tanpa spasi atau karakter khusus)
+                                    💡 Format: 628xxxxxxxxxx (tanpa spasi atau
+                                    karakter khusus)
                                 </p>
                             </div>
                         </div>
@@ -179,12 +207,17 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
                             <Separator />
 
                             <div className="space-y-2">
-                                <Label htmlFor={`${isEditing ? 'edit' : 'create'}-role`}>
-                                    Peran <span className="text-destructive">*</span>
+                                <Label
+                                    htmlFor={`${isEditing ? 'edit' : 'create'}-role`}
+                                >
+                                    Peran{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <Select
                                     value={form.data.role}
-                                    onValueChange={(value) => form.setData('role', value)}
+                                    onValueChange={(value) =>
+                                        form.setData('role', value)
+                                    }
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Pilih peran" />
@@ -219,21 +252,31 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
 
                                 <div className="space-y-2">
                                     <Label htmlFor="create-password">
-                                        Password <span className="text-destructive">*</span>
+                                        Password{' '}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                         <Input
                                             id="create-password"
                                             type="password"
                                             value={form.data.password}
-                                            onChange={(e) => form.setData('password', e.target.value)}
+                                            onChange={(e) =>
+                                                form.setData(
+                                                    'password',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="••••••••"
                                             required
                                             className="pl-9"
                                         />
                                     </div>
-                                    <InputError message={form.errors.password} />
+                                    <InputError
+                                        message={form.errors.password}
+                                    />
                                     <p className="text-xs text-muted-foreground">
                                         💡 Must be at least 8 characters long
                                     </p>
@@ -241,21 +284,35 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
 
                                 <div className="space-y-2">
                                     <Label htmlFor="create-password-confirmation">
-                                        Confirm Password <span className="text-destructive">*</span>
+                                        Confirm Password{' '}
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <div className="relative">
-                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                                         <Input
                                             id="create-password-confirmation"
                                             type="password"
-                                            value={form.data.password_confirmation}
-                                            onChange={(e) => form.setData('password_confirmation', e.target.value)}
+                                            value={
+                                                form.data.password_confirmation
+                                            }
+                                            onChange={(e) =>
+                                                form.setData(
+                                                    'password_confirmation',
+                                                    e.target.value,
+                                                )
+                                            }
                                             placeholder="••••••••"
                                             required
                                             className="pl-9"
                                         />
                                     </div>
-                                    <InputError message={form.errors.password_confirmation} />
+                                    <InputError
+                                        message={
+                                            form.errors.password_confirmation
+                                        }
+                                    />
                                 </div>
                             </div>
                         )}
@@ -273,9 +330,12 @@ export function EmployeeFormModal({ open, employee, onClose }: EmployeeFormModal
                         <Button type="submit" disabled={form.processing}>
                             <Save className="mr-2 h-4 w-4" />
                             {form.processing
-                                ? (isEditing ? 'Menyimpan...' : 'Membuat...')
-                                : (isEditing ? 'Perbarui' : 'Simpan')
-                            }
+                                ? isEditing
+                                    ? 'Menyimpan...'
+                                    : 'Membuat...'
+                                : isEditing
+                                  ? 'Perbarui'
+                                  : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>

@@ -12,10 +12,7 @@ import {
 import { formatQuantity, formatDate } from '@/lib/utils';
 import type { OutboundTableProps } from '@/types/models/outbound';
 
-export function OutboundTable({
-    outbounds,
-    onShow,
-}: OutboundTableProps) {
+export function OutboundTable({ outbounds, onShow }: OutboundTableProps) {
     if (outbounds.length === 0) {
         return (
             <div className="rounded-lg border border-dashed bg-card">
@@ -23,8 +20,10 @@ export function OutboundTable({
                     <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
                         <FolderOpen className="h-10 w-10 text-muted-foreground" />
                     </div>
-                    <h3 className="mt-4 text-lg font-semibold">Belum Ada Outbound</h3>
-                    <p className="mt-2 text-sm text-muted-foreground max-w-sm">
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada Outbound
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                         Mulai dengan menambahkan transaksi outbound pertama
                     </p>
                 </div>
@@ -38,36 +37,55 @@ export function OutboundTable({
                 <TableHeader>
                     <TableRow className="hover:bg-transparent">
                         <TableHead className="font-semibold">Kode</TableHead>
-                        <TableHead className="font-semibold">Customer</TableHead>
+                        <TableHead className="font-semibold">
+                            Customer
+                        </TableHead>
                         <TableHead className="font-semibold">Produk</TableHead>
-                        <TableHead className="font-semibold">Warehouse</TableHead>
+                        <TableHead className="font-semibold">
+                            Warehouse
+                        </TableHead>
                         <TableHead className="font-semibold">Qty</TableHead>
                         <TableHead className="font-semibold">Tanggal</TableHead>
-                        <TableHead className="text-right font-semibold">Aksi</TableHead>
+                        <TableHead className="text-right font-semibold">
+                            Aksi
+                        </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {outbounds.map((outbound) => (
                         <TableRow key={outbound.id} className="group">
                             <TableCell>
-                                <Badge variant="secondary" className="font-mono text-xs">
+                                <Badge
+                                    variant="secondary"
+                                    className="font-mono text-xs"
+                                >
                                     {outbound.code}
                                 </Badge>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{outbound.customer.name}</div>
+                                <div className="font-medium">
+                                    {outbound.customer.name}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{outbound.product.name}</div>
+                                <div className="font-medium">
+                                    {outbound.product.name}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{outbound.warehouse.name}</div>
+                                <div className="font-medium">
+                                    {outbound.warehouse.name}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{formatQuantity(outbound.quantity)}</div>
+                                <div className="font-medium">
+                                    {formatQuantity(outbound.quantity)}
+                                </div>
                             </TableCell>
                             <TableCell>
-                                <div className="font-medium">{formatDate(outbound.sale_date)}</div>
+                                <div className="font-medium">
+                                    {formatDate(outbound.sale_date)}
+                                </div>
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">
@@ -78,7 +96,9 @@ export function OutboundTable({
                                         className="h-8 gap-1.5"
                                     >
                                         <Eye className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only">Lihat</span>
+                                        <span className="sr-only sm:not-sr-only">
+                                            Lihat
+                                        </span>
                                     </Button>
                                 </div>
                             </TableCell>

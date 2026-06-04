@@ -1,7 +1,8 @@
 import { Head, router, useForm } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Pagination } from '@/components/pagination';
 import { useGenericModals, type ModalWithData } from '@/hooks/useGenericModals';
+import { useSelection } from '@/hooks/useSelection';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import type { PageProps, User } from '@/types/models/employee';
@@ -33,18 +34,34 @@ export default function Index({
 
     const { modals, openModal, closeModal } = useGenericModals<User>({
         simple: ['create', 'bulkDelete'],
-        withData: ['edit', 'delete']
+        withData: ['edit', 'delete'],
     });
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const previousFilters = useRef({ search: filters.search || '', role: filters.role || '' });
+    const {
+        selectedIds,
+        toggleSelectAll,
+        toggleSelectOne,
+        clearSelection,
+        allSelected,
+        someSelected,
+        selectedCount,
+    } = useSelection(employees.data);
+    const previousFilters = useRef({
+        search: filters.search || '',
+        role: filters.role || '',
+    });
 
     useEffect(() => {
-        if (previousFilters.current.search === searchForm.data.search &&
-            previousFilters.current.role === searchForm.data.role) {
+        if (
+            previousFilters.current.search === searchForm.data.search &&
+            previousFilters.current.role === searchForm.data.role
+        ) {
             return;
         }
 
-        previousFilters.current = { search: searchForm.data.search, role: searchForm.data.role };
+        previousFilters.current = {
+            search: searchForm.data.search,
+            role: searchForm.data.role,
+        };
 
         const timer = setTimeout(() => {
             const currentParams = new URLSearchParams(window.location.search);
@@ -59,18 +76,15 @@ export default function Index({
             if (searchForm.data.search) params.search = searchForm.data.search;
             else delete params.search;
 
-            if (searchForm.data.role && searchForm.data.role !== 'all') params.role = searchForm.data.role;
+            if (searchForm.data.role && searchForm.data.role !== 'all')
+                params.role = searchForm.data.role;
             else delete params.role;
 
-            router.get(
-                '/dashboard/employees',
-                params,
-                {
-                    preserveState: true,
-                    preserveScroll: true,
-                    replace: true,
-                }
-            );
+            router.get('/dashboard/employees', params, {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            });
         }, 300);
 
         return () => clearTimeout(timer);
@@ -91,33 +105,25 @@ export default function Index({
             data: { ids: selectedIds },
             preserveScroll: true,
             onSuccess: () => {
-                setSelectedIds([]);
+                clearSelection();
                 closeModal('bulkDelete');
             },
         });
     };
 
-    const toggleSelectAll = (checked: boolean) => {
-        setSelectedIds(checked ? employees.data.map(emp => emp.id) : []);
-    };
-
-    const toggleSelectOne = (id: number, checked: boolean) => {
-        setSelectedIds(prev =>
-            checked ? [...prev, id] : prev.filter(selectedId => selectedId !== id)
+    const clearFilters = () => {
+        searchForm.setData({ search: '', role: '' });
+        router.get(
+            '/dashboard/employees',
+            {},
+            {
+                replace: true,
+                preserveState: false,
+            },
         );
     };
 
-    const clearFilters = () => {
-        searchForm.setData({ search: '', role: '' });
-        router.get('/dashboard/employees', {}, {
-            replace: true,
-            preserveState: false
-        });
-    };
-
     const hasActiveFilters = !!searchForm.data.search || !!searchForm.data.role;
-    const allSelected = employees.data.length > 0 && selectedIds.length === employees.data.length;
-    const someSelected = selectedIds.length > 0 && selectedIds.length < employees.data.length;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -126,12 +132,14 @@ export default function Index({
                 <EmployeeToolbar
                     searchValue={searchForm.data.search}
                     roleValue={searchForm.data.role}
-                    onSearchChange={(value) => searchForm.setData('search', value)}
+                    onSearchChange={(value) =>
+                        searchForm.setData('search', value)
+                    }
                     onRoleChange={(value) => searchForm.setData('role', value)}
                     onAddClick={() => openModal('create')}
                     onBulkDeleteClick={() => openModal('bulkDelete')}
                     onClearFilters={clearFilters}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                     isSearching={searchForm.processing}
                     hasActiveFilters={hasActiveFilters}
                 />
@@ -169,7 +177,7 @@ export default function Index({
                     onCloseModal={closeModal}
                     onConfirmDelete={handleDelete}
                     onConfirmBulkDelete={handleBulkDelete}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                 />
             </div>
         </AppLayout>

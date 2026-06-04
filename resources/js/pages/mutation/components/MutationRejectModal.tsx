@@ -60,19 +60,28 @@ export function MutationRejectModal({
                 <DialogHeader>
                     <DialogTitle>Tolak Mutasi - {mutation.code}</DialogTitle>
                     <DialogDescription>
-                        Tolak mutasi dari {mutation.from_warehouse?.name} ke {mutation.to_warehouse?.name}
+                        Tolak mutasi dari {mutation.from_warehouse?.name} ke{' '}
+                        {mutation.to_warehouse?.name}
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-sm font-medium text-muted-foreground">Produk</label>
-                                <p className="text-sm font-medium">{mutation.product?.name}</p>
+                                <label className="text-sm font-medium text-muted-foreground">
+                                    Produk
+                                </label>
+                                <p className="text-sm font-medium">
+                                    {mutation.product?.name}
+                                </p>
                             </div>
                             <div>
-                                <label className="text-sm font-medium text-muted-foreground">Jumlah</label>
-                                <p className="text-sm font-medium">{mutation.quantity} {mutation.product?.unit}</p>
+                                <label className="text-sm font-medium text-muted-foreground">
+                                    Jumlah
+                                </label>
+                                <p className="text-sm font-medium">
+                                    {mutation.quantity} {mutation.product?.unit}
+                                </p>
                             </div>
                         </div>
 
@@ -81,11 +90,17 @@ export function MutationRejectModal({
                             <Textarea
                                 id="notes"
                                 value={data.notes}
-                                onChange={(e) => setData('notes', e.target.value)}
+                                onChange={(e) =>
+                                    setData('notes', e.target.value)
+                                }
                                 placeholder="Berikan alasan penolakan (opsional)"
                                 rows={3}
                             />
-                            {errors.notes && <p className="text-sm text-destructive">{errors.notes}</p>}
+                            {errors.notes && (
+                                <p className="text-sm text-destructive">
+                                    {errors.notes}
+                                </p>
+                            )}
                         </div>
                     </div>
                     <DialogFooter className="flex gap-2">

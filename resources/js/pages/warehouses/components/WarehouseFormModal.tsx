@@ -5,11 +5,7 @@ import InputError from '@/components/input-error';
 import { ModalHeader } from '@/components/modal-header';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -21,7 +17,11 @@ interface WarehouseFormModalProps {
     onClose: () => void;
 }
 
-export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormModalProps) {
+export function WarehouseFormModal({
+    open,
+    warehouse,
+    onClose,
+}: WarehouseFormModalProps) {
     const isEdit = !!warehouse;
 
     const form = useForm({
@@ -78,36 +78,48 @@ export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormMo
                     <ModalHeader
                         icon={WarehouseIcon}
                         title={isEdit ? 'Edit Gudang' : 'Tambah Gudang'}
-                        description={isEdit ? 'Perbarui informasi gudang' : 'Tambahkan lokasi gudang baru'}
+                        description={
+                            isEdit
+                                ? 'Perbarui informasi gudang'
+                                : 'Tambahkan lokasi gudang baru'
+                        }
                     />
                     <div className="space-y-4 py-4">
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse-code">
-                                Kode Gudang
-                            </Label>
-                            <Input
-                                id="warehouse-code"
-                                value={form.data.code}
-                                placeholder={isEdit ? 'WHS-001' : 'Otomatis dibuat oleh sistem'}
-                                className="font-mono"
-                                disabled
-                            />
-                            {!isEdit && (
-                                <p className="text-sm text-muted-foreground">
-                                    Kode gudang akan dibuat otomatis saat disimpan.
-                                </p>
-                            )}
+                                    Kode Gudang
+                                </Label>
+                                <Input
+                                    id="warehouse-code"
+                                    value={form.data.code}
+                                    placeholder={
+                                        isEdit
+                                            ? 'WHS-001'
+                                            : 'Otomatis dibuat oleh sistem'
+                                    }
+                                    className="font-mono"
+                                    disabled
+                                />
+                                {!isEdit && (
+                                    <p className="text-sm text-muted-foreground">
+                                        Kode gudang akan dibuat otomatis saat
+                                        disimpan.
+                                    </p>
+                                )}
                             </div>
 
                             <div className="space-y-2">
                                 <Label htmlFor="warehouse-name">
-                                    Nama Gudang <span className="text-destructive">*</span>
+                                    Nama Gudang{' '}
+                                    <span className="text-destructive">*</span>
                                 </Label>
                                 <Input
                                     id="warehouse-name"
                                     value={form.data.name}
-                                    onChange={(e) => form.setData('name', e.target.value)}
+                                    onChange={(e) =>
+                                        form.setData('name', e.target.value)
+                                    }
                                     placeholder="Contoh: Gudang Utama, Cabang Jakarta"
                                     required
                                     autoFocus={isEdit}
@@ -118,12 +130,15 @@ export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormMo
 
                         <div className="space-y-2">
                             <Label htmlFor="warehouse-address">
-                                Alamat <span className="text-destructive">*</span>
+                                Alamat{' '}
+                                <span className="text-destructive">*</span>
                             </Label>
                             <Textarea
                                 id="warehouse-address"
                                 value={form.data.address}
-                                onChange={(e) => form.setData('address', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData('address', e.target.value)
+                                }
                                 placeholder="Masukkan alamat lengkap gudang"
                                 rows={3}
                                 required
@@ -132,13 +147,13 @@ export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormMo
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="warehouse-phone">
-                                Telepon
-                            </Label>
+                            <Label htmlFor="warehouse-phone">Telepon</Label>
                             <Input
                                 id="warehouse-phone"
                                 value={form.data.phone}
-                                onChange={(e) => form.setData('phone', e.target.value)}
+                                onChange={(e) =>
+                                    form.setData('phone', e.target.value)
+                                }
                                 placeholder="+62 21 12345678"
                             />
                             <InputError message={form.errors.phone} />
@@ -148,9 +163,17 @@ export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormMo
                             <Checkbox
                                 id="warehouse-is-active"
                                 checked={form.data.is_active}
-                                onCheckedChange={(checked) => form.setData('is_active', checked as boolean)}
+                                onCheckedChange={(checked) =>
+                                    form.setData(
+                                        'is_active',
+                                        checked as boolean,
+                                    )
+                                }
                             />
-                            <Label htmlFor="warehouse-is-active" className="text-sm font-medium">
+                            <Label
+                                htmlFor="warehouse-is-active"
+                                className="text-sm font-medium"
+                            >
                                 Gudang Aktif
                             </Label>
                         </div>
@@ -166,7 +189,11 @@ export function WarehouseFormModal({ open, warehouse, onClose }: WarehouseFormMo
                         </Button>
                         <Button type="submit" disabled={form.processing}>
                             <Save className="mr-2 h-4 w-4" />
-                            {form.processing ? `${isEdit ? 'Memperbarui' : 'Menyimpan'}...` : isEdit ? 'Perbarui' : 'Simpan'}
+                            {form.processing
+                                ? `${isEdit ? 'Memperbarui' : 'Menyimpan'}...`
+                                : isEdit
+                                  ? 'Perbarui'
+                                  : 'Simpan'}
                         </Button>
                     </DialogFooter>
                 </form>

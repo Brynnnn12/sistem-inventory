@@ -8,7 +8,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import type { ModalState as GenericModalState, ModalWithData } from '@/hooks/useGenericModals';
+import type {
+    ModalState as GenericModalState,
+    ModalWithData,
+} from '@/hooks/useGenericModals';
 import type { Warehouse } from '@/types/models/warehouses';
 import { WarehouseFormModal } from './WarehouseFormModal';
 

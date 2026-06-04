@@ -92,13 +92,17 @@ export default function Profile({
                                 </div>
 
                                 <div className="grid gap-2">
-                                    <Label htmlFor="phone_number">Nomor Telepon</Label>
+                                    <Label htmlFor="phone_number">
+                                        Nomor Telepon
+                                    </Label>
 
                                     <Input
                                         id="phone_number"
                                         type="tel"
                                         className="mt-1 block w-full"
-                                        defaultValue={auth.user.phone_number ?? ''}
+                                        defaultValue={
+                                            auth.user.phone_number ?? ''
+                                        }
                                         name="phone_number"
                                         autoComplete="tel"
                                         placeholder="contoh: 6281234567890"
@@ -110,7 +114,8 @@ export default function Profile({
                                     />
 
                                     <p className="text-sm text-muted-foreground">
-                                        Format: 628xxxxxxxxxx (untuk notifikasi WhatsApp)
+                                        Format: 628xxxxxxxxxx (untuk notifikasi
+                                        WhatsApp)
                                     </p>
                                 </div>
 

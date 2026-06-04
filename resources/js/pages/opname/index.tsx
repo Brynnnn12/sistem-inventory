@@ -36,7 +36,13 @@ export default function Index({
     canSelectWarehouse: boolean;
     filters?: Filters;
 }) {
-    const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
+    const {
+        filters: filterState,
+        setFilter,
+        clearFilters,
+        isFiltering,
+        hasActiveFilters,
+    } = useFilters({
         route: '/dashboard/opname',
         initialFilters: {
             search: filters?.search || '',
@@ -47,7 +53,7 @@ export default function Index({
 
     const { modals, openModal, closeModal } = useGenericModals<Opname>({
         simple: ['create'],
-        withData: ['show', 'approve']
+        withData: ['show', 'approve'],
     });
 
     const handleApprove = (opname: Opname) => {
@@ -63,8 +69,18 @@ export default function Index({
                     onSearchChange={(value) => setFilter('search', value)}
                     onAddClick={() => openModal('create')}
                     onClearFilters={clearFilters}
-                    onWarehouseChange={(warehouseId) => setFilter('warehouse_id', warehouseId === 'all' ? '' : warehouseId)}
-                    onDifferenceTypeChange={(differenceType) => setFilter('difference_type', differenceType === 'all' ? '' : differenceType)}
+                    onWarehouseChange={(warehouseId) =>
+                        setFilter(
+                            'warehouse_id',
+                            warehouseId === 'all' ? '' : warehouseId,
+                        )
+                    }
+                    onDifferenceTypeChange={(differenceType) =>
+                        setFilter(
+                            'difference_type',
+                            differenceType === 'all' ? '' : differenceType,
+                        )
+                    }
                     isSearching={isFiltering}
                     hasActiveFilters={hasActiveFilters}
                     filters={filterState}

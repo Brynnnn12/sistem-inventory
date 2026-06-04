@@ -5,7 +5,11 @@ import { useGenericModals } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { OutboundTransaction, Filters, PageProps } from '@/types/models/outbound';
+import type {
+    OutboundTransaction,
+    Filters,
+    PageProps,
+} from '@/types/models/outbound';
 import { OutboundModals } from './components/OutboundModals';
 import { OutboundTable } from './components/OutboundTable';
 import { OutboundToolbar } from './components/OutboundToolbar';
@@ -39,7 +43,13 @@ export default function Index({
     canSelectWarehouse: boolean;
     filters?: Filters;
 }) {
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const {
+        searchValue,
+        setSearchValue,
+        clearSearch,
+        isSearching,
+        hasActiveSearch,
+    } = useSearch({
         route: '/dashboard/outbound',
         initialSearch: filters.search || '',
     });
@@ -52,10 +62,11 @@ export default function Index({
         only: ['outbounds', 'filters'],
     });
 
-    const { modals, openModal, closeModal } = useGenericModals<OutboundTransaction>({
-        simple: ['create'],
-        withData: ['show']
-    });
+    const { modals, openModal, closeModal } =
+        useGenericModals<OutboundTransaction>({
+            simple: ['create'],
+            withData: ['show'],
+        });
 
     const clearFiltersHandler = () => {
         clearSearch();
@@ -71,7 +82,9 @@ export default function Index({
                     onSearchChange={setSearchValue}
                     onAddClick={() => openModal('create')}
                     onClearFilters={clearFiltersHandler}
-                    onWarehouseChange={(value) => setFilter('warehouse_id', value)}
+                    onWarehouseChange={(value) =>
+                        setFilter('warehouse_id', value)
+                    }
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                     filters={filters}

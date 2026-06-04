@@ -19,8 +19,8 @@ export type ModalType = string;
  * }
  */
 export interface ModalConfig {
-    simple?: string[];      // Modals that don't need data (e.g., 'create', 'bulkDelete')
-    withData?: string[];    // Modals that need data (e.g., 'edit', 'delete', 'approve', 'reject')
+    simple?: string[]; // Modals that don't need data (e.g., 'create', 'bulkDelete')
+    withData?: string[]; // Modals that need data (e.g., 'edit', 'delete', 'approve', 'reject')
 }
 
 /**
@@ -49,10 +49,10 @@ export function useGenericModals<T = unknown>(config: ModalConfig) {
 
     // Initialize state based on configuration
     const initialState: ModalState<T> = {};
-    simple.forEach(key => {
+    simple.forEach((key) => {
         initialState[key] = false;
     });
-    withData.forEach(key => {
+    withData.forEach((key) => {
         initialState[key] = { isOpen: false, data: null };
     });
 
@@ -63,27 +63,36 @@ export function useGenericModals<T = unknown>(config: ModalConfig) {
      * @param type - The modal type to open
      * @param data - Optional data for modals that need it
      */
-    const openModal = useCallback((type: ModalType, data?: T) => {
-        setModals(prev => {
-            if (simple.includes(type)) {
-                return { ...prev, [type]: true };
-            }
-            return { ...prev, [type]: { isOpen: true, data: data || null } };
-        });
-    }, [simple]);
+    const openModal = useCallback(
+        (type: ModalType, data?: T) => {
+            setModals((prev) => {
+                if (simple.includes(type)) {
+                    return { ...prev, [type]: true };
+                }
+                return {
+                    ...prev,
+                    [type]: { isOpen: true, data: data || null },
+                };
+            });
+        },
+        [simple],
+    );
 
     /**
      * Close a modal
      * @param type - The modal type to close
      */
-    const closeModal = useCallback((type: ModalType) => {
-        setModals(prev => {
-            if (simple.includes(type)) {
-                return { ...prev, [type]: false };
-            }
-            return { ...prev, [type]: { isOpen: false, data: null } };
-        });
-    }, [simple]);
+    const closeModal = useCallback(
+        (type: ModalType) => {
+            setModals((prev) => {
+                if (simple.includes(type)) {
+                    return { ...prev, [type]: false };
+                }
+                return { ...prev, [type]: { isOpen: false, data: null } };
+            });
+        },
+        [simple],
+    );
 
     return {
         modals,
@@ -99,5 +108,7 @@ export function useGenericModals<T = unknown>(config: ModalConfig) {
  * const createModal = modals.create as boolean;
  */
 export type ModalWithData<T> = {
-    open: boolean; isOpen: boolean; data: T | null
+    open: boolean;
+    isOpen: boolean;
+    data: T | null;
 };

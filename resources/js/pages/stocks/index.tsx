@@ -28,7 +28,13 @@ export default function Index({
 }) {
     const [isLoading] = useState(false);
 
-    const { filters: filterState, setFilter, clearFilters, isFiltering, hasActiveFilters } = useFilters({
+    const {
+        filters: filterState,
+        setFilter,
+        clearFilters,
+        isFiltering,
+        hasActiveFilters,
+    } = useFilters({
         route: '/dashboard/stocks',
         initialFilters: {
             search: filters.search || '',
@@ -39,7 +45,7 @@ export default function Index({
 
     const { modals, openModal, closeModal } = useGenericModals<Stock>({
         simple: [],
-        withData: ['show']
+        withData: ['show'],
     });
 
     return (
@@ -55,7 +61,9 @@ export default function Index({
                     filters={filterState}
                     warehouses={warehouses}
                     products={products}
-                    onWarehouseChange={(value) => setFilter('warehouse_id', value)}
+                    onWarehouseChange={(value) =>
+                        setFilter('warehouse_id', value)
+                    }
                     onProductChange={(value) => setFilter('product_id', value)}
                 />
 

@@ -21,7 +21,7 @@ export function useFilters({
         // Only trigger if filters actually changed
         const currentFilters = filterForm.data;
         const hasChanged = Object.keys(currentFilters).some(
-            key => previousFilters.current[key] !== currentFilters[key]
+            (key) => previousFilters.current[key] !== currentFilters[key],
         );
 
         if (!hasChanged) {
@@ -76,11 +76,14 @@ export function useFilters({
         });
     };
 
-    const hasActiveFilters = Object.values(filterForm.data).some(value => !!value);
+    const hasActiveFilters = Object.values(filterForm.data).some(
+        (value) => !!value,
+    );
 
     return {
         filters: filterForm.data,
-        setFilter: (key: string, value: string) => filterForm.setData(key as keyof typeof filterForm.data, value),
+        setFilter: (key: string, value: string) =>
+            filterForm.setData(key as keyof typeof filterForm.data, value),
         setFilters: (data: Record<string, string>) => filterForm.setData(data),
         clearFilters,
         isFiltering: filterForm.processing,

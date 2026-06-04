@@ -45,14 +45,18 @@ export default function TwoFactorChallenge() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="flex min-h-screen flex-col items-center justify-center p-4">
             <Head title="Autentikasi Dua Faktor" />
 
-            <div className="grid md:grid-cols-2 items-center gap-4 max-md:gap-8 max-w-6xl max-md:max-w-lg w-full p-4 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-md">
-                <div className="md:max-w-md w-full px-4 py-4">
+            <div className="grid w-full max-w-6xl items-center gap-4 rounded-md p-4 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] max-md:max-w-lg max-md:gap-8 md:grid-cols-2">
+                <div className="w-full px-4 py-4 md:max-w-md">
                     <div className="mb-12">
-                        <h1 className="text-slate-900 text-3xl font-bold">{authConfigContent.title}</h1>
-                        <p className="text-slate-600 text-sm mt-2">{authConfigContent.description}</p>
+                        <h1 className="text-3xl font-bold text-slate-900">
+                            {authConfigContent.title}
+                        </h1>
+                        <p className="mt-2 text-sm text-slate-600">
+                            {authConfigContent.description}
+                        </p>
                     </div>
 
                     <div className="space-y-6">
@@ -67,7 +71,10 @@ export default function TwoFactorChallenge() {
                                     {showRecoveryInput ? (
                                         <>
                                             <div>
-                                                <label htmlFor="recovery_code" className="text-slate-900 text-[13px] font-medium block mb-2">
+                                                <label
+                                                    htmlFor="recovery_code"
+                                                    className="mb-2 block text-[13px] font-medium text-slate-900"
+                                                >
                                                     Kode pemulihan
                                                 </label>
                                                 <div className="relative flex items-center">
@@ -76,12 +83,18 @@ export default function TwoFactorChallenge() {
                                                         name="recovery_code"
                                                         type="text"
                                                         placeholder="Masukkan kode pemulihan"
-                                                        autoFocus={showRecoveryInput}
+                                                        autoFocus={
+                                                            showRecoveryInput
+                                                        }
                                                         required
-                                                        className="w-full text-slate-900 text-sm border-b border-slate-300 focus:border-blue-600 pl-2 pr-8 py-3 outline-none"
+                                                        className="w-full border-b border-slate-300 py-3 pr-8 pl-2 text-sm text-slate-900 outline-none focus:border-blue-600"
                                                     />
                                                 </div>
-                                                <InputError message={errors.recovery_code} />
+                                                <InputError
+                                                    message={
+                                                        errors.recovery_code
+                                                    }
+                                                />
                                             </div>
                                         </>
                                     ) : (
@@ -91,17 +104,23 @@ export default function TwoFactorChallenge() {
                                                     name="code"
                                                     maxLength={OTP_MAX_LENGTH}
                                                     value={code}
-                                                    onChange={(value) => setCode(value)}
+                                                    onChange={(value) =>
+                                                        setCode(value)
+                                                    }
                                                     disabled={processing}
                                                     pattern={REGEXP_ONLY_DIGITS}
                                                 >
                                                     <InputOTPGroup>
                                                         {Array.from(
-                                                            { length: OTP_MAX_LENGTH },
+                                                            {
+                                                                length: OTP_MAX_LENGTH,
+                                                            },
                                                             (_, index) => (
                                                                 <InputOTPSlot
                                                                     key={index}
-                                                                    index={index}
+                                                                    index={
+                                                                        index
+                                                                    }
                                                                 />
                                                             ),
                                                         )}
@@ -114,7 +133,7 @@ export default function TwoFactorChallenge() {
 
                                     <Button
                                         type="submit"
-                                        className="w-full shadow-xl py-2.5 px-4 text-sm font-medium tracking-wide rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                                        className="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium tracking-wide text-white shadow-xl hover:bg-blue-700 focus:outline-none"
                                         disabled={processing}
                                     >
                                         Lanjutkan
@@ -124,7 +143,7 @@ export default function TwoFactorChallenge() {
                                         <span>atau Anda dapat </span>
                                         <button
                                             type="button"
-                                            className="cursor-pointer text-blue-600 font-medium hover:underline"
+                                            className="cursor-pointer font-medium text-blue-600 hover:underline"
                                             onClick={() =>
                                                 toggleRecoveryMode(clearErrors)
                                             }

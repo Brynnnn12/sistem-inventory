@@ -1,11 +1,17 @@
 import { Head, router } from '@inertiajs/react';
-import { useState } from 'react';
 import { Pagination } from '@/components/pagination';
 import { useGenericModals, type ModalWithData } from '@/hooks/useGenericModals';
 import { useSearch } from '@/hooks/useSearch';
+import { useSelection } from '@/hooks/useSelection';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import type { WarehouseUser, Filters, PageProps, Warehouse, User } from '@/types/models/warehouse-users';
+import type {
+    WarehouseUser,
+    Filters,
+    PageProps,
+    Warehouse,
+    User,
+} from '@/types/models/warehouse-users';
 import { WarehouseUserModals } from './components/WarehouseUserModals';
 import { WarehouseUserTable } from './components/WarehouseUserTable';
 import { WarehouseUserToolbar } from './components/WarehouseUserToolbar';
@@ -26,16 +32,30 @@ export default function Index({
     users: User[];
     filters?: Filters;
 }) {
-    const { searchValue, setSearchValue, clearSearch, isSearching, hasActiveSearch } = useSearch({
+    const {
+        searchValue,
+        setSearchValue,
+        clearSearch,
+        isSearching,
+        hasActiveSearch,
+    } = useSearch({
         route: '/dashboard/warehouse-users',
         initialSearch: filters.search || '',
     });
 
     const { modals, openModal, closeModal } = useGenericModals<WarehouseUser>({
         simple: ['create', 'bulkDelete', 'swap'],
-        withData: ['delete']
+        withData: ['delete'],
     });
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const {
+        selectedIds,
+        toggleSelectAll,
+        toggleSelectOne,
+        clearSelection,
+        allSelected,
+        someSelected,
+        selectedCount,
+    } = useSelection(warehouseUsers.data);
 
     const handleDelete = () => {
         const deleteModal = modals.delete as ModalWithData<WarehouseUser>;
@@ -52,44 +72,39 @@ export default function Index({
             data: { ids: selectedIds },
             preserveScroll: true,
             onSuccess: () => {
-                setSelectedIds([]);
+                clearSelection();
                 closeModal('bulkDelete');
             },
         });
     };
 
     const handleSwap = () => {
-        console.log('Updated handleSwap called', selectedIds);
-        if (selectedIds.length !== 2 || selectedIds[1] === undefined || selectedIds[0] === undefined) return;
+        if (
+            selectedIds.length !== 2 ||
+            selectedIds[1] === undefined ||
+            selectedIds[0] === undefined
+        )
+            return;
 
-        router.post('/dashboard/warehouse-users/swap', {
-            warehouse_user1_id: selectedIds[1].toString(),
-            warehouse_user2_id: selectedIds[0].toString(),
-        }, {
-            preserveScroll: true,
-            onSuccess: () => {
-                setSelectedIds([]);
-                closeModal('swap');
+        router.post(
+            '/dashboard/warehouse-users/swap',
+            {
+                warehouse_user1_id: selectedIds[1].toString(),
+                warehouse_user2_id: selectedIds[0].toString(),
             },
-        });
-    };
-
-    const toggleSelectAll = (checked: boolean) => {
-        setSelectedIds(checked ? warehouseUsers.data.map(wh => wh.id) : []);
-    };
-
-    const toggleSelectOne = (id: number, checked: boolean) => {
-        setSelectedIds(prev =>
-            checked ? [...prev, id] : prev.filter(selectedId => selectedId !== id)
+            {
+                preserveScroll: true,
+                onSuccess: () => {
+                    clearSelection();
+                    closeModal('swap');
+                },
+            },
         );
     };
 
     const clearFilters = () => {
         clearSearch();
     };
-
-    const allSelected = warehouseUsers.data.length > 0 && selectedIds.length === warehouseUsers.data.length;
-    const someSelected = selectedIds.length > 0 && selectedIds.length < warehouseUsers.data.length;
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -102,7 +117,7 @@ export default function Index({
                     onBulkDeleteClick={() => openModal('bulkDelete')}
                     onSwapClick={() => openModal('swap')}
                     onClearFilters={clearFilters}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                 />
@@ -112,7 +127,9 @@ export default function Index({
                     selectedIds={selectedIds}
                     onSelectAll={toggleSelectAll}
                     onSelectOne={toggleSelectOne}
-                    onDelete={(warehouseUser) => openModal('delete', warehouseUser)}
+                    onDelete={(warehouseUser) =>
+                        openModal('delete', warehouseUser)
+                    }
                     allSelected={allSelected}
                     someSelected={someSelected}
                 />
@@ -142,7 +159,7 @@ export default function Index({
                     onConfirmDelete={handleDelete}
                     onConfirmBulkDelete={handleBulkDelete}
                     onConfirmSwap={handleSwap}
-                    selectedCount={selectedIds.length}
+                    selectedCount={selectedCount}
                 />
             </div>
         </AppLayout>
