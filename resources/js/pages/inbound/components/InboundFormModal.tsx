@@ -38,7 +38,7 @@ import type { InboundFormModalProps } from '@/types/models/inbound';
 interface InboundFormModalPropsExtended extends InboundFormModalProps {
     warehouses: Array<{ id: number; name: string }>;
     suppliers: Array<{ id: number; name: string }>;
-    products: Array<{ id: number; name: string }>;
+    products: Array<{ id: number; name: string; cost?: number }>;
     canSelectWarehouse: boolean;
 }
 
@@ -314,14 +314,20 @@ export function InboundFormModal({
                                                             key={product.id}
                                                             value={product.name}
                                                             onSelect={() => {
-                                                                setData(
-                                                                    'product_id',
-                                                                    product.id.toString(),
-                                                                );
-                                                                setProductSearchOpen(
-                                                                    false,
-                                                                );
-                                                            }}
+                                                                 setData(
+                                                                     'product_id',
+                                                                     product.id.toString(),
+                                                                 );
+                                                                 if (product.cost) {
+                                                                     setData(
+                                                                         'unit_price',
+                                                                         String(Math.round(product.cost)),
+                                                                     );
+                                                                 }
+                                                                 setProductSearchOpen(
+                                                                     false,
+                                                                 );
+                                                             }}
                                                         >
                                                             <Check
                                                                 className={cn(
@@ -371,12 +377,12 @@ export function InboundFormModal({
                                 <Input
                                     id="unit_price"
                                     type="number"
-                                    step="0.01"
+                                    step="1"
                                     value={data.unit_price}
                                     onChange={(e) =>
                                         setData('unit_price', e.target.value)
                                     }
-                                    placeholder="0.00"
+                                    placeholder="0"
                                 />
                                 {errors.unit_price && (
                                     <p className="text-sm text-destructive">

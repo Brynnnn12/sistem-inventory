@@ -38,7 +38,7 @@ import type { OutboundFormModalProps } from '@/types/models/outbound';
 interface OutboundFormModalPropsExtended extends OutboundFormModalProps {
     warehouses: Array<{ id: number; name: string }>;
     customers: Array<{ id: number; name: string }>;
-    products: Array<{ id: number; name: string }>;
+    products: Array<{ id: number; name: string; price?: number }>;
     stocks: Array<{
         id: number;
         warehouse_id: number;
@@ -132,6 +132,17 @@ export function OutboundFormModal({
             setData('warehouse_id', warehouses[0].id.toString());
         }
     }, [canSelectWarehouse, warehouses, data.warehouse_id, setData]);
+
+    // Get current stock for selected warehouse + product
+    const currentStock = useMemo(() => {
+        if (!data.warehouse_id || !data.product_id) return null;
+        const stock = stocks.find(
+            (s) =>
+                s.warehouse_id.toString() === data.warehouse_id &&
+                s.product_id.toString() === data.product_id,
+        );
+        return stock ? stock.quantity : 0;
+    }, [data.warehouse_id, data.product_id, stocks]);
 
     // Live preview for total (quantity * unit_price) — keeps unit_price as user input
     const previewTotal = (() => {
@@ -379,6 +390,18 @@ export function OutboundFormModal({
                                                                         'product_id',
                                                                         product.id.toString(),
                                                                     );
+                                                                    if (
+                                                                        product.price
+                                                                    ) {
+                                                                        setData(
+                                                                            'unit_price',
+                                                                            String(
+                                                                                Math.round(
+                                                                                    product.price,
+                                                                                ),
+                                                                            ),
+                                                                        );
+                                                                    }
                                                                     setProductSearchOpen(
                                                                         false,
                                                                     );
@@ -425,6 +448,14 @@ export function OutboundFormModal({
                                         {errors.quantity}
                                     </p>
                                 )}
+                                {currentStock !== null && (
+                                    <p className="text-sm text-muted-foreground">
+                                        Stok tersedia:{' '}
+                                        <span className="font-medium">
+                                            {Math.round(currentStock)}
+                                        </span>
+                                    </p>
+                                )}
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -433,12 +464,12 @@ export function OutboundFormModal({
                                 <Input
                                     id="unit_price"
                                     type="number"
-                                    step="0.01"
+                                    step="1"
                                     value={data.unit_price}
                                     onChange={(e) =>
                                         setData('unit_price', e.target.value)
                                     }
-                                    placeholder="0.00"
+                                    placeholder="0"
                                 />
                                 {errors.unit_price && (
                                     <p className="text-sm text-destructive">

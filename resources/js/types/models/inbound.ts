@@ -22,6 +22,8 @@ interface InboundTransaction {
     product: {
         id: number;
         name: string;
+        cost?: number;
+        unit?: string;
     };
     creator: {
         id: number;

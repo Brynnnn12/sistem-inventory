@@ -17,7 +17,7 @@ class StockController extends Controller
         $user = Auth::user();
 
         $query = Stock::with(['warehouse', 'product.category', 'histories' => function ($query) {
-            $query->with('user')->latest()->limit(10);
+            $query->with('creator')->latest()->limit(10);
         }]);
 
         // Filter by user warehouses if not super-admin

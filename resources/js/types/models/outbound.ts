@@ -22,6 +22,8 @@ interface OutboundTransaction {
     product: {
         id: number;
         name: string;
+        price?: number;
+        unit?: string;
     };
     creator: {
         id: number;

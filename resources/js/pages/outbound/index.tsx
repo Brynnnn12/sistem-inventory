@@ -31,7 +31,7 @@ export default function Index({
     outbounds: PageProps;
     warehouses: Array<{ id: number; name: string }>;
     customers: Array<{ id: number; name: string }>;
-    products: Array<{ id: number; name: string }>;
+    products: Array<{ id: number; name: string; price?: number }>;
     stocks: Array<{
         id: number;
         warehouse_id: number;
@@ -54,7 +54,11 @@ export default function Index({
         initialSearch: filters.search || '',
     });
 
-    const { setFilter, clearFilters } = useFilters({
+    const {
+        setFilter,
+        clearFilters,
+        hasActiveFilters: hasFilterActive,
+    } = useFilters({
         route: '/dashboard/outbound',
         initialFilters: {
             warehouse_id: filters.warehouse_id || '',
@@ -83,10 +87,10 @@ export default function Index({
                     onAddClick={() => openModal('create')}
                     onClearFilters={clearFiltersHandler}
                     onWarehouseChange={(value) =>
-                        setFilter('warehouse_id', value)
+                        setFilter('warehouse_id', value === 'all' ? '' : value)
                     }
                     isSearching={isSearching}
-                    hasActiveFilters={hasActiveSearch}
+                    hasActiveFilters={hasActiveSearch || hasFilterActive}
                     filters={filters}
                     warehouses={warehouses}
                 />

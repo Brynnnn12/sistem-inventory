@@ -19,7 +19,7 @@ import type { NavItem } from '@/types';
 import AppLogo from './app-logo';
 
 export function AppSidebar() {
-    const { isSuperAdmin } = useAuth();
+    const { isSuperAdmin, hasRole } = useAuth();
 
     // 1. Menu Utama (Tanpa Dropdown)
     const topNavItems: NavItem[] = [
@@ -30,17 +30,22 @@ export function AppSidebar() {
         },
     ];
 
-    // 2. Kelompok Operasional (Dropdown)
+    // 2. Kelompok Operasional (Dropdown) — disesuaikan dengan role
+    const canWrite = hasRole('super-admin') || hasRole('admin');
     const operationalNavItems: NavItem[] = [
         {
             title: 'Manajemen Stok',
             href: '#',
             icon: Boxes,
             items: [
-                { title: 'Barang Masuk', href: '/dashboard/inbound' },
-                { title: 'Barang Keluar', href: '/dashboard/outbound' },
-                { title: 'Opname Stok', href: '/dashboard/opname' },
-                { title: 'Mutasi Antar Gudang', href: '/dashboard/mutations' },
+                ...(canWrite
+                    ? [
+                          { title: 'Barang Masuk', href: '/dashboard/inbound' },
+                          { title: 'Barang Keluar', href: '/dashboard/outbound' },
+                          { title: 'Opname Stok', href: '/dashboard/opname' },
+                          { title: 'Mutasi Antar Gudang', href: '/dashboard/mutations' },
+                      ]
+                    : []),
                 { title: 'Riwayat Stok', href: '/dashboard/stock-history' },
                 { title: 'Stok Tersedia', href: '/dashboard/stocks' },
             ],
@@ -124,7 +129,7 @@ export function AppSidebar() {
                 {/* Bagian Laporan (Dropdown) */}
                 <NavMain title="Laporan" items={reportNavItems} />
 
-                {/* Bagian Master Data (Dropdown - Admin Only) */}
+                {/* Bagian Master Data (Dropdown - Super Admin Only) */}
                 {isSuperAdmin && (
                     <NavMain title="Master Data" items={masterDataNavItems} />
                 )}

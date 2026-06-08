@@ -54,7 +54,7 @@ class InboundController extends Controller
             : $user->warehouses()->active()->get();
 
         $suppliers = Supplier::active()->get();
-        $products = Product::active()->get();
+        $products = Product::active()->get(['id', 'name', 'cost', 'unit']);
 
         return Inertia::render('inbound/index', [
             'inbounds' => $inbounds,

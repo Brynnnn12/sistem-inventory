@@ -56,7 +56,7 @@ class OutboundController extends Controller
             : $user->warehouses()->active()->get();
 
         $customers = Customer::active()->get();
-        $products = Product::active()->get();
+        $products = Product::active()->get(['id', 'name', 'price', 'unit']);
 
         $stocks = \App\Models\Stock::with(['product', 'warehouse'])
             ->whereHas('warehouse', function ($q) use ($warehouses) {

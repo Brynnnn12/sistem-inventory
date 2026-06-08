@@ -30,7 +30,7 @@ export default function Index({
     inbounds: PageProps;
     warehouses: Array<{ id: number; name: string }>;
     suppliers: Array<{ id: number; name: string }>;
-    products: Array<{ id: number; name: string }>;
+    products: Array<{ id: number; name: string; cost?: number }>;
     canSelectWarehouse: boolean;
     filters?: Filters;
 }) {
@@ -45,7 +45,11 @@ export default function Index({
         initialSearch: filters.search || '',
     });
 
-    const { setFilter, clearFilters } = useFilters({
+    const {
+        setFilter,
+        clearFilters,
+        hasActiveFilters: hasFilterActive,
+    } = useFilters({
         route: '/dashboard/inbound',
         initialFilters: {
             warehouse_id: filters.warehouse_id || '',
@@ -73,13 +77,11 @@ export default function Index({
                     onSearchChange={setSearchValue}
                     onAddClick={() => openModal('create')}
                     onClearFilters={clearFiltersHandler}
-                    // Pastikan nilai 'all' ditangani dengan benar saat pengiriman filter
                     onWarehouseChange={(value) =>
                         setFilter('warehouse_id', value === 'all' ? '' : value)
                     }
                     isSearching={isSearching}
-                    hasActiveFilters={hasActiveSearch}
-                    // Kirim filters langsung dari props
+                    hasActiveFilters={hasActiveSearch || hasFilterActive}
                     filters={filters}
                     warehouses={warehouses}
                 />
