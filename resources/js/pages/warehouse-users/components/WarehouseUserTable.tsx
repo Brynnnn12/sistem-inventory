@@ -9,6 +9,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { useAuth } from '@/hooks/use-auth';
 import { formatDate } from '@/lib/utils';
 import type { WarehouseUser } from '@/types/models/warehouse-users';
 
@@ -31,6 +32,8 @@ export function WarehouseUserTable({
     allSelected,
     someSelected,
 }: WarehouseUserTableProps) {
+    const { isSuperAdmin } = useAuth();
+
     if (warehouseUsers.length === 0) {
         return (
             <div className="rounded-lg border border-dashed bg-card">
@@ -132,17 +135,19 @@ export function WarehouseUserTable({
                             </TableCell>
                             <TableCell className="text-right">
                                 <div className="flex items-center justify-end gap-2">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                        onClick={() => onDelete(warehouseUser)}
-                                    >
-                                        <Trash2 className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only">
-                                            Hapus
-                                        </span>
-                                    </Button>
+                                    {isSuperAdmin && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                            onClick={() => onDelete(warehouseUser)}
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" />
+                                            <span className="sr-only sm:not-sr-only">
+                                                Hapus
+                                            </span>
+                                        </Button>
+                                    )}
                                 </div>
                             </TableCell>
                         </TableRow>

@@ -3,13 +3,12 @@
 namespace App\Actions\Customers;
 
 use App\Models\Customer;
+use App\Models\OutboundTransaction;
 use Illuminate\Support\Facades\DB;
 
 class BulkDeleteCustomersAction
 {
     /**
-     * Bulk delete customers (soft delete).
-     *
      * @param  array<int>  $ids
      *
      * @throws \Exception
@@ -22,6 +21,13 @@ class BulkDeleteCustomersAction
             }
 
             $customers = Customer::whereIn('id', $ids)->lockForUpdate()->get();
+
+            $blocked = $customers->filter(fn ($c) => OutboundTransaction::where('customer_id', $c->id)->exists());
+
+            if ($blocked->isNotEmpty()) {
+                $names = $blocked->pluck('name')->join(', ');
+                throw new \Exception("Customer berikut tidak dapat dihapus karena masih memiliki transaksi barang keluar: {$names}");
+            }
 
             return Customer::whereIn('id', $ids)->delete();
         });

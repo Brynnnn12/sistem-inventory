@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,11 +26,14 @@ class StockHistory extends Model
         'created_by',
     ];
 
-    protected $casts = [
-        'previous_qty' => 'decimal:2',
-        'new_qty' => 'decimal:2',
-        'change_qty' => 'decimal:2',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'previous_qty' => 'decimal:2',
+            'new_qty' => 'decimal:2',
+            'change_qty' => 'decimal:2',
+        ];
+    }
 
     public function stock(): BelongsTo
     {
@@ -46,48 +50,43 @@ class StockHistory extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
     public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'created_by');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function scopeByStock($query, $stockId)
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeByStock(Builder $query, int $stockId): Builder
     {
         return $query->where('stock_id', $stockId);
     }
 
-    public function scopeByWarehouse($query, $warehouseId)
+    public function scopeByWarehouse(Builder $query, int $warehouseId): Builder
     {
         return $query->where('warehouse_id', $warehouseId);
     }
 
-    public function scopeByProduct($query, $productId)
+    public function scopeByProduct(Builder $query, int $productId): Builder
     {
         return $query->where('product_id', $productId);
     }
 
-    public function scopeByReference($query, $type, $id)
+    public function scopeByReference(Builder $query, string $type, int $id): Builder
     {
         return $query->where('reference_type', $type)->where('reference_id', $id);
     }
 
-    public function scopeByDateRange($query, $startDate, $endDate)
+    public function scopeByDateRange(Builder $query, string $startDate, string $endDate): Builder
     {
         return $query->whereBetween('created_at', [$startDate, $endDate]);
     }
 
-    public function scopeByReferenceType($query, $type)
+    public function scopeByReferenceType(Builder $query, string $type): Builder
     {
         return $query->where('reference_type', $type);
-    }
-
-    public function scopeByChangeType($query, $changeType)
-    {
-        return $query->where('change_type', $changeType);
     }
 }

@@ -13,6 +13,7 @@ import type { Auth } from './auth';
 export type SharedData = {
     name: string;
     auth: Auth;
+    userRoles: string[];
     sidebarOpen: boolean;
     flash?: {
         success?: string | null;

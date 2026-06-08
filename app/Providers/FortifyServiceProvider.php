@@ -123,10 +123,10 @@ class FortifyServiceProvider extends ServiceProvider
     {
         // Custom email verification
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            Mail::to($notifiable->email)->send(new VerifyEmailMail(
+            return (new VerifyEmailMail(
                 $notifiable->name,
                 $url
-            ));
+            ))->to($notifiable->email);
         });
 
         // Custom reset password

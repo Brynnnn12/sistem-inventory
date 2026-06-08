@@ -8,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useAuth } from '@/hooks/use-auth';
 
 interface EmployeeToolbarProps {
     searchValue: string;
@@ -34,6 +35,7 @@ export function EmployeeToolbar({
     isSearching,
     hasActiveFilters,
 }: EmployeeToolbarProps) {
+    const { isSuperAdmin } = useAuth();
     return (
         <>
             {/* Header */}
@@ -51,7 +53,7 @@ export function EmployeeToolbar({
                     )}
                 </div>
                 <div className="flex gap-2">
-                    {selectedCount > 0 && (
+                    {selectedCount > 0 && isSuperAdmin && (
                         <Button
                             variant="destructive"
                             onClick={onBulkDeleteClick}
@@ -61,10 +63,12 @@ export function EmployeeToolbar({
                             Hapus
                         </Button>
                     )}
-                    <Button onClick={onAddClick} className="gap-2">
-                        <Plus className="h-4 w-4" />
-                        Tambah Karyawan
-                    </Button>
+                    {isSuperAdmin && (
+                        <Button onClick={onAddClick} className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Tambah Karyawan
+                        </Button>
+                    )}
                 </div>
             </div>
 

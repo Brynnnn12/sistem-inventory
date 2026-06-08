@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,17 +29,19 @@ class StockMutation extends Model
         'notes',
     ];
 
-    protected $casts = [
-        'quantity' => 'decimal:2',
-        'received_qty' => 'decimal:2',
-        'damaged_qty' => 'decimal:2',
-        'sent_at' => 'datetime',
-        'received_at' => 'datetime',
-    ];
-
     protected $appends = ['status_display'];
 
-    // Status mapping from database to frontend
+    protected function casts(): array
+    {
+        return [
+            'quantity' => 'decimal:2',
+            'received_qty' => 'decimal:2',
+            'damaged_qty' => 'decimal:2',
+            'sent_at' => 'datetime',
+            'received_at' => 'datetime',
+        ];
+    }
+
     public const STATUS_MAPPING = [
         'dikirim' => 'sent',
         'diterima' => 'received',
@@ -46,7 +49,6 @@ class StockMutation extends Model
         'selesai' => 'completed',
     ];
 
-    // Reverse mapping for saving to database
     public const STATUS_REVERSE_MAPPING = [
         'sent' => 'dikirim',
         'received' => 'diterima',
@@ -59,9 +61,8 @@ class StockMutation extends Model
         return self::STATUS_MAPPING[$this->status] ?? $this->status;
     }
 
-    public function setStatusAttribute($value)
+    public function setStatusAttribute(string $value): void
     {
-        // If frontend sends English status, convert to Indonesian for database
         if (array_key_exists($value, self::STATUS_REVERSE_MAPPING)) {
             $this->attributes['status'] = self::STATUS_REVERSE_MAPPING[$value];
         } else {
@@ -79,12 +80,10 @@ class StockMutation extends Model
         return $this->belongsTo(Warehouse::class, 'to_warehouse');
     }
 
-    // Override toArray to ensure relationships are included
     public function toArray()
     {
         $array = parent::toArray();
 
-        // Ensure relationships are loaded and included
         if ($this->relationLoaded('fromWarehouse')) {
             $array['from_warehouse'] = $this->fromWarehouse;
         }
@@ -116,32 +115,32 @@ class StockMutation extends Model
             ->whereIn('reference_type', ['mutation_sent', 'mutation_received', 'mutation_rejected']);
     }
 
-    public function scopeByFromWarehouse($query, $warehouseId)
+    public function scopeByFromWarehouse(Builder $query, int $warehouseId): Builder
     {
         return $query->where('from_warehouse', $warehouseId);
     }
 
-    public function scopeByToWarehouse($query, $warehouseId)
+    public function scopeByToWarehouse(Builder $query, int $warehouseId): Builder
     {
         return $query->where('to_warehouse', $warehouseId);
     }
 
-    public function scopeByProduct($query, $productId)
+    public function scopeByProduct(Builder $query, int $productId): Builder
     {
         return $query->where('product_id', $productId);
     }
 
-    public function scopeByStatus($query, $status)
+    public function scopeByStatus(Builder $query, string $status): Builder
     {
         return $query->where('status', $status);
     }
 
-    public function scopePending($query)
+    public function scopePending(Builder $query): Builder
     {
         return $query->whereIn('status', ['dikirim', 'diterima']);
     }
 
-    public function scopeCompleted($query)
+    public function scopeCompleted(Builder $query): Builder
     {
         return $query->where('status', 'selesai');
     }

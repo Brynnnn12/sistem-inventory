@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Warehouse extends Model
@@ -18,13 +19,6 @@ class Warehouse extends Model
         'is_active',
     ];
 
-    public function scopeSearch($query, ?string $search): void
-    {
-        if ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        }
-    }
-
     protected function casts(): array
     {
         return [
@@ -33,7 +27,14 @@ class Warehouse extends Model
         ];
     }
 
-    public function users()
+    public function scopeSearch($query, ?string $search): void
+    {
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
+    }
+
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'warehouse_users')
             ->using(WarehouseUser::class)

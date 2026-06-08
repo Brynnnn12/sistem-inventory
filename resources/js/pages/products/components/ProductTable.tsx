@@ -10,6 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { useAuth } from '@/hooks/use-auth';
 import { formatIDR } from '@/lib/utils';
 import type { Product } from '@/types/models/products';
 
@@ -34,6 +35,8 @@ export function ProductTable({
     allSelected,
     someSelected,
 }: ProductTableProps) {
+    const { isSuperAdmin } = useAuth();
+
     if (products.length === 0) {
         return (
             <div className="rounded-lg border border-dashed bg-card">
@@ -140,22 +143,26 @@ export function ProductTable({
                             </TableCell>
                             <TableCell className="text-right">
                                 <div className="flex items-center justify-end gap-2">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 gap-1.5"
-                                        onClick={() => onEdit(product)}
-                                    >
-                                        <Edit className="h-3.5 w-3.5" />
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                        onClick={() => onDelete(product)}
-                                    >
-                                        <Trash2 className="h-3.5 w-3.5" />
-                                    </Button>
+                                    {isSuperAdmin && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-8 gap-1.5"
+                                            onClick={() => onEdit(product)}
+                                        >
+                                            <Edit className="h-3.5 w-3.5" />
+                                        </Button>
+                                    )}
+                                    {isSuperAdmin && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                            onClick={() => onDelete(product)}
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" />
+                                        </Button>
+                                    )}
                                 </div>
                             </TableCell>
                         </TableRow>

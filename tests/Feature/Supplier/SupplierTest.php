@@ -1,11 +1,10 @@
 <?php
 
+use App\Models\InboundTransaction;
 use App\Models\Supplier;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
-use function Pest\Laravel\put;
 
 beforeEach(function () {
     $this->user = createSuperAdmin();
@@ -202,3 +201,35 @@ test('super-admin bisa hapus banyak supplier', function () {
     }
 });
 
+// ============================================
+// DELETE PROTECTION - Supplier dengan transaksi
+// ============================================
+
+test('supplier dengan transaksi inbound tidak bisa dihapus', function () {
+    $supplier = Supplier::factory()->create(['name' => 'Supplier Terlarang']);
+    InboundTransaction::factory()->create(['supplier_id' => $supplier->id]);
+
+    $response = actingAs(createSuperAdmin())->delete(route('suppliers.destroy', $supplier));
+
+    $response->assertRedirect(route('suppliers.index'))
+        ->assertSessionHas('error');
+
+    $this->assertDatabaseHas('suppliers', ['id' => $supplier->id]);
+});
+
+test('supplier dengan transaksi inbound tidak bisa dihapus bulk', function () {
+    $supplier = Supplier::factory()->create(['name' => 'Supplier Terlarang']);
+    InboundTransaction::factory()->create(['supplier_id' => $supplier->id]);
+
+    $clean = Supplier::factory()->create(['name' => 'Supplier Bersih']);
+
+    $response = actingAs(createSuperAdmin())->delete(route('suppliers.bulk-destroy'), [
+        'ids' => [$supplier->id, $clean->id],
+    ]);
+
+    $response->assertRedirect(route('suppliers.index'))
+        ->assertSessionHas('error');
+
+    $this->assertDatabaseHas('suppliers', ['id' => $supplier->id]);
+    $this->assertDatabaseHas('suppliers', ['id' => $clean->id]);
+});

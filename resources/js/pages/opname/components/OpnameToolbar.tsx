@@ -8,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useAuth } from '@/hooks/use-auth';
 import type { OpnameToolbarProps } from '@/types/models/opname';
 
 export function OpnameToolbar({
@@ -22,6 +23,7 @@ export function OpnameToolbar({
     filters,
     warehouses,
 }: OpnameToolbarProps) {
+    const { isSuperAdmin, isAdmin } = useAuth();
     return (
         <>
             {/* Header */}
@@ -35,10 +37,12 @@ export function OpnameToolbar({
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <Button onClick={onAddClick} className="gap-2">
-                        <Plus className="h-4 w-4" />
-                        Tambah Opname
-                    </Button>
+                    {(isSuperAdmin || isAdmin) && (
+                        <Button onClick={onAddClick} className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Tambah Opname
+                        </Button>
+                    )}
                 </div>
             </div>
 

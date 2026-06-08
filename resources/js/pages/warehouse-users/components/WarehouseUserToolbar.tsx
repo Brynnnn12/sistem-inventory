@@ -1,6 +1,7 @@
 import { Plus, Search, Trash2, X, ArrowLeftRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/use-auth';
 
 interface WarehouseUserToolbarProps {
     searchValue: string;
@@ -25,6 +26,7 @@ export function WarehouseUserToolbar({
     isSearching,
     hasActiveFilters,
 }: WarehouseUserToolbarProps) {
+    const { isSuperAdmin } = useAuth();
     return (
         <>
             {/* Header */}
@@ -42,7 +44,7 @@ export function WarehouseUserToolbar({
                     )}
                 </div>
                 <div className="flex gap-2">
-                    {selectedCount > 0 && (
+                    {selectedCount > 0 && isSuperAdmin && (
                         <>
                             {selectedCount === 2 && (
                                 <Button variant="outline" onClick={onSwapClick}>
@@ -59,10 +61,12 @@ export function WarehouseUserToolbar({
                             </Button>
                         </>
                     )}
-                    <Button onClick={onAddClick}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Tambah Penugasan
-                    </Button>
+                    {isSuperAdmin && (
+                        <Button onClick={onAddClick}>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Tambah Penugasan
+                        </Button>
+                    )}
                 </div>
             </div>
 

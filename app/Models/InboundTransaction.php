@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -24,12 +25,15 @@ class InboundTransaction extends Model
         'created_by',
     ];
 
-    protected $casts = [
-        'quantity' => 'decimal:2',
-        'unit_price' => 'decimal:2',
-        'total_price' => 'decimal:2',
-        'received_date' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'quantity' => 'decimal:2',
+            'unit_price' => 'decimal:2',
+            'total_price' => 'decimal:2',
+            'received_date' => 'datetime',
+        ];
+    }
 
     public function supplier(): BelongsTo
     {
@@ -57,22 +61,22 @@ class InboundTransaction extends Model
             ->where('reference_type', 'inbound');
     }
 
-    public function scopeBySupplier($query, $supplierId)
+    public function scopeBySupplier(Builder $query, int $supplierId): Builder
     {
         return $query->where('supplier_id', $supplierId);
     }
 
-    public function scopeByWarehouse($query, $warehouseId)
+    public function scopeByWarehouse(Builder $query, int $warehouseId): Builder
     {
         return $query->where('warehouse_id', $warehouseId);
     }
 
-    public function scopeByProduct($query, $productId)
+    public function scopeByProduct(Builder $query, int $productId): Builder
     {
         return $query->where('product_id', $productId);
     }
 
-    public function scopeByDateRange($query, $startDate, $endDate)
+    public function scopeByDateRange(Builder $query, string $startDate, string $endDate): Builder
     {
         return $query->whereBetween('received_date', [$startDate, $endDate]);
     }

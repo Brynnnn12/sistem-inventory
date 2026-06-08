@@ -1,6 +1,7 @@
 import { Plus, Search, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/use-auth';
 import type { CategoryToolbarProps } from '@/types/models/categories';
 
 export function CategoryToolbar({
@@ -13,6 +14,7 @@ export function CategoryToolbar({
     isSearching,
     hasActiveFilters,
 }: CategoryToolbarProps) {
+    const { isSuperAdmin } = useAuth();
     return (
         <>
             {/* Header */}
@@ -32,7 +34,7 @@ export function CategoryToolbar({
                     )}
                 </div>
                 <div className="flex gap-2">
-                    {selectedCount > 0 && (
+                    {selectedCount > 0 && isSuperAdmin && (
                         <Button
                             variant="destructive"
                             onClick={onBulkDeleteClick}
@@ -42,10 +44,12 @@ export function CategoryToolbar({
                             Hapus ({selectedCount})
                         </Button>
                     )}
-                    <Button onClick={onAddClick} className="gap-2">
-                        <Plus className="h-4 w-4" />
-                        Tambah Kategori
-                    </Button>
+                    {isSuperAdmin && (
+                        <Button onClick={onAddClick} className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Tambah Kategori
+                        </Button>
+                    )}
                 </div>
             </div>
 

@@ -2,22 +2,16 @@ import { usePage } from '@inertiajs/react';
 import type { SharedData } from '@/types';
 
 export function useAuth() {
-    const { auth } = usePage<SharedData>().props;
+    const { auth, userRoles } = usePage<SharedData>().props;
     const user = auth.user;
+    const roles: string[] = userRoles ?? [];
 
-    // Helper untuk cek role
-    const hasRole = (roleName: string) =>
-        user?.roles?.some((role) => role.name === roleName) ?? false;
-
-    // Helper untuk cek permission
-    const can = (permissionName: string) =>
-        user?.permissions?.includes(permissionName) ?? false;
+    const hasRole = (roleName: string) => roles.includes(roleName);
 
     return {
         user,
+        roles,
         hasRole,
-        can,
-        // Shortcut untuk PT RBM
         isSuperAdmin: hasRole('super-admin'),
         isAdmin: hasRole('admin'),
     };

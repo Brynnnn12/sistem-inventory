@@ -8,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useAuth } from '@/hooks/use-auth';
 import type { OutboundToolbarProps } from '@/types/models/outbound';
 
 export function OutboundToolbar({
@@ -21,6 +22,7 @@ export function OutboundToolbar({
     filters,
     warehouses,
 }: OutboundToolbarProps) {
+    const { isSuperAdmin, isAdmin } = useAuth();
     return (
         <>
             {/* Header */}
@@ -34,10 +36,12 @@ export function OutboundToolbar({
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    <Button onClick={onAddClick} className="gap-2">
-                        <Plus className="h-4 w-4" />
-                        Tambah Outbound
-                    </Button>
+                    {(isSuperAdmin || isAdmin) && (
+                        <Button onClick={onAddClick} className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Tambah Outbound
+                        </Button>
+                    )}
                 </div>
             </div>
 

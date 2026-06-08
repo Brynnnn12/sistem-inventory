@@ -39,7 +39,7 @@ export default function Login({ status, canResetPassword }: Props) {
                                         htmlFor="email"
                                         className="mb-2 block text-[13px] font-medium text-slate-900"
                                     >
-                                        Alamat email
+                                        Email
                                     </Label>
                                     <div className="relative flex items-center">
                                         <input

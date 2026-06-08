@@ -1,6 +1,7 @@
 import { Plus, Search, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useAuth } from '@/hooks/use-auth';
 
 interface SupplierToolbarProps {
     searchValue: string;
@@ -23,6 +24,7 @@ export function SupplierToolbar({
     isSearching,
     hasActiveFilters,
 }: SupplierToolbarProps) {
+    const { isSuperAdmin } = useAuth();
     return (
         <>
             <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -39,7 +41,7 @@ export function SupplierToolbar({
                     )}
                 </div>
                 <div className="flex gap-2">
-                    {selectedCount > 0 && (
+                    {selectedCount > 0 && isSuperAdmin && (
                         <Button
                             variant="destructive"
                             onClick={onBulkDeleteClick}
@@ -48,10 +50,12 @@ export function SupplierToolbar({
                             Hapus
                         </Button>
                     )}
-                    <Button onClick={onAddClick}>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Tambah Supplier
-                    </Button>
+                    {isSuperAdmin && (
+                        <Button onClick={onAddClick}>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Tambah Supplier
+                        </Button>
+                    )}
                 </div>
             </div>
 

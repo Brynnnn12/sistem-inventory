@@ -1,14 +1,12 @@
 <?php
 
 use App\Models\Customer;
+use App\Models\OutboundTransaction;
 use App\Models\User;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
 use function Pest\Laravel\get;
-use function Pest\Laravel\post;
-use function Pest\Laravel\put;
-
-
 
 // ============================================
 // INDEX - Tampilkan daftar customer
@@ -243,4 +241,37 @@ test('bulk delete requires valid ids', function () {
 
     actingAs(createSuperAdmin())->delete(route('customers.bulk-destroy'), ['ids' => [9999, 8888]])
         ->assertSessionHasErrors(['ids.0']);
+});
+
+// ============================================
+// DELETE PROTECTION - Pelanggan dengan transaksi
+// ============================================
+
+test('customer dengan transaksi outbound tidak bisa dihapus', function () {
+    $customer = Customer::factory()->create(['name' => 'Toko Terlarang']);
+    OutboundTransaction::factory()->create(['customer_id' => $customer->id]);
+
+    $response = actingAs(createSuperAdmin())->delete(route('customers.destroy', $customer));
+
+    $response->assertRedirect(route('customers.index'))
+        ->assertSessionHas('error');
+
+    $this->assertDatabaseHas('customers', ['id' => $customer->id]);
+});
+
+test('customer dengan transaksi outbound tidak bisa dihapus bulk', function () {
+    $customer = Customer::factory()->create(['name' => 'Toko Terlarang']);
+    OutboundTransaction::factory()->create(['customer_id' => $customer->id]);
+
+    $clean = Customer::factory()->create(['name' => 'Toko Bersih']);
+
+    $response = actingAs(createSuperAdmin())->delete(route('customers.bulk-destroy'), [
+        'ids' => [$customer->id, $clean->id],
+    ]);
+
+    $response->assertRedirect(route('customers.index'))
+        ->assertSessionHas('error');
+
+    $this->assertDatabaseHas('customers', ['id' => $customer->id]);
+    $this->assertDatabaseHas('customers', ['id' => $clean->id]);
 });

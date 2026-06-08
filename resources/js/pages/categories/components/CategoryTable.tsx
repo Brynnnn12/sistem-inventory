@@ -10,6 +10,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { useAuth } from '@/hooks/use-auth';
 import type { CategoryTableProps } from '@/types/models/categories';
 
 export function CategoryTable({
@@ -22,6 +23,8 @@ export function CategoryTable({
     allSelected,
     someSelected,
 }: CategoryTableProps) {
+    const { isSuperAdmin } = useAuth();
+
     if (categories.length === 0) {
         return (
             <div className="rounded-lg border border-dashed bg-card">
@@ -99,28 +102,32 @@ export function CategoryTable({
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => onEdit(category)}
-                                        className="h-8 gap-1.5"
-                                    >
-                                        <Edit className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only">
-                                            Edit
-                                        </span>
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={() => onDelete(category)}
-                                        className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                    >
-                                        <Trash2 className="h-3.5 w-3.5" />
-                                        <span className="sr-only sm:not-sr-only">
-                                            Hapus
-                                        </span>
-                                    </Button>
+                                    {isSuperAdmin && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => onEdit(category)}
+                                            className="h-8 gap-1.5"
+                                        >
+                                            <Edit className="h-3.5 w-3.5" />
+                                            <span className="sr-only sm:not-sr-only">
+                                                Edit
+                                            </span>
+                                        </Button>
+                                    )}
+                                    {isSuperAdmin && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => onDelete(category)}
+                                            className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" />
+                                            <span className="sr-only sm:not-sr-only">
+                                                Hapus
+                                            </span>
+                                        </Button>
+                                    )}
                                 </div>
                             </TableCell>
                         </TableRow>

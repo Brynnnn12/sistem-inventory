@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Stock extends Model
 {
@@ -20,19 +22,21 @@ class Stock extends Model
         'updated_by',
     ];
 
-    protected $casts = [
-        'quantity' => 'decimal:2',
-        'available_qty' => 'decimal:2',
-    ];
-
-    // available_qty is a real column now, no need for accessor
+    protected function casts(): array
+    {
+        return [
+            'quantity' => 'decimal:2',
+            'available_qty' => 'decimal:2',
+            'last_updated' => 'datetime',
+        ];
+    }
 
     public function warehouse(): BelongsTo
     {
         return $this->belongsTo(Warehouse::class);
     }
 
-    public function histories()
+    public function histories(): HasMany
     {
         return $this->hasMany(StockHistory::class);
     }
@@ -42,15 +46,13 @@ class Stock extends Model
         return $this->belongsTo(Product::class);
     }
 
-
-    public function scopeByWarehouse($query, $warehouseId)
+    public function scopeByWarehouse(Builder $query, int $warehouseId): Builder
     {
         return $query->where('warehouse_id', $warehouseId);
     }
 
-    public function scopeByProduct($query, $productId)
+    public function scopeByProduct(Builder $query, int $productId): Builder
     {
         return $query->where('product_id', $productId);
     }
-
 }

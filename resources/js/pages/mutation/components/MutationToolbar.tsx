@@ -8,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useAuth } from '@/hooks/use-auth';
 import type { MutationToolbarProps } from '@/types/models/mutation';
 
 export function MutationToolbar({
@@ -21,6 +22,7 @@ export function MutationToolbar({
     hasActiveFilters,
     filters,
 }: MutationToolbarProps) {
+    const { isSuperAdmin, isAdmin } = useAuth();
     return (
         <>
             {/* Header */}
@@ -33,10 +35,12 @@ export function MutationToolbar({
                         Kelola perpindahan stok antar gudang
                     </p>
                 </div>
-                <Button onClick={onAddClick} className="gap-2">
-                    <Plus className="h-4 w-4" />
-                    Buat Mutasi
-                </Button>
+                {(isSuperAdmin || isAdmin) && (
+                    <Button onClick={onAddClick} className="gap-2">
+                        <Plus className="h-4 w-4" />
+                        Buat Mutasi
+                    </Button>
+                )}
             </div>
 
             {/* Filters */}

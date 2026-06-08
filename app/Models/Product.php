@@ -24,15 +24,6 @@ class Product extends Model
         'is_active',
     ];
 
-    protected $appends = [];
-
-    public function scopeSearch($query, ?string $search): void
-    {
-        if ($search) {
-            $query->where('name', 'like', "%{$search}%");
-        }
-    }
-
     protected function casts(): array
     {
         return [
@@ -43,6 +34,13 @@ class Product extends Model
             'is_active' => 'boolean',
             'deleted_at' => 'datetime',
         ];
+    }
+
+    public function scopeSearch($query, ?string $search): void
+    {
+        if ($search) {
+            $query->where('name', 'like', "%{$search}%");
+        }
     }
 
     public function category(): BelongsTo
