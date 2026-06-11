@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 10)->unique();
             $table->string('name', 50)->index();
-            $table->text(column: 'address');
+            $table->string('address', 255);
             $table->string('phone', 15)->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();

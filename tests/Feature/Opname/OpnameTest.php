@@ -1,12 +1,11 @@
 <?php
 
-use function Pest\Laravel\actingAs;
-use function Pest\Laravel\post;
-
 use App\Models\Opname;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Warehouse;
+
+use function Pest\Laravel\actingAs;
 
 test('super-admin bisa membuat opname', function () {
     $superAdmin = createSuperAdmin();
@@ -188,33 +187,15 @@ test('super-admin bisa mengapprove opname dan stok disesuaikan', function () {
     $this->assertDatabaseHas('stock_histories', ['reference_type' => 'adjustment', 'reference_id' => $opname->id]);
 });
 
-test('admin di gudang bisa mengapprove opname', function () {
+test('admin tidak bisa mengapprove opname (hanya super-admin)', function () {
     $admin = createAdmin();
 
     $warehouse = Warehouse::factory()->create();
-    Warehouse::factory()->create();
     \App\Models\WarehouseUser::factory()->create(['user_id' => $admin->id, 'warehouse_id' => $warehouse->id]);
 
-    $product = Product::factory()->create();
+    $opname = Opname::factory()->create(['warehouse_id' => $warehouse->id, 'status' => 'draft']);
 
-    Stock::factory()->create(['warehouse_id' => $warehouse->id, 'product_id' => $product->id, 'quantity' => 8]);
-
-    $opname = Opname::factory()->create([
-        'warehouse_id' => $warehouse->id,
-        'product_id' => $product->id,
-        'system_qty' => 8,
-        'physical_qty' => 5,
-        'difference_qty' => 3,
-        'difference_type' => 'kurang',
-        'status' => 'draft',
-    ]);
-
-    $response = actingAs($admin)->post(route('opname.approve', $opname));
-
-    $response->assertRedirect(route('opname.index'))
-        ->assertSessionHas('success', 'Opname berhasil diapprove dan stok disesuaikan.');
-
-    $this->assertDatabaseHas('stocks', ['warehouse_id' => $warehouse->id, 'product_id' => $product->id, 'quantity' => 5]);
+    actingAs($admin)->post(route('opname.approve', $opname))->assertForbidden();
 });
 
 test('viewer tidak bisa mengapprove opname', function () {

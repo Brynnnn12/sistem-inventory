@@ -57,7 +57,7 @@ class UpdateCategoryRequest extends FormRequest
             'name.string' => 'Nama kategori harus berupa teks.',
             'name.min' => 'Nama kategori minimal 3 karakter.',
             'name.max' => 'Nama kategori tidak boleh lebih dari 50 karakter.',
-            'name.unique' => 'Nama kategori sudah digunakan.',
+            'name.unique' => 'Kategori sudah terdaftar.',
             'name.regex' => 'Nama kategori hanya boleh mengandung huruf, angka, spasi, dan tanda hubung (-).',
         ];
     }

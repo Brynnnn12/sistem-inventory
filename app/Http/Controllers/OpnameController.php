@@ -70,6 +70,7 @@ class OpnameController extends Controller
             'products' => $products,
             'stocks' => $stocks,
             'canSelectWarehouse' => $user->hasRole('super-admin'),
+            'canApprove' => $user->hasRole('super-admin'),
             'filters' => $request->only(['search', 'warehouse_id', 'difference_type', 'start_date', 'end_date']),
         ]);
     }

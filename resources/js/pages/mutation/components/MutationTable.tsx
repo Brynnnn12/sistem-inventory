@@ -87,36 +87,31 @@ export function MutationTable({
                             <TableCell>
                                 <Badge
                                     variant={
-                                        mutation.status_display === 'pending'
-                                            ? 'secondary'
-                                            : mutation.status_display === 'sent'
+                                        mutation.status_display === 'sent'
+                                            ? 'default'
+                                            : mutation.status_display ===
+                                                'received'
                                               ? 'default'
                                               : mutation.status_display ===
-                                                  'received'
+                                                  'completed'
                                                 ? 'default'
                                                 : mutation.status_display ===
-                                                    'completed'
-                                                  ? 'default'
-                                                  : mutation.status_display ===
-                                                      'rejected'
-                                                    ? 'destructive'
-                                                    : 'secondary'
+                                                    'rejected'
+                                                  ? 'destructive'
+                                                  : 'secondary'
                                     }
                                 >
-                                    {mutation.status_display === 'pending'
-                                        ? 'Pending'
-                                        : mutation.status_display === 'sent'
-                                          ? 'Dikirim'
+                                    {mutation.status_display === 'sent'
+                                        ? 'Dikirim'
+                                        : mutation.status_display === 'received'
+                                          ? 'Diterima'
                                           : mutation.status_display ===
-                                              'received'
-                                            ? 'Diterima'
+                                              'completed'
+                                            ? 'Selesai'
                                             : mutation.status_display ===
-                                                'completed'
-                                              ? 'Selesai'
-                                              : mutation.status_display ===
-                                                  'rejected'
-                                                ? 'Ditolak'
-                                                : mutation.status_display}
+                                                'rejected'
+                                              ? 'Ditolak'
+                                              : mutation.status_display}
                                 </Badge>
                             </TableCell>
                             <TableCell className="text-sm">
@@ -132,8 +127,7 @@ export function MutationTable({
                                     >
                                         <Eye className="h-4 w-4" />
                                     </Button>
-                                    {mutation.type === 'incoming' &&
-                                        mutation.status_display === 'sent' &&
+                                    {mutation.status_display === 'sent' &&
                                         onReceiveMutation && (
                                             <Button
                                                 variant="ghost"
@@ -146,8 +140,7 @@ export function MutationTable({
                                                 <CheckCircle className="h-4 w-4" />
                                             </Button>
                                         )}
-                                    {mutation.type === 'incoming' &&
-                                        mutation.status_display === 'sent' &&
+                                    {mutation.status_display === 'sent' &&
                                         onRejectMutation && (
                                             <Button
                                                 variant="ghost"

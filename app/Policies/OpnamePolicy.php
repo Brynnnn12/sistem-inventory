@@ -60,14 +60,6 @@ class OpnamePolicy
      */
     public function approve(User $user, Opname $opname): bool
     {
-        if ($user->hasRole('super-admin')) {
-            return true;
-        }
-
-        if ($user->hasRole('admin')) {
-            return $user->warehouses()->where('warehouses.id', $opname->warehouse_id)->exists();
-        }
-
-        return false;
+        return $user->hasRole('super-admin');
     }
 }

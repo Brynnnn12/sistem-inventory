@@ -20,6 +20,7 @@ export default function Index({
     products,
     stocks,
     canSelectWarehouse,
+    canApprove,
     filters = {},
 }: {
     opnames: PageProps;
@@ -34,6 +35,7 @@ export default function Index({
         warehouse: { id: number; name: string };
     }>;
     canSelectWarehouse: boolean;
+    canApprove: boolean;
     filters?: Filters;
 }) {
     const {
@@ -90,7 +92,7 @@ export default function Index({
                 <OpnameTable
                     opnames={opnames.data}
                     onShow={(opname) => openModal('show', opname)}
-                    onApprove={handleApprove}
+                    onApprove={canApprove ? handleApprove : undefined}
                 />
 
                 {opnames.total > 0 && (
