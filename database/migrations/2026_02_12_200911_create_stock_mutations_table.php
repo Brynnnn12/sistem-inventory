@@ -29,7 +29,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Indexes
-            $table->index(['code', 'from_warehouse', 'to_warehouse', 'product_id', 'status', 'sent_at']);
+            $table->index(['code', 'from_warehouse', 'to_warehouse', 'product_id', 'status', 'sent_at'], 'stock_mutations_composite_idx');
         });
     }
 

@@ -12,6 +12,6 @@ class SupplierSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Supplier::factory(rand(15, 25))->create();
+        \App\Models\Supplier::factory(5)->create();
     }
 }

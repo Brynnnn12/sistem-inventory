@@ -12,32 +12,14 @@ class WarehouseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create specific warehouses
-        Warehouse::create([
-            'code' => 'WHS-001',
-            'name' => 'Gudang Pusat Jakarta',
-            'address' => 'Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta 10220',
-            'phone' => '021-12345678',
-            'is_active' => true,
-        ]);
+        $warehouses = [
+            ['code' => 'WHS-001', 'name' => 'Gudang Brebes', 'address' => 'Jl. Dr. Sutomo No. 78, Brebes, Jawa Tengah 52212', 'phone' => '0283-1234567'],
+            ['code' => 'WHS-002', 'name' => 'Gudang Tegal', 'address' => 'Jl. Pahlawan No. 45, Tegal, Jawa Tengah 52111', 'phone' => '0283-7654321'],
+            ['code' => 'WHS-003', 'name' => 'Gudang Pemalang', 'address' => 'Jl. Jenderal Sudirman No. 89, Pemalang, Jawa Tengah 52311', 'phone' => '0284-1122334'],
+        ];
 
-        Warehouse::create([
-            'code' => 'WHS-002',
-            'name' => 'Gudang Cabang Bandung',
-            'address' => 'Jl. Asia Afrika No. 456, Bandung, Jawa Barat 40111',
-            'phone' => '022-87654321',
-            'is_active' => true,
-        ]);
-
-        Warehouse::create([
-            'code' => 'WHS-003',
-            'name' => 'Gudang Cabang Surabaya',
-            'address' => 'Jl. Tunjungan No. 789, Surabaya, Jawa Timur 60275',
-            'phone' => '031-11223344',
-            'is_active' => true,
-        ]);
-
-        // Create additional random warehouses
-        Warehouse::factory(2)->create();
+        foreach ($warehouses as $warehouse) {
+            Warehouse::create([...$warehouse, 'is_active' => true]);
+        }
     }
 }

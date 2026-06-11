@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamps();
 
             // Indexes
-            $table->index(['code', 'warehouse_id', 'customer_id', 'product_id', 'sale_date', 'created_by']);
+            $table->index(['code', 'warehouse_id', 'customer_id', 'product_id', 'sale_date', 'created_by'], 'outbound_tx_composite_idx');
         });
     }
 

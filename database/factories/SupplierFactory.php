@@ -66,7 +66,7 @@ class SupplierFactory extends Factory
             'code' => 'SUP-' . fake()->unique()->numberBetween(1000, 9999),
             'name' => fake()->randomElement($suppliers),
             'contact_person' => fake()->randomElement($contactPersons),
-            'phone' => fake()->phoneNumber(),
+            'phone' => fake()->numerify('08##########'),
             'email' => fake()->unique()->safeEmail(),
             'address' => fake()->address(),
             'tax_id' => 'NPWP-' . fake()->unique()->numberBetween(1000000000000000, 9999999999999999),

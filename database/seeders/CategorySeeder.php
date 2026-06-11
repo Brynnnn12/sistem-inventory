@@ -12,6 +12,10 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(4)->create();
+        $categories = ['Makanan', 'Minuman', 'Bahan Pokok'];
+
+        foreach ($categories as $name) {
+            Category::create(['name' => $name]);
+        }
     }
 }

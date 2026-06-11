@@ -63,7 +63,7 @@ class CustomerFactory extends Factory
             'code' => 'CST-' . fake()->unique()->numberBetween(1000, 9999),
             'name' => fake()->randomElement($customers),
             'contact_person' => fake()->randomElement($contactPersons),
-            'phone' => fake()->phoneNumber(),
+            'phone' => fake()->numerify('08##########'),
             'email' => fake()->unique()->safeEmail(),
             'address' => fake()->address(),
             'is_active' => fake()->boolean(95), // 95% chance of being active
