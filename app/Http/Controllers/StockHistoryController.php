@@ -39,7 +39,7 @@ class StockHistoryController extends Controller
             ->when($request->start_date && $request->end_date, function ($q) use ($request) {
                 $q->whereBetween('created_at', [$request->start_date, $request->end_date]);
             })
-            ->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
+            ->when($user->hasRole('admin'), function ($q) use ($user) {
                 $warehouseIds = $user->warehouses()->pluck('warehouses.id');
                 $q->whereIn('warehouse_id', $warehouseIds);
             })
@@ -47,9 +47,9 @@ class StockHistoryController extends Controller
 
         $stockHistories = $query->paginate(25)->withQueryString();
 
-        $warehouses = $user->hasRole('super-admin')
-            ? Warehouse::active()->get()
-            : $user->warehouses()->active()->get();
+        $warehouses = $user->hasRole('admin')
+            ? $user->warehouses()->active()->get()
+            : Warehouse::active()->get();
 
         $products = Product::active()->get();
 

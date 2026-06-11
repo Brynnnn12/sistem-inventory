@@ -117,13 +117,22 @@ export function StockHistoryToolbar({
                                         Semua Tipe
                                     </SelectItem>
                                     <SelectItem value="inbound">
-                                        Inbound
+                                        Barang Masuk
+                                    </SelectItem>
+                                    <SelectItem value="outbound">
+                                        Barang Keluar
                                     </SelectItem>
                                     <SelectItem value="mutation_sent">
                                         Mutasi Keluar
                                     </SelectItem>
                                     <SelectItem value="mutation_received">
                                         Mutasi Masuk
+                                    </SelectItem>
+                                    <SelectItem value="mutation_rejected">
+                                        Mutasi Ditolak
+                                    </SelectItem>
+                                    <SelectItem value="adjustment">
+                                        Penyesuaian
                                     </SelectItem>
                                 </SelectContent>
                             </Select>

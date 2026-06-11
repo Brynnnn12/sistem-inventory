@@ -1,4 +1,10 @@
-import { Badge } from '@/components/ui/badge';
+import {
+    ArrowDownLeft,
+    ArrowRightLeft,
+    ArrowUpRight,
+    RotateCcw,
+    XCircle,
+} from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -9,6 +15,15 @@ import {
 } from '@/components/ui/table';
 import { formatDateTime, formatQuantity } from '@/lib/utils';
 import type { StockHistoryTableProps } from '@/types/models/stock-history';
+
+const referenceLabels: Record<string, { label: string; icon: React.ReactNode }> = {
+    inbound: { label: 'Barang Masuk', icon: <ArrowDownLeft className="h-3.5 w-3.5 text-green-600" /> },
+    outbound: { label: 'Barang Keluar', icon: <ArrowUpRight className="h-3.5 w-3.5 text-red-600" /> },
+    mutation_sent: { label: 'Mutasi Keluar', icon: <ArrowRightLeft className="h-3.5 w-3.5 text-blue-600" /> },
+    mutation_received: { label: 'Mutasi Masuk', icon: <ArrowRightLeft className="h-3.5 w-3.5 text-purple-600" /> },
+    mutation_rejected: { label: 'Mutasi Ditolak', icon: <XCircle className="h-3.5 w-3.5 text-gray-500" /> },
+    adjustment: { label: 'Penyesuaian', icon: <RotateCcw className="h-3.5 w-3.5 text-amber-600" /> },
+};
 
 export function StockHistoryTable({
     stockHistories,
@@ -97,13 +112,23 @@ export function StockHistoryTable({
                                 {formatQuantity(history.new_qty)}
                             </TableCell>
                             <TableCell>
-                                <Badge
-                                    variant="outline"
-                                    className="font-mono text-xs"
-                                >
-                                    {history.reference_code ||
-                                        `${history.reference_type}#${history.reference_id}`}
-                                </Badge>
+                                <div className="flex items-center gap-2">
+                                    {referenceLabels[history.reference_type]
+                                        ?.icon || null}
+                                    <div className="flex flex-col">
+                                        <span className="text-sm font-medium">
+                                            {referenceLabels[
+                                                history.reference_type
+                                            ]?.label ||
+                                                history.reference_type}
+                                        </span>
+                                        {history.reference_code && (
+                                            <span className="font-mono text-xs text-muted-foreground">
+                                                {history.reference_code}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
                             </TableCell>
                             <TableCell className="text-sm">
                                 {history.creator?.name || '-'}

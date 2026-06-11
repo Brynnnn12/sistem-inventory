@@ -13,7 +13,7 @@ class WarehousePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['super-admin', 'admin', 'viewer']);
+        return $user->hasAnyRole(['super-admin', 'admin']);
     }
 
     /**
@@ -22,7 +22,7 @@ class WarehousePolicy
      */
     public function view(User $user, Warehouse $warehouse): bool
     {
-        if ($user->hasAnyRole(['super-admin', 'viewer'])) {
+        if ($user->hasAnyRole(['super-admin'])) {
             return true;
         }
 

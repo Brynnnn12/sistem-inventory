@@ -12,7 +12,7 @@ class StockMutationPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasRole(['super-admin', 'admin', 'viewer']);
+        return $user->hasRole(['super-admin', 'admin']);
     }
 
     /**

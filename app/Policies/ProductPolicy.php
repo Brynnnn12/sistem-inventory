@@ -13,7 +13,7 @@ class ProductPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasAnyRole(['super-admin', 'admin', 'viewer']);
+        return $user->hasAnyRole(['super-admin', 'admin']);
     }
 
     /**

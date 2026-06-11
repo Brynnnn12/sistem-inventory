@@ -20,8 +20,8 @@ class StockController extends Controller
             $query->with('creator')->latest()->limit(10);
         }]);
 
-        // Filter by user warehouses if not super-admin
-        $query->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
+        // Filter by user warehouses for admin only (viewer can see all)
+        $query->when($user->hasRole('admin'), function ($q) use ($user) {
             $warehouseIds = $user->warehouses()->pluck('warehouses.id');
             $q->whereIn('warehouse_id', $warehouseIds);
         });
@@ -54,9 +54,9 @@ class StockController extends Controller
 
         return Inertia::render('stocks/index', [
             'stocks' => $stocks,
-            'warehouses' => $user->hasRole('super-admin')
-                ? Warehouse::active()->select('id', 'name')->get()
-                : $user->warehouses()->active()->select('warehouses.id', 'warehouses.name')->get(),
+            'warehouses' => $user->hasRole('admin')
+                ? $user->warehouses()->active()->select('warehouses.id', 'warehouses.name')->get()
+                : Warehouse::active()->select('id', 'name')->get(),
             'products' => Product::active()->select('id', 'name')->get(),
             'filters' => $request->only(['search', 'warehouse_id', 'product_id']),
         ]);
