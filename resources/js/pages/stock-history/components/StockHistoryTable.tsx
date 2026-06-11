@@ -16,13 +16,34 @@ import {
 import { formatDateTime, formatQuantity } from '@/lib/utils';
 import type { StockHistoryTableProps } from '@/types/models/stock-history';
 
-const referenceLabels: Record<string, { label: string; icon: React.ReactNode }> = {
-    inbound: { label: 'Barang Masuk', icon: <ArrowDownLeft className="h-3.5 w-3.5 text-green-600" /> },
-    outbound: { label: 'Barang Keluar', icon: <ArrowUpRight className="h-3.5 w-3.5 text-red-600" /> },
-    mutation_sent: { label: 'Mutasi Keluar', icon: <ArrowRightLeft className="h-3.5 w-3.5 text-blue-600" /> },
-    mutation_received: { label: 'Mutasi Masuk', icon: <ArrowRightLeft className="h-3.5 w-3.5 text-purple-600" /> },
-    mutation_rejected: { label: 'Mutasi Ditolak', icon: <XCircle className="h-3.5 w-3.5 text-gray-500" /> },
-    adjustment: { label: 'Penyesuaian', icon: <RotateCcw className="h-3.5 w-3.5 text-amber-600" /> },
+const referenceLabels: Record<
+    string,
+    { label: string; icon: React.ReactNode }
+> = {
+    inbound: {
+        label: 'Barang Masuk',
+        icon: <ArrowDownLeft className="h-3.5 w-3.5 text-green-600" />,
+    },
+    outbound: {
+        label: 'Barang Keluar',
+        icon: <ArrowUpRight className="h-3.5 w-3.5 text-red-600" />,
+    },
+    mutation_sent: {
+        label: 'Mutasi Keluar',
+        icon: <ArrowRightLeft className="h-3.5 w-3.5 text-blue-600" />,
+    },
+    mutation_received: {
+        label: 'Mutasi Masuk',
+        icon: <ArrowRightLeft className="h-3.5 w-3.5 text-purple-600" />,
+    },
+    mutation_rejected: {
+        label: 'Mutasi Ditolak',
+        icon: <XCircle className="h-3.5 w-3.5 text-gray-500" />,
+    },
+    adjustment: {
+        label: 'Penyesuaian',
+        icon: <RotateCcw className="h-3.5 w-3.5 text-amber-600" />,
+    },
 };
 
 export function StockHistoryTable({
@@ -119,8 +140,7 @@ export function StockHistoryTable({
                                         <span className="text-sm font-medium">
                                             {referenceLabels[
                                                 history.reference_type
-                                            ]?.label ||
-                                                history.reference_type}
+                                            ]?.label || history.reference_type}
                                         </span>
                                         {history.reference_code && (
                                             <span className="font-mono text-xs text-muted-foreground">

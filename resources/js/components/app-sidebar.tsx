@@ -41,9 +41,15 @@ export function AppSidebar() {
                 ...(canWrite
                     ? [
                           { title: 'Barang Masuk', href: '/dashboard/inbound' },
-                          { title: 'Barang Keluar', href: '/dashboard/outbound' },
+                          {
+                              title: 'Barang Keluar',
+                              href: '/dashboard/outbound',
+                          },
                           { title: 'Opname Stok', href: '/dashboard/opname' },
-                          { title: 'Mutasi Antar Gudang', href: '/dashboard/mutations' },
+                          {
+                              title: 'Mutasi Antar Gudang',
+                              href: '/dashboard/mutations',
+                          },
                       ]
                     : []),
                 { title: 'Riwayat Stok', href: '/dashboard/stock-history' },

@@ -1,11 +1,6 @@
 import { Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import {
     Select,
@@ -103,9 +98,7 @@ export function StockReportToolbar({
                         />
                     </div>
                     <div className="flex items-end">
-                        <Button onClick={onApplyFilter}>
-                            Terapkan Filter
-                        </Button>
+                        <Button onClick={onApplyFilter}>Terapkan Filter</Button>
                     </div>
                 </div>
             </CardContent>

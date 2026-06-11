@@ -320,20 +320,26 @@ export function InboundFormModal({
                                                             key={product.id}
                                                             value={product.name}
                                                             onSelect={() => {
-                                                                 setData(
-                                                                     'product_id',
-                                                                     product.id.toString(),
-                                                                 );
-                                                                 if (product.cost) {
-                                                                     setData(
-                                                                         'unit_price',
-                                                                         String(Math.round(product.cost)),
-                                                                     );
-                                                                 }
-                                                                 setProductSearchOpen(
-                                                                     false,
-                                                                 );
-                                                             }}
+                                                                setData(
+                                                                    'product_id',
+                                                                    product.id.toString(),
+                                                                );
+                                                                if (
+                                                                    product.cost
+                                                                ) {
+                                                                    setData(
+                                                                        'unit_price',
+                                                                        String(
+                                                                            Math.round(
+                                                                                product.cost,
+                                                                            ),
+                                                                        ),
+                                                                    );
+                                                                }
+                                                                setProductSearchOpen(
+                                                                    false,
+                                                                );
+                                                            }}
                                                         >
                                                             <Check
                                                                 className={cn(
@@ -378,8 +384,7 @@ export function InboundFormModal({
                                 {(() => {
                                     const product = products.find(
                                         (p) =>
-                                            p.id.toString() ===
-                                            data.product_id,
+                                            p.id.toString() === data.product_id,
                                     );
                                     if (
                                         product &&

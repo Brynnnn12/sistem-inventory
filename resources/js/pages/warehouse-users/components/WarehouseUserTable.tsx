@@ -140,7 +140,9 @@ export function WarehouseUserTable({
                                             variant="ghost"
                                             size="sm"
                                             className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                            onClick={() => onDelete(warehouseUser)}
+                                            onClick={() =>
+                                                onDelete(warehouseUser)
+                                            }
                                         >
                                             <Trash2 className="h-3.5 w-3.5" />
                                             <span className="sr-only sm:not-sr-only">

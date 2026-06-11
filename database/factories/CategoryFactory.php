@@ -17,7 +17,12 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->randomElement(['Makanan', 'Minuman', 'Bahan Pokok']),
+            'name' => fake()->unique()->randomElement([
+                'Makanan', 'Minuman', 'Bahan Pokok', 'Peralatan', 'Elektronik',
+                'Kebersihan', 'ATK', 'Obat-obatan', 'Bumbu Dapur', 'Snack',
+                'Rokok', 'Pakaian', 'Otomotif', 'Pertanian', 'Perikanan',
+                'Kerajinan', 'Mainan', 'Olahraga', 'Kesehatan', 'Buku',
+            ]),
         ];
     }
 }

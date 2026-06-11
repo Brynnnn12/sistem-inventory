@@ -54,16 +54,13 @@ test('admin bisa melihat daftar produk', function () {
         );
 });
 
-test('viewer bisa melihat daftar produk', function () {
+test('viewer tidak bisa melihat daftar produk', function () {
     $viewer = createViewer();
     \App\Models\Product::factory()->count(2)->create(['is_active' => true]);
 
     $response = actingAs($viewer)->get(route('products.index'));
 
-    $response->assertOk()
-        ->assertInertia(fn ($page) => $page
-            ->component('products/index')
-        );
+    $response->assertForbidden();
 });
 
 test('super-admin bisa buat produk' , function() {

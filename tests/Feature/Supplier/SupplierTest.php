@@ -48,15 +48,12 @@ test('admin bisa melihat daftar supplier', function () {
         );
 });
 
-test('viewer bisa melihat daftar supplier', function () {
+test('viewer tidak bisa melihat daftar supplier', function () {
     Supplier::factory()->count(2)->create(['is_active' => true]);
 
     $response = actingAs(createViewer())->get(route('suppliers.index'));
 
-    $response->assertOk()
-        ->assertInertia(fn ($page) => $page
-            ->component('suppliers/index')
-        );
+    $response->assertForbidden();
 });
 
 test('super-admin bisa membuat supplier', function () {

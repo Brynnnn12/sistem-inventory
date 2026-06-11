@@ -124,7 +124,9 @@ export function EmployeeFormModal({
                                         htmlFor={`${isEditing ? 'edit' : 'create'}-name`}
                                     >
                                         Nama Lengkap{' '}
-                                        <span className="text-destructive">*</span>
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <div className="relative">
                                         <User className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -132,7 +134,10 @@ export function EmployeeFormModal({
                                             id={`${isEditing ? 'edit' : 'create'}-name`}
                                             value={form.data.name}
                                             onChange={(e) =>
-                                                form.setData('name', e.target.value)
+                                                form.setData(
+                                                    'name',
+                                                    e.target.value,
+                                                )
                                             }
                                             placeholder="Contoh: John Doe, Ahmad Suharto"
                                             required
@@ -147,7 +152,9 @@ export function EmployeeFormModal({
                                         htmlFor={`${isEditing ? 'edit' : 'create'}-email`}
                                     >
                                         Alamat Email{' '}
-                                        <span className="text-destructive">*</span>
+                                        <span className="text-destructive">
+                                            *
+                                        </span>
                                     </Label>
                                     <div className="relative">
                                         <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -281,7 +288,8 @@ export function EmployeeFormModal({
                                             message={form.errors.password}
                                         />
                                         <p className="text-xs text-muted-foreground">
-                                            💡 Must be at least 8 characters long
+                                            💡 Must be at least 8 characters
+                                            long
                                         </p>
                                     </div>
 
@@ -298,7 +306,8 @@ export function EmployeeFormModal({
                                                 id="create-password-confirmation"
                                                 type="password"
                                                 value={
-                                                    form.data.password_confirmation
+                                                    form.data
+                                                        .password_confirmation
                                                 }
                                                 onChange={(e) =>
                                                     form.setData(
@@ -313,7 +322,8 @@ export function EmployeeFormModal({
                                         </div>
                                         <InputError
                                             message={
-                                                form.errors.password_confirmation
+                                                form.errors
+                                                    .password_confirmation
                                             }
                                         />
                                     </div>

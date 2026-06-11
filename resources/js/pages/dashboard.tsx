@@ -20,8 +20,8 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import AppLayout from '@/layouts/app-layout';
 import { useAuth } from '@/hooks/use-auth';
+import AppLayout from '@/layouts/app-layout';
 import { EmployeesList } from '@/pages/dashboard/EmployeesList';
 import MonthlyChart from '@/pages/dashboard/MonthlyChart';
 import { ProductsList } from '@/pages/dashboard/ProductsList';
@@ -321,9 +321,7 @@ export default function Dashboard({
                 {/* Products and Employees Grid */}
                 <div className="grid gap-6 lg:grid-cols-2">
                     <ProductsList products={products} />
-                    {isSuperAdmin && (
-                        <EmployeesList employees={employees} />
-                    )}
+                    {isSuperAdmin && <EmployeesList employees={employees} />}
                 </div>
             </div>
         </AppLayout>

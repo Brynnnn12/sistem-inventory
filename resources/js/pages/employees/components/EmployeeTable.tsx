@@ -147,7 +147,9 @@ export function EmployeeTable({
                                                 variant="ghost"
                                                 size="sm"
                                                 className="h-8 gap-1.5 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                onClick={() => onDelete(employee)}
+                                                onClick={() =>
+                                                    onDelete(employee)
+                                                }
                                             >
                                                 <Trash2 className="h-3.5 w-3.5" />
                                                 <span className="sr-only sm:not-sr-only">

@@ -43,9 +43,7 @@ export default function StockReport({
             '/dashboard/reports/stock',
             {
                 warehouse_id:
-                    selectedWarehouse !== 'all'
-                        ? selectedWarehouse
-                        : undefined,
+                    selectedWarehouse !== 'all' ? selectedWarehouse : undefined,
                 start_date: startDate,
                 end_date: endDate,
             },

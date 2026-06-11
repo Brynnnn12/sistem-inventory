@@ -49,18 +49,13 @@ test('admin bisa melihat daftar gudang', function () {
         );
 });
 
-test('viewer bisa melihat daftar gudang', function () {
+test('viewer tidak bisa melihat daftar gudang', function () {
     $viewer = createViewer();
     \App\Models\Warehouse::factory()->count(2)->create();
 
     $response = actingAs($viewer)->get(route('warehouses.index'));
 
-    $response->assertOk()
-        ->assertInertia(
-            fn($page) => $page
-                ->component('warehouses/index')
-                ->has('warehouses.data', 2)
-        );
+    $response->assertForbidden();
 });
 
 

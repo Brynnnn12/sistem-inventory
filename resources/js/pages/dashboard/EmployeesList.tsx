@@ -71,7 +71,6 @@ export function EmployeesList({ employees }: EmployeesListProps) {
                                     </div>
                                 </div>
                                 <div className="text-right">
-
                                     <div className="mt-1 text-xs text-muted-foreground">
                                         {formatDate(employee.created_at)}
                                     </div>
