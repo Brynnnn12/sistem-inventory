@@ -11,6 +11,7 @@ interface WarehouseUserToolbarProps {
     onSwapClick: () => void;
     onClearFilters: () => void;
     selectedCount: number;
+    canSwap: boolean;
     isSearching: boolean;
     hasActiveFilters: boolean;
 }
@@ -23,6 +24,7 @@ export function WarehouseUserToolbar({
     onSwapClick,
     onClearFilters,
     selectedCount,
+    canSwap,
     isSearching,
     hasActiveFilters,
 }: WarehouseUserToolbarProps) {
@@ -46,7 +48,7 @@ export function WarehouseUserToolbar({
                 <div className="flex gap-2">
                     {selectedCount > 0 && isSuperAdmin && (
                         <>
-                            {selectedCount === 2 && (
+                            {canSwap && (
                                 <Button variant="outline" onClick={onSwapClick}>
                                     <ArrowLeftRight className="mr-2 h-4 w-4" />
                                     Tukar

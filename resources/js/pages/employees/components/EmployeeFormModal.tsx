@@ -118,54 +118,56 @@ export function EmployeeFormModal({
                             </div>
                             <Separator />
 
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor={`${isEditing ? 'edit' : 'create'}-name`}
-                                >
-                                    Nama Lengkap{' '}
-                                    <span className="text-destructive">*</span>
-                                </Label>
-                                <div className="relative">
-                                    <User className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                    <Input
-                                        id={`${isEditing ? 'edit' : 'create'}-name`}
-                                        value={form.data.name}
-                                        onChange={(e) =>
-                                            form.setData('name', e.target.value)
-                                        }
-                                        placeholder="Contoh: John Doe, Ahmad Suharto"
-                                        required
-                                        className="pl-9"
-                                    />
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor={`${isEditing ? 'edit' : 'create'}-name`}
+                                    >
+                                        Nama Lengkap{' '}
+                                        <span className="text-destructive">*</span>
+                                    </Label>
+                                    <div className="relative">
+                                        <User className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                        <Input
+                                            id={`${isEditing ? 'edit' : 'create'}-name`}
+                                            value={form.data.name}
+                                            onChange={(e) =>
+                                                form.setData('name', e.target.value)
+                                            }
+                                            placeholder="Contoh: John Doe, Ahmad Suharto"
+                                            required
+                                            className="pl-9"
+                                        />
+                                    </div>
+                                    <InputError message={form.errors.name} />
                                 </div>
-                                <InputError message={form.errors.name} />
-                            </div>
 
-                            <div className="space-y-2">
-                                <Label
-                                    htmlFor={`${isEditing ? 'edit' : 'create'}-email`}
-                                >
-                                    Alamat Email{' '}
-                                    <span className="text-destructive">*</span>
-                                </Label>
-                                <div className="relative">
-                                    <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                    <Input
-                                        id={`${isEditing ? 'edit' : 'create'}-email`}
-                                        type="email"
-                                        value={form.data.email}
-                                        onChange={(e) =>
-                                            form.setData(
-                                                'email',
-                                                e.target.value,
-                                            )
-                                        }
-                                        placeholder="contoh@email.com"
-                                        required
-                                        className="pl-9"
-                                    />
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor={`${isEditing ? 'edit' : 'create'}-email`}
+                                    >
+                                        Alamat Email{' '}
+                                        <span className="text-destructive">*</span>
+                                    </Label>
+                                    <div className="relative">
+                                        <Mail className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                        <Input
+                                            id={`${isEditing ? 'edit' : 'create'}-email`}
+                                            type="email"
+                                            value={form.data.email}
+                                            onChange={(e) =>
+                                                form.setData(
+                                                    'email',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="contoh@email.com"
+                                            required
+                                            className="pl-9"
+                                        />
+                                    </div>
+                                    <InputError message={form.errors.email} />
                                 </div>
-                                <InputError message={form.errors.email} />
                             </div>
 
                             <div className="space-y-2">
@@ -250,69 +252,71 @@ export function EmployeeFormModal({
                                 </div>
                                 <Separator />
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="create-password">
-                                        Password{' '}
-                                        <span className="text-destructive">
-                                            *
-                                        </span>
-                                    </Label>
-                                    <div className="relative">
-                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                        <Input
-                                            id="create-password"
-                                            type="password"
-                                            value={form.data.password}
-                                            onChange={(e) =>
-                                                form.setData(
-                                                    'password',
-                                                    e.target.value,
-                                                )
-                                            }
-                                            placeholder="••••••••"
-                                            required
-                                            className="pl-9"
+                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="create-password">
+                                            Password{' '}
+                                            <span className="text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+                                        <div className="relative">
+                                            <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                            <Input
+                                                id="create-password"
+                                                type="password"
+                                                value={form.data.password}
+                                                onChange={(e) =>
+                                                    form.setData(
+                                                        'password',
+                                                        e.target.value,
+                                                    )
+                                                }
+                                                placeholder="••••••••"
+                                                required
+                                                className="pl-9"
+                                            />
+                                        </div>
+                                        <InputError
+                                            message={form.errors.password}
                                         />
+                                        <p className="text-xs text-muted-foreground">
+                                            💡 Must be at least 8 characters long
+                                        </p>
                                     </div>
-                                    <InputError
-                                        message={form.errors.password}
-                                    />
-                                    <p className="text-xs text-muted-foreground">
-                                        💡 Must be at least 8 characters long
-                                    </p>
-                                </div>
 
-                                <div className="space-y-2">
-                                    <Label htmlFor="create-password-confirmation">
-                                        Confirm Password{' '}
-                                        <span className="text-destructive">
-                                            *
-                                        </span>
-                                    </Label>
-                                    <div className="relative">
-                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                        <Input
-                                            id="create-password-confirmation"
-                                            type="password"
-                                            value={
-                                                form.data.password_confirmation
+                                    <div className="space-y-2">
+                                        <Label htmlFor="create-password-confirmation">
+                                            Confirm Password{' '}
+                                            <span className="text-destructive">
+                                                *
+                                            </span>
+                                        </Label>
+                                        <div className="relative">
+                                            <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                            <Input
+                                                id="create-password-confirmation"
+                                                type="password"
+                                                value={
+                                                    form.data.password_confirmation
+                                                }
+                                                onChange={(e) =>
+                                                    form.setData(
+                                                        'password_confirmation',
+                                                        e.target.value,
+                                                    )
+                                                }
+                                                placeholder="••••••••"
+                                                required
+                                                className="pl-9"
+                                            />
+                                        </div>
+                                        <InputError
+                                            message={
+                                                form.errors.password_confirmation
                                             }
-                                            onChange={(e) =>
-                                                form.setData(
-                                                    'password_confirmation',
-                                                    e.target.value,
-                                                )
-                                            }
-                                            placeholder="••••••••"
-                                            required
-                                            className="pl-9"
                                         />
                                     </div>
-                                    <InputError
-                                        message={
-                                            form.errors.password_confirmation
-                                        }
-                                    />
                                 </div>
                             </div>
                         )}

@@ -1,4 +1,4 @@
-import { Eye, CheckCircle, XCircle } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, FolderOpen } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,9 +31,18 @@ export function MutationTable({
 
     if (mutations.length === 0) {
         return (
-            <div className="flex h-32 items-center justify-center">
-                <div className="text-sm text-muted-foreground">
-                    Tidak ada data mutasi
+            <div className="rounded-lg border border-dashed bg-card">
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full bg-muted">
+                        <FolderOpen className="h-10 w-10 text-muted-foreground" />
+                    </div>
+                    <h3 className="mt-4 text-lg font-semibold">
+                        Belum Ada Transaksi Barang Mutasi
+                    </h3>
+                    <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                        Mulai dengan menambahkan transaksi Barang Mutasi untuk
+                        mencatat perpindahan barang antar gudang.
+                    </p>
                 </div>
             </div>
         );

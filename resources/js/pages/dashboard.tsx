@@ -21,6 +21,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
+import { useAuth } from '@/hooks/use-auth';
 import { EmployeesList } from '@/pages/dashboard/EmployeesList';
 import MonthlyChart from '@/pages/dashboard/MonthlyChart';
 import { ProductsList } from '@/pages/dashboard/ProductsList';
@@ -45,6 +46,8 @@ export default function Dashboard({
     stockAlerts,
     monthlyChart,
 }: DashboardProps) {
+    const { isSuperAdmin } = useAuth();
+
     const getTransactionIcon = (type: string) => {
         switch (type) {
             case 'inbound':
@@ -318,7 +321,9 @@ export default function Dashboard({
                 {/* Products and Employees Grid */}
                 <div className="grid gap-6 lg:grid-cols-2">
                     <ProductsList products={products} />
-                    <EmployeesList employees={employees} />
+                    {isSuperAdmin && (
+                        <EmployeesList employees={employees} />
+                    )}
                 </div>
             </div>
         </AppLayout>

@@ -42,10 +42,10 @@ export function OpnameTable({ opnames, onShow, onApprove }: OpnameTableProps) {
                             Warehouse
                         </TableHead>
                         <TableHead className="font-semibold">
-                            System Qty
+                            Stok Sistem
                         </TableHead>
                         <TableHead className="font-semibold">
-                            Physical Qty
+                            Stok Fisik
                         </TableHead>
                         <TableHead className="font-semibold">Selisih</TableHead>
                         <TableHead className="font-semibold">Status</TableHead>
@@ -106,7 +106,7 @@ export function OpnameTable({ opnames, onShow, onApprove }: OpnameTableProps) {
                                     }
                                 >
                                     {opname.status === 'approved'
-                                        ? 'Approved'
+                                        ? 'Disetujui'
                                         : 'Draft'}
                                 </Badge>
                             </TableCell>
@@ -132,7 +132,7 @@ export function OpnameTable({ opnames, onShow, onApprove }: OpnameTableProps) {
                                         >
                                             <CheckCircle className="h-3.5 w-3.5" />
                                             <span className="sr-only sm:not-sr-only">
-                                                Approve
+                                                Setujui
                                             </span>
                                         </Button>
                                     )}

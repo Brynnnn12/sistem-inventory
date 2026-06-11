@@ -23,6 +23,14 @@ class DashboardController extends Controller
         $products = \App\Models\Product::query()
             ->active()
             ->with(['category:id,name'])
+            ->when($warehouseIds, function ($query) use ($warehouseIds) {
+                $query->whereIn('id', function ($sub) use ($warehouseIds) {
+                    $sub->select('product_id')
+                        ->from('stocks')
+                        ->whereIn('warehouse_id', $warehouseIds)
+                        ->distinct();
+                });
+            })
             ->latest()
             ->take(5)
             ->get()
@@ -42,7 +50,11 @@ class DashboardController extends Controller
         // Get latest 5 employees
         $employees = \App\Models\User::query()
             ->select('id', 'name', 'email', 'created_at')
-            ->where('is_active', true)
+            ->when($warehouseIds, function ($query) use ($warehouseIds) {
+                $query->whereHas('warehouses', function ($q) use ($warehouseIds) {
+                    $q->whereIn('warehouses.id', $warehouseIds);
+                });
+            })
             ->latest()
             ->take(5)
             ->get()
@@ -81,7 +93,16 @@ class DashboardController extends Controller
 
     private function getStockSummary(?array $warehouseIds = null): array
     {
-        $totalProducts = \App\Models\Product::active()->count();
+        $totalProductsQuery = \App\Models\Product::active();
+        if ($warehouseIds) {
+            $totalProductsQuery->whereIn('id', function ($sub) use ($warehouseIds) {
+                $sub->select('product_id')
+                    ->from('stocks')
+                    ->whereIn('warehouse_id', $warehouseIds)
+                    ->distinct();
+            });
+        }
+        $totalProducts = $totalProductsQuery->count();
         $totalWarehouses = $warehouseIds ? count($warehouseIds) : \App\Models\Warehouse::count();
         $totalStockValueQuery = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)

@@ -38,7 +38,13 @@ import type { InboundFormModalProps } from '@/types/models/inbound';
 interface InboundFormModalPropsExtended extends InboundFormModalProps {
     warehouses: Array<{ id: number; name: string }>;
     suppliers: Array<{ id: number; name: string }>;
-    products: Array<{ id: number; name: string; cost?: number }>;
+    products: Array<{
+        id: number;
+        name: string;
+        cost?: number;
+        unit?: string;
+        max_stock?: number;
+    }>;
     canSelectWarehouse: boolean;
 }
 
@@ -369,6 +375,27 @@ export function InboundFormModal({
                                         {errors.quantity}
                                     </p>
                                 )}
+                                {(() => {
+                                    const product = products.find(
+                                        (p) =>
+                                            p.id.toString() ===
+                                            data.product_id,
+                                    );
+                                    if (
+                                        product &&
+                                        product.max_stock &&
+                                        product.max_stock > 0
+                                    ) {
+                                        return (
+                                            <p className="text-xs text-muted-foreground">
+                                                Stok maksimum:{' '}
+                                                {product.max_stock}{' '}
+                                                {product.unit || 'unit'}
+                                            </p>
+                                        );
+                                    }
+                                    return null;
+                                })()}
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">

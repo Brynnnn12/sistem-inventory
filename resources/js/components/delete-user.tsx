@@ -15,9 +15,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function DeleteUser() {
+    const { isSuperAdmin } = useAuth();
     const passwordInput = useRef<HTMLInputElement>(null);
+
+    if (!isSuperAdmin) return null;
 
     return (
         <div className="space-y-6">

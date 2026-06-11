@@ -26,7 +26,33 @@ class StoreInboundRequest extends FormRequest
             'warehouse_id' => 'required|exists:warehouses,id',
             'supplier_id' => 'required|exists:suppliers,id',
             'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|numeric|min:0.01',
+            'quantity' => [
+                'required',
+                'numeric',
+                'min:0.01',
+                function ($attribute, $value, $fail) {
+                    $productId = $this->input('product_id');
+                    $warehouseId = $this->input('warehouse_id');
+                    if (! $productId || ! $warehouseId) {
+                        return;
+                    }
+
+                    $product = \App\Models\Product::find($productId);
+                    if (! $product || $product->max_stock <= 0) {
+                        return;
+                    }
+
+                    $currentStock = (float) (\App\Models\Stock::where('product_id', $productId)
+                        ->where('warehouse_id', $warehouseId)
+                        ->value('quantity') ?? 0);
+
+                    $newTotal = $currentStock + (float) $value;
+
+                    if ($newTotal > $product->max_stock) {
+                        $fail("Jumlah melebihi stok maksimum ({$product->max_stock} {$product->unit}). Stok saat ini: {$currentStock} {$product->unit}.");
+                    }
+                },
+            ],
             'unit_price' => 'nullable|numeric|min:0',
             'received_date' => 'required|date|before_or_equal:today',
             'notes' => 'nullable|string|max:500',

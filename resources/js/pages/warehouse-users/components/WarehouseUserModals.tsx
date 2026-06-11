@@ -25,12 +25,14 @@ const DeleteConfirmDialog = ({
     description,
     onConfirm,
     onClose,
+    confirmText = 'Hapus',
 }: {
     open: boolean;
     title: string;
     description: string;
     onConfirm: () => void;
     onClose: () => void;
+    confirmText?: string;
 }) => (
     <AlertDialog open={open} onOpenChange={onClose}>
         <AlertDialogContent>
@@ -44,7 +46,7 @@ const DeleteConfirmDialog = ({
                     onClick={onConfirm}
                     className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                 >
-                    Hapus
+                    {confirmText}
                 </AlertDialogAction>
             </AlertDialogFooter>
         </AlertDialogContent>
@@ -96,6 +98,7 @@ export function WarehouseUserModals({
                 description="Apakah Anda yakin ingin menukar gudang antara kedua pengguna yang dipilih? Tindakan ini akan menukar assignment gudang mereka."
                 onConfirm={onConfirmSwap}
                 onClose={() => onCloseModal('swap')}
+                confirmText="Tukar"
             />
 
             <DeleteConfirmDialog

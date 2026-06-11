@@ -102,6 +102,13 @@ export default function Index({
         );
     };
 
+    const selectedItems = warehouseUsers.data.filter((wu) =>
+        selectedIds.includes(wu.id),
+    );
+    const canSwap =
+        selectedItems.length === 2 &&
+        selectedItems[0].warehouse_id !== selectedItems[1].warehouse_id;
+
     const clearFilters = () => {
         clearSearch();
     };
@@ -118,6 +125,7 @@ export default function Index({
                     onSwapClick={() => openModal('swap')}
                     onClearFilters={clearFilters}
                     selectedCount={selectedCount}
+                    canSwap={canSwap}
                     isSearching={isSearching}
                     hasActiveFilters={hasActiveSearch}
                 />

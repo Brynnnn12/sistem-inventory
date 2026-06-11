@@ -71,18 +71,7 @@ export function EmployeesList({ employees }: EmployeesListProps) {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <Badge
-                                        variant={
-                                            employee.is_active
-                                                ? 'default'
-                                                : 'secondary'
-                                        }
-                                        className="text-xs"
-                                    >
-                                        {employee.is_active
-                                            ? 'Aktif'
-                                            : 'Tidak Aktif'}
-                                    </Badge>
+
                                     <div className="mt-1 text-xs text-muted-foreground">
                                         {formatDate(employee.created_at)}
                                     </div>

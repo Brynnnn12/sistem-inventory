@@ -37,7 +37,13 @@ class WarehouseUserController extends Controller
             ->withQueryString();
 
         $warehouses = Warehouse::select('id', 'name')->whereNull('deleted_at')->get();
-        $users = User::role('admin')->select('id', 'name', 'email')->whereNull('deleted_at')->get();
+
+        $assignedUserIds = WarehouseUser::whereNull('deleted_at')->pluck('user_id');
+        $users = User::role('admin')
+            ->select('id', 'name', 'email')
+            ->whereNull('deleted_at')
+            ->whereNotIn('id', $assignedUserIds)
+            ->get();
 
         return Inertia::render('warehouse-users/index', [
             'warehouseUsers' => $warehouseUsers,

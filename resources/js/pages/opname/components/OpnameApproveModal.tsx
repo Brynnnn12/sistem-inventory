@@ -42,25 +42,25 @@ export function OpnameApproveModal({
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
                         <AlertTriangle className="h-5 w-5 text-amber-500" />
-                        Approve Opname
+                        Setujui Opname
                     </DialogTitle>
                     <DialogDescription>
-                        Are you sure you want to approve opname{' '}
-                        <strong>{opname.code}</strong>? This action will adjust
-                        stock levels based on the opname results and cannot be
-                        undone.
+                        Apakah Anda yakin ingin menyetujui opname{' '}
+                        <strong>{opname.code}</strong>? Tindakan ini akan
+                        menyesuaikan stok berdasarkan hasil opname dan tidak
+                        dapat dibatalkan.
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="py-4">
                     <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                            <span className="text-muted-foreground">Code:</span>
+                            <span className="text-muted-foreground">Kode:</span>
                             <span className="font-medium">{opname.code}</span>
                         </div>
                         <div className="flex justify-between">
                             <span className="text-muted-foreground">
-                                Warehouse:
+                                Gudang:
                             </span>
                             <span className="font-medium">
                                 {opname.warehouse?.name}
@@ -68,7 +68,7 @@ export function OpnameApproveModal({
                         </div>
                         <div className="flex justify-between">
                             <span className="text-muted-foreground">
-                                Product:
+                                Produk:
                             </span>
                             <span className="font-medium">
                                 {opname.product?.name}
@@ -79,11 +79,11 @@ export function OpnameApproveModal({
 
                 <DialogFooter>
                     <Button variant="outline" onClick={onClose}>
-                        Cancel
+                        Batal
                     </Button>
                     <Button onClick={handleApprove} className="gap-2">
                         <CheckCircle className="h-4 w-4" />
-                        Approve Opname
+                        Setujui Opname
                     </Button>
                 </DialogFooter>
             </DialogContent>
