@@ -1,4 +1,4 @@
-import { Eye, CheckCircle, XCircle, FolderOpen } from 'lucide-react';
+import { Eye, Printer, CheckCircle, XCircle, FolderOpen } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,6 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { formatQuantity, formatDate } from '@/lib/utils';
+import { download as proofDocDownload } from '@/routes/proof-documents';
 import type { MutationTableProps } from '@/types/models/mutation';
 
 export function MutationTable({
@@ -128,6 +129,22 @@ export function MutationTable({
                             </TableCell>
                             <TableCell>
                                 <div className="flex gap-1">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() =>
+                                            window.open(
+                                                proofDocDownload({
+                                                    type: 'mutation',
+                                                    id: mutation.id,
+                                                }).url,
+                                                '_blank',
+                                            )
+                                        }
+                                        className="h-8 w-8 p-0"
+                                    >
+                                        <Printer className="h-4 w-4" />
+                                    </Button>
                                     <Button
                                         variant="ghost"
                                         size="sm"

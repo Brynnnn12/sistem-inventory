@@ -1,8 +1,10 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
     DialogDescription,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
@@ -126,6 +128,11 @@ export function OutboundShowModal({
                         </div>
                     </div>
                 </div>
+                <DialogFooter>
+                    <Button variant="outline" onClick={onClose}>
+                        Tutup
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

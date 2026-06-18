@@ -1,4 +1,4 @@
-import { Eye, FolderOpen } from 'lucide-react';
+import { Eye, FolderOpen, Printer } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,6 +10,7 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { formatQuantity, formatDate } from '@/lib/utils';
+import { download as proofDocDownload } from '@/routes/proof-documents';
 import type { OutboundTableProps } from '@/types/models/outbound';
 
 export function OutboundTable({ outbounds, onShow }: OutboundTableProps) {
@@ -89,6 +90,22 @@ export function OutboundTable({ outbounds, onShow }: OutboundTableProps) {
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() =>
+                                            window.open(
+                                                proofDocDownload({
+                                                    type: 'outbound',
+                                                    id: outbound.id,
+                                                }).url,
+                                                '_blank',
+                                            )
+                                        }
+                                        className="h-8 w-8 p-0"
+                                    >
+                                        <Printer className="h-3.5 w-3.5" />
+                                    </Button>
                                     <Button
                                         variant="ghost"
                                         size="sm"

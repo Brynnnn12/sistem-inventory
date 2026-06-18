@@ -1,7 +1,9 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
@@ -31,7 +33,7 @@ export function MutationShowModal({
                     <DialogTitle>Detail Mutasi - {mutation.code}</DialogTitle>
                 </DialogHeader>
 
-                <div className="max-h-[80vh] overflow-y-auto pr-4">
+                <div className="max-h-[68vh] overflow-y-auto pr-4">
                     <div className="space-y-6">
                         {/* Mutation Information */}
                         <div className="grid grid-cols-2 gap-4">
@@ -255,6 +257,12 @@ export function MutationShowModal({
                             )}
                     </div>
                 </div>
+
+                <DialogFooter>
+                    <Button variant="outline" onClick={onClose}>
+                        Tutup
+                    </Button>
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

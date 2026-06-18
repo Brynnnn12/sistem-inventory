@@ -47,9 +47,12 @@ class DashboardController extends Controller
                 ];
             });
 
-        // Get latest 5 employees
+        // Get latest 5 employees (excluding superadmin)
         $employees = \App\Models\User::query()
             ->select('id', 'name', 'email', 'created_at')
+            ->whereDoesntHave('roles', function ($query) {
+                $query->where('name', 'super-admin');
+            })
             ->when($warehouseIds, function ($query) use ($warehouseIds) {
                 $query->whereHas('warehouses', function ($q) use ($warehouseIds) {
                     $q->whereIn('warehouses.id', $warehouseIds);

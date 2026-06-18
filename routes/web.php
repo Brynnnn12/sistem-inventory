@@ -133,6 +133,12 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::get('/transactions/export', [\App\Http\Controllers\ReportController::class, 'exportTransactions'])->name('transactions.export');
         });
 
+        // Proof Documents
+        Route::get('proof-documents/{type}/{id}/download', [\App\Http\Controllers\ProofDocumentController::class, 'download'])
+            ->name('proof-documents.download')
+            ->whereIn('type', ['inbound', 'outbound', 'mutation'])
+            ->whereNumber('id');
+
     });
 
 });
