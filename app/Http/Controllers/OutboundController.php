@@ -20,7 +20,8 @@ class OutboundController extends Controller
 {
     public function __construct(
         private readonly CreateOutboundTransactionAction $createOutboundAction,
-    ) {}
+    ) {
+    }
 
     public function index(Request $request): Response
     {
@@ -33,8 +34,8 @@ class OutboundController extends Controller
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($searchQuery) use ($request) {
                     $searchQuery->where('code', 'like', "%{$request->search}%")
-                        ->orWhereHas('customer', fn ($cq) => $cq->where('name', 'like', "%{$request->search}%"))
-                        ->orWhereHas('product', fn ($pq) => $pq->where('name', 'like', "%{$request->search}%"));
+                        ->orWhereHas('customer', fn($cq) => $cq->where('name', 'like', "%{$request->search}%"))
+                        ->orWhereHas('product', fn($pq) => $pq->where('name', 'like', "%{$request->search}%"));
                 });
             })
             ->when($request->warehouse_id, function ($q) use ($request) {
@@ -43,7 +44,7 @@ class OutboundController extends Controller
             ->when($request->start_date && $request->end_date, function ($q) use ($request) {
                 $q->whereBetween('sale_date', [$request->start_date, $request->end_date]);
             })
-            ->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
+            ->when(!$user->hasRole('super-admin'), function ($q) use ($user) {
                 $warehouseIds = $user->warehouses()->pluck('warehouses.id');
                 $q->whereIn('warehouse_id', $warehouseIds);
             })
@@ -59,11 +60,11 @@ class OutboundController extends Controller
         $products = Product::active()->get(['id', 'name', 'price', 'unit']);
 
         $stocks = \App\Models\Stock::with(['product', 'warehouse'])
-            ->whereHas('warehouse', function ($q) use ($warehouses) {
-                $q->whereIn('id', $warehouses->pluck('id'));
-            })
+            ->whereIn('warehouse_id', $warehouses->pluck('id'))
             ->where('quantity', '>', 0)
             ->get();
+
+
 
         return Inertia::render('outbound/index', [
             'outbounds' => $outbounds,

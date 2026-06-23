@@ -97,10 +97,10 @@ export function MutationCreateModal({
         const stockedProductIds = stocks
             .filter(
                 (stock) =>
-                    stock.warehouse_id.toString() === data.from_warehouse &&
-                    stock.quantity > 0,
+                    String(stock.warehouse_id) === data.from_warehouse &&
+                    Number(stock.quantity) > 0,
             )
-            .map((stock) => stock.product_id);
+            .map((stock) => Number(stock.product_id));
 
         // Return products that have stock in the selected from warehouse
         return products.filter((product) =>

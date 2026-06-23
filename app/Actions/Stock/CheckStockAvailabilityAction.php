@@ -68,7 +68,6 @@ class CheckStockAvailabilityAction
         return [
             'available' => $stock->available_qty,
             'current' => $stock->quantity,
-            'reserved' => $stock->reserved_qty,
             'is_available' => true,
         ];
     }

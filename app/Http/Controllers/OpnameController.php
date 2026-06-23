@@ -20,7 +20,8 @@ class OpnameController extends Controller
 {
     public function __construct(
         private readonly ApproveOpnameAction $approveOpnameAction,
-    ) {}
+    ) {
+    }
 
     public function index(Request $request): Response
     {
@@ -33,7 +34,7 @@ class OpnameController extends Controller
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($searchQuery) use ($request) {
                     $searchQuery->where('code', 'like', "%{$request->search}%")
-                        ->orWhereHas('product', fn ($pq) => $pq->where('name', 'like', "%{$request->search}%"));
+                        ->orWhereHas('product', fn($pq) => $pq->where('name', 'like', "%{$request->search}%"));
                 });
             })
             ->when($request->warehouse_id, function ($q) use ($request) {
@@ -42,7 +43,7 @@ class OpnameController extends Controller
             ->when($request->difference_type, function ($q) use ($request) {
                 $q->where('difference_type', $request->difference_type);
             })
-            ->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
+            ->when(!$user->hasRole('super-admin'), function ($q) use ($user) {
                 $warehouseIds = $user->warehouses()->pluck('warehouses.id');
                 $q->whereIn('warehouse_id', $warehouseIds);
             })
@@ -56,13 +57,18 @@ class OpnameController extends Controller
 
         $products = Product::active()->get();
 
-        // Get stocks for product filtering based on accessible warehouses
         $stocks = \App\Models\Stock::with(['product', 'warehouse'])
-            ->whereHas('warehouse', function ($q) use ($warehouses) {
-                $q->whereIn('id', $warehouses->pluck('id'));
-            })
-            ->where('quantity', '>', 0) // Only include products with stock > 0 for opname
-            ->get();
+            ->whereIn('warehouse_id', $warehouses->pluck('id'))
+            ->get([
+                'id',
+                'warehouse_id',
+                'product_id',
+                'quantity',
+                'available_qty',
+                'last_updated',
+                'updated_by',
+            ]);
+
 
         return Inertia::render('opname/index', [
             'opnames' => $opnames,

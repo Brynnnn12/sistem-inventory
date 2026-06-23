@@ -79,20 +79,18 @@ export function OpnameFormModal({
         [data.product_id, products],
     );
 
-    // Filter products based on selected warehouse and available stock
+    // Filter products based on selected warehouse (include 0 stock for opname)
     const availableProducts = useMemo(() => {
         if (!data.warehouse_id) {
-            return products; // Show all products if no warehouse selected
+            return products;
         }
 
-        // Get product IDs that exist in the selected warehouse (including 0 stock for opname)
         const stockedProductIds = stocks
             .filter(
-                (stock) => stock.warehouse_id.toString() === data.warehouse_id,
+                (stock) => String(stock.warehouse_id) === data.warehouse_id,
             )
-            .map((stock) => stock.product_id);
+            .map((stock) => Number(stock.product_id));
 
-        // Return products that exist in the selected warehouse
         return products.filter((product) =>
             stockedProductIds.includes(product.id),
         );

@@ -47,7 +47,6 @@ class UpdateStockAction
                 ],
                 [
                     'quantity' => 0,
-                    'reserved_qty' => 0,
                     'last_updated' => now(),
                     'updated_by' => $updatedBy,
                 ]

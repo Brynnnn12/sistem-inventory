@@ -100,10 +100,10 @@ export function OutboundFormModal({
         const stockedProductIds = stocks
             .filter(
                 (stock) =>
-                    stock.warehouse_id.toString() === data.warehouse_id &&
-                    stock.quantity > 0,
+                    String(stock.warehouse_id) === data.warehouse_id &&
+                    Number(stock.quantity) > 0,
             )
-            .map((stock) => stock.product_id);
+            .map((stock) => Number(stock.product_id));
 
         // Return products that have stock in the selected warehouse
         return products.filter((product) =>
@@ -138,10 +138,10 @@ export function OutboundFormModal({
         if (!data.warehouse_id || !data.product_id) return null;
         const stock = stocks.find(
             (s) =>
-                s.warehouse_id.toString() === data.warehouse_id &&
-                s.product_id.toString() === data.product_id,
+                String(s.warehouse_id) === data.warehouse_id &&
+                String(s.product_id) === data.product_id,
         );
-        return stock ? stock.quantity : 0;
+        return stock ? Number(stock.quantity) : 0;
     }, [data.warehouse_id, data.product_id, stocks]);
 
     // Live preview for total (quantity * unit_price) — keeps unit_price as user input

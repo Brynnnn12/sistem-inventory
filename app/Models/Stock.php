@@ -25,6 +25,8 @@ class Stock extends Model
     protected function casts(): array
     {
         return [
+            'warehouse_id' => 'integer',
+            'product_id' => 'integer',
             'quantity' => 'decimal:2',
             'available_qty' => 'decimal:2',
             'last_updated' => 'datetime',
