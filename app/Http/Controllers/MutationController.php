@@ -8,7 +8,6 @@ use App\Http\Requests\Transaction\StoreMutationRequest;
 use App\Models\Product;
 use App\Models\StockMutation;
 use App\Models\Warehouse;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

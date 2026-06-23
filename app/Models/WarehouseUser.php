@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WarehouseUser extends Pivot
 {
-
     use HasFactory, SoftDeletes;
 
     protected $table = 'warehouse_users';

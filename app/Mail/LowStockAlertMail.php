@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -27,7 +26,7 @@ class LowStockAlertMail extends Mailable
     public function envelope(): Envelope
     {
         $subject = $this->scope === 'warehouse'
-            ? 'Peringatan Stok Rendah - ' . $this->stocks->first()->warehouse->name
+            ? 'Peringatan Stok Rendah - '.$this->stocks->first()->warehouse->name
             : 'Peringatan Stok Rendah - Semua Gudang';
 
         return new Envelope(

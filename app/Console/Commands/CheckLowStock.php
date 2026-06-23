@@ -44,6 +44,7 @@ class CheckLowStock extends Command
 
         if ($lowStocks->isEmpty()) {
             $this->info('Tidak ada stok rendah ditemukan.');
+
             return;
         }
 

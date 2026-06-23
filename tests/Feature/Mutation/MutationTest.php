@@ -3,12 +3,10 @@
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockMutation;
-use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseUser;
+
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
 
 // INDEX
 

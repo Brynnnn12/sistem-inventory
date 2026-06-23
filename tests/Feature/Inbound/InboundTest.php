@@ -3,14 +3,10 @@
 use App\Models\InboundTransaction;
 use App\Models\Product;
 use App\Models\Supplier;
-use App\Models\Stock;
-use App\Models\StockHistory;
-use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseUser;
+
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
 
 // INDEX
 

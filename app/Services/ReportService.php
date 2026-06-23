@@ -303,77 +303,77 @@ class ReportService
     }
 
     /**
- * Export transaction report (PDF / Excel).
- */
-public function exportTransactionReport($type, $warehouseId, $startDate, $endDate, $format, ?array $warehouseIds = null)
-{
-    // Fix jika frontend kirim "all" atau kosong
-    if ($warehouseId === 'all' || $warehouseId === '' || $warehouseId == 0) {
-        $warehouseId = null;
-    }
+     * Export transaction report (PDF / Excel).
+     */
+    public function exportTransactionReport($type, $warehouseId, $startDate, $endDate, $format, ?array $warehouseIds = null)
+    {
+        // Fix jika frontend kirim "all" atau kosong
+        if ($warehouseId === 'all' || $warehouseId === '' || $warehouseId == 0) {
+            $warehouseId = null;
+        }
 
-    // Pastikan integer jika ada isi
-    if ($warehouseId !== null) {
-        $warehouseId = (int) $warehouseId;
-    }
+        // Pastikan integer jika ada isi
+        if ($warehouseId !== null) {
+            $warehouseId = (int) $warehouseId;
+        }
 
-    if ($format === 'excel') {
-        $filename =
-            'transaction_report_' .
-            $type . '_' .
-            str_replace('-', '_', $startDate) .
-            '_to_' .
-            str_replace('-', '_', $endDate) .
-            '.xlsx';
+        if ($format === 'excel') {
+            $filename =
+                'transaction_report_'.
+                $type.'_'.
+                str_replace('-', '_', $startDate).
+                '_to_'.
+                str_replace('-', '_', $endDate).
+                '.xlsx';
 
-        return Excel::download(
-            new TransactionReportExport(
+            return Excel::download(
+                new TransactionReportExport(
+                    $type,
+                    $warehouseId,
+                    $startDate,
+                    $endDate,
+                    $warehouseIds
+                ),
+                $filename
+            );
+        }
+
+        if ($format === 'pdf') {
+            $transactionReport = $this->getTransactionReport(
                 $type,
                 $warehouseId,
                 $startDate,
                 $endDate,
                 $warehouseIds
-            ),
-            $filename
-        );
-    }
+            );
 
-    if ($format === 'pdf') {
-        $transactionReport = $this->getTransactionReport(
-            $type,
-            $warehouseId,
-            $startDate,
-            $endDate,
-            $warehouseIds
-        );
+            $warehouse = $warehouseId
+                ? Warehouse::find($warehouseId)
+                : null;
 
-        $warehouse = $warehouseId
-            ? Warehouse::find($warehouseId)
-            : null;
+            $filename =
+                'transaction_report_'.
+                $type.'_'.
+                str_replace('-', '_', $startDate).
+                '_to_'.
+                str_replace('-', '_', $endDate).
+                '.pdf';
 
-        $filename =
-            'transaction_report_' .
-            $type . '_' .
-            str_replace('-', '_', $startDate) .
-            '_to_' .
-            str_replace('-', '_', $endDate) .
-            '.pdf';
-
-        return Pdf::view(
-            'reports.transactions',
-            compact(
-                'transactionReport',
-                'warehouse',
-                'warehouseId',
-                'type'
+            return Pdf::view(
+                'reports.transactions',
+                compact(
+                    'transactionReport',
+                    'warehouse',
+                    'warehouseId',
+                    'type'
+                )
             )
-        )
-            ->format('a4')
-            ->download($filename);
-    }
+                ->format('a4')
+                ->download($filename);
+        }
 
-    return response()->json([
-        'message' => 'Unsupported format'
-    ], 400);
-}
+        return response()->json([
+            'message' => 'Unsupported format',
+        ], 400);
+    }
 }

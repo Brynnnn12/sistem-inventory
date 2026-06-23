@@ -43,6 +43,5 @@ class UserSeeder extends Seeder
             'phone_number' => '6285150704897',
         ])->create()->assignRole('viewer');
 
-
     }
 }

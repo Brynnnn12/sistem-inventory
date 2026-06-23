@@ -29,8 +29,12 @@ class UpdateProductRequest extends FormRequest
      */
     private function formatNumber($value): mixed
     {
-        if (is_null($value) || $value === '') return null;
-        if (is_numeric($value)) return $value;
+        if (is_null($value) || $value === '') {
+            return null;
+        }
+        if (is_numeric($value)) {
+            return $value;
+        }
 
         // Menghapus titik ribuan, mengubah koma menjadi titik desimal
         // Contoh: "1.250.000,00" -> "1250000.00"
@@ -41,14 +45,14 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'category_id' => 'sometimes|required|integer|exists:categories,id',
-            'name'        => 'sometimes|required|string|min:3|max:255|regex:/^[a-zA-Z0-9\s\-\.\(\)]+$/',
-            'unit'        => 'sometimes|required|string|max:50',
-            'min_stock'   => 'nullable|numeric|min:0',
-            'max_stock'   => 'nullable|numeric|min:0',
-            'price'       => 'nullable|numeric|min:0',
-            'cost'        => 'nullable|numeric|min:0|lte:price',
+            'name' => 'sometimes|required|string|min:3|max:255|regex:/^[a-zA-Z0-9\s\-\.\(\)]+$/',
+            'unit' => 'sometimes|required|string|max:50',
+            'min_stock' => 'nullable|numeric|min:0',
+            'max_stock' => 'nullable|numeric|min:0',
+            'price' => 'nullable|numeric|min:0',
+            'cost' => 'nullable|numeric|min:0|lte:price',
             'description' => 'nullable|string|max:1000',
-            'is_active'   => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 

@@ -24,7 +24,7 @@ class OutboundTransactionFactory extends Factory
         $unitPrice = $this->faker->randomFloat(2, 5000, 100000);
 
         return [
-            'code' => 'OUT-' . $this->faker->unique()->numberBetween(100000, 999999),
+            'code' => 'OUT-'.$this->faker->unique()->numberBetween(100000, 999999),
             'customer_id' => Customer::factory(),
             'warehouse_id' => Warehouse::factory(),
             'product_id' => Product::factory(),

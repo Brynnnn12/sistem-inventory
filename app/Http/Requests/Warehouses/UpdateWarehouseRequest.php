@@ -38,7 +38,7 @@ class UpdateWarehouseRequest extends FormRequest
                 'string',
                 'max:10',
                 'regex:/^[A-Z0-9\-]+$/',
-                'unique:warehouses,code,' . $warehouseId,
+                'unique:warehouses,code,'.$warehouseId,
             ],
             'name' => [
                 'sometimes',

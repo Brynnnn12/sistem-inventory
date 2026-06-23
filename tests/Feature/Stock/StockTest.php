@@ -1,14 +1,11 @@
 <?php
 
+use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockHistory;
 use App\Models\Warehouse;
-use App\Models\Product;
-use App\Models\User;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
-
 
 test('super-admin bisa melihat daftar stock', function () {
     $superAdmin = createSuperAdmin();
@@ -53,7 +50,6 @@ test('super-admin bisa melihat daftar stock', function () {
         );
 });
 
-
 test('bisa mem-filter stock berdasarkan gudang dan produk', function () {
     $superAdmin = createSuperAdmin();
 
@@ -79,7 +75,6 @@ test('bisa mem-filter stock berdasarkan gudang dan produk', function () {
     $response = actingAs($superAdmin)->get(route('stocks.index', ['warehouse_id' => $warehouseA->id, 'product_id' => $productB->id]));
     $response->assertOk()->assertInertia(fn ($page) => $page->has('stocks.data', 1));
 });
-
 
 test('super-admin bisa melihat daftar riwayat stok', function () {
     $superAdmin = createSuperAdmin();
@@ -125,7 +120,6 @@ test('super-admin bisa melihat daftar riwayat stok', function () {
             ->has('stockHistories.data.0')
         );
 });
-
 
 test('admin hanya melihat stock history untuk gudangnya sendiri', function () {
     $admin = createAdmin();

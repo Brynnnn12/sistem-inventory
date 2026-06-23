@@ -2,7 +2,6 @@
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
 
 test('super-admin bisa melihat daftar gudang', function () {
     $superAdmin = createSuperAdmin();
@@ -13,12 +12,12 @@ test('super-admin bisa melihat daftar gudang', function () {
 
     $response->assertOk()
         ->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('warehouses/index')
                 ->has('warehouses.data', 3)
                 ->has(
                     'warehouses.data.0',
-                    fn($warehouse) => $warehouse
+                    fn ($warehouse) => $warehouse
                         ->has('id')
                         ->has('code')
                         ->has('name')
@@ -43,7 +42,7 @@ test('admin bisa melihat daftar gudang', function () {
 
     $response->assertOk()
         ->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('warehouses/index')
                 ->has('warehouses.data', 2)
         );
@@ -58,7 +57,6 @@ test('viewer tidak bisa melihat daftar gudang', function () {
     $response->assertForbidden();
 });
 
-
 test('user tanpa peran tidak bisa melihat daftar gudang', function () {
     $user = \App\Models\User::factory()->create();
     \App\Models\Warehouse::factory()->count(2)->create();
@@ -67,7 +65,6 @@ test('user tanpa peran tidak bisa melihat daftar gudang', function () {
 
     $response->assertForbidden();
 });
-
 
 test('super-admin bisa buat gudang', function () {
     $superAdmin = createSuperAdmin();

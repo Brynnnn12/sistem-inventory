@@ -25,7 +25,6 @@ return new class extends Migration
             // Boolean status aktif, default: true
             $table->boolean('is_active')->default(true)->index();
 
-
             $table->timestamps();
         });
     }

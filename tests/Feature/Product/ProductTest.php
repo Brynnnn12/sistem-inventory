@@ -1,11 +1,7 @@
 <?php
-use App\Models\User;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
-
-
 
 test('super-admin bisa melihat daftar produk', function () {
     $superAdmin = createSuperAdmin();
@@ -63,7 +59,7 @@ test('viewer tidak bisa melihat daftar produk', function () {
     $response->assertForbidden();
 });
 
-test('super-admin bisa buat produk' , function() {
+test('super-admin bisa buat produk', function () {
     $superAdmin = createSuperAdmin();
 
     $productData = [

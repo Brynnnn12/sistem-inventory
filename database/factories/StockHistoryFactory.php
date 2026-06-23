@@ -30,7 +30,7 @@ class StockHistoryFactory extends Factory
                 'outbound_transaction',
                 'stock_mutation',
                 'opname',
-                'manual_adjustment'
+                'manual_adjustment',
             ]),
             'reference_id' => $this->faker->numberBetween(1, 1000),
             'change_type' => $changeType,

@@ -56,10 +56,14 @@ class StoreProductRequest extends FormRequest
      */
     private function formatNumeric(mixed $value): mixed
     {
-        if (is_null($value) || $value === '') return null;
+        if (is_null($value) || $value === '') {
+            return null;
+        }
 
         // Jika sudah numeric (dari frontend type="number"), kembalikan langsung
-        if (is_numeric($value)) return $value;
+        if (is_numeric($value)) {
+            return $value;
+        }
 
         // Jika string format IDR (misal: 1.250.000,00), ubah ke 1250000.00
         $clean = str_replace('.', '', $value); // Hapus titik ribuan
@@ -67,6 +71,7 @@ class StoreProductRequest extends FormRequest
 
         return is_numeric($clean) ? (float) $clean : $value;
     }
+
     public function messages(): array
     {
         return [

@@ -63,13 +63,13 @@ class SupplierFactory extends Factory
         ];
 
         return [
-            'code' => 'SUP-' . fake()->unique()->numberBetween(1000, 9999),
+            'code' => 'SUP-'.fake()->unique()->numberBetween(1000, 9999),
             'name' => fake()->randomElement($suppliers),
             'contact_person' => fake()->randomElement($contactPersons),
             'phone' => fake()->numerify('08##########'),
             'email' => fake()->unique()->safeEmail(),
             'address' => fake()->address(),
-            'tax_id' => 'NPWP-' . fake()->unique()->numberBetween(1000000000000000, 9999999999999999),
+            'tax_id' => 'NPWP-'.fake()->unique()->numberBetween(1000000000000000, 9999999999999999),
             'is_active' => fake()->boolean(95), // 95% chance of being active
         ];
     }

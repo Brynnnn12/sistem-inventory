@@ -24,7 +24,7 @@ class StockMutationFactory extends Factory
         $status = $this->faker->randomElement(['dikirim', 'diterima', 'ditolak', 'selesai']);
 
         return [
-            'code' => 'MUT-' . $this->faker->unique()->numberBetween(100000, 999999),
+            'code' => 'MUT-'.$this->faker->unique()->numberBetween(100000, 999999),
             'from_warehouse' => Warehouse::factory(),
             'to_warehouse' => Warehouse::factory(),
             'product_id' => Product::factory(),

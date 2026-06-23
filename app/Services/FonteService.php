@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Http;
 class FonteService implements NotificationServiceInterface
 {
     protected string $apiUrl = 'https://api.fonnte.com';
+
     protected string $token;
 
     public function __construct()
@@ -17,7 +18,7 @@ class FonteService implements NotificationServiceInterface
 
     public function sendMessage(string $recipient, string $message, ?string $subject = null): array
     {
-        if (!config('services.fonnte.enabled', true)) {
+        if (! config('services.fonnte.enabled', true)) {
             return ['success' => true, 'message' => 'disabled'];
         }
 
@@ -31,6 +32,7 @@ class FonteService implements NotificationServiceInterface
                 ]);
 
             $res = $response->json();
+
             return ['success' => $res['status'] ?? false, 'data' => $res];
         } catch (\Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
@@ -48,13 +50,15 @@ class FonteService implements NotificationServiceInterface
 
             sleep(rand(5, 15));
         }
+
         return $results;
     }
 
     private function randomizeMessage(string $message): string
     {
-        $greetings = ["Halo", "Hi", "Selamat", "Info"];
+        $greetings = ['Halo', 'Hi', 'Selamat', 'Info'];
         $prefix = $greetings[array_rand($greetings)];
-        return "[$prefix] " . $message . "\n" . bin2hex(random_bytes(2));
+
+        return "[$prefix] ".$message."\n".bin2hex(random_bytes(2));
     }
 }

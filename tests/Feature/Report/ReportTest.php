@@ -1,14 +1,10 @@
 <?php
 
-use App\Services\ReportService;
 use App\Models\Warehouse;
-use App\Models\Stock;
-use App\Models\Product;
+use App\Services\ReportService;
 use Carbon\Carbon;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
-
 
 test('super-admin dapat melihat halaman laporan stok dan menerima data dari service', function () {
     Carbon::setTestNow('2026-04-26 10:00:00');

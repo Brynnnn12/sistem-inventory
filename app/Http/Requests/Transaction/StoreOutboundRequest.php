@@ -54,7 +54,7 @@ class StoreOutboundRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        //ini akan diisi jika ada kebutuhan untuk memanipulasi data sebelum validasi, misalnya mengatur warehouse_id berdasarkan user yang login jika tidak disediakan
+        // ini akan diisi jika ada kebutuhan untuk memanipulasi data sebelum validasi, misalnya mengatur warehouse_id berdasarkan user yang login jika tidak disediakan
         /** @var \App\Models\User $user */
         $user = Auth::user();
         if (! $user->hasRole('super-admin') && ! $this->has('warehouse_id')) {

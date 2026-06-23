@@ -2,10 +2,8 @@
 
 use App\Models\InboundTransaction;
 use App\Models\OutboundTransaction;
-use App\Models\User;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
 
 it('provides a twelve-item monthlyChart on dashboard', function () {
     $superAdmin = createSuperAdmin();

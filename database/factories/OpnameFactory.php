@@ -23,14 +23,14 @@ class OpnameFactory extends Factory
         $physicalQty = $systemQty + $this->faker->randomFloat(2, -20, 20);
         $differenceQty = abs($systemQty - $physicalQty);
 
-        $differenceType = match(true) {
+        $differenceType = match (true) {
             $physicalQty > $systemQty => 'lebih',
             $physicalQty < $systemQty => 'kurang',
             default => 'sama'
         };
 
         return [
-            'code' => 'OPN-' . $this->faker->unique()->numberBetween(100000, 999999),
+            'code' => 'OPN-'.$this->faker->unique()->numberBetween(100000, 999999),
             'warehouse_id' => Warehouse::factory(),
             'product_id' => Product::factory(),
             'system_qty' => $systemQty,

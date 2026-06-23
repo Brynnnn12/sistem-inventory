@@ -1,12 +1,9 @@
 <?php
 
-use function Pest\Laravel\actingAs;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
-use function Pest\Laravel\delete;
-
 use App\Models\Warehouse;
 use App\Models\WarehouseUser;
+
+use function Pest\Laravel\actingAs;
 
 test('super-admin bisa menukar penempatan gudang antar pengguna', function () {
     $superAdmin = createSuperAdmin();
@@ -48,7 +45,7 @@ test('super-admin bisa melihat daftar penempatan gudang', function () {
     $users = \App\Models\User::factory()->count(3)->create();
     $warehouses = Warehouse::factory()->count(3)->create();
 
-    $warehouseUsers = collect(range(0,2))->map(fn($i) => WarehouseUser::factory()->create([
+    $warehouseUsers = collect(range(0, 2))->map(fn ($i) => WarehouseUser::factory()->create([
         'user_id' => $users[$i]->id,
         'warehouse_id' => $warehouses[$i]->id,
     ]));
@@ -85,7 +82,7 @@ test('admin dan viewer tidak bisa melihat daftar penempatan gudang', function ()
     $users = \App\Models\User::factory()->count(2)->create();
     $warehouses = Warehouse::factory()->count(2)->create();
 
-    foreach (range(0,1) as $i) {
+    foreach (range(0, 1) as $i) {
         WarehouseUser::factory()->create([
             'user_id' => $users[$i]->id,
             'warehouse_id' => $warehouses[$i]->id,
@@ -95,7 +92,6 @@ test('admin dan viewer tidak bisa melihat daftar penempatan gudang', function ()
     actingAs($admin)->get(route('warehouse-users.index'))->assertForbidden();
     actingAs($viewer)->get(route('warehouse-users.index'))->assertForbidden();
 });
-
 
 test('super-admin bisa membuat penempatan gudang', function () {
     $superAdmin = createSuperAdmin();
@@ -118,7 +114,6 @@ test('super-admin bisa membuat penempatan gudang', function () {
     ]);
 });
 
-
 test('admin dan viewer tidak bisa membuat penempatan gudang', function () {
     $admin = createAdmin();
     $viewer = createViewer();
@@ -137,7 +132,6 @@ test('admin dan viewer tidak bisa membuat penempatan gudang', function () {
     ])->assertForbidden();
 });
 
-
 test('super-admin bisa menghapus penempatan gudang', function () {
     $superAdmin = createSuperAdmin();
 
@@ -152,7 +146,6 @@ test('super-admin bisa menghapus penempatan gudang', function () {
     expect(\App\Models\WarehouseUser::withTrashed()->find($wu->id))->not->toBeNull();
 });
 
-
 test('admin dan viewer tidak bisa menghapus penempatan gudang', function () {
     $admin = createAdmin();
     $viewer = createViewer();
@@ -163,14 +156,13 @@ test('admin dan viewer tidak bisa menghapus penempatan gudang', function () {
     actingAs($viewer)->delete(route('warehouse-users.destroy', $wu))->assertForbidden();
 });
 
-
 test('super-admin bisa hapus banyak penempatan gudang', function () {
     $superAdmin = createSuperAdmin();
 
     $users = \App\Models\User::factory()->count(3)->create();
     $warehouses = Warehouse::factory()->count(3)->create();
 
-    $wus = collect(range(0,2))->map(fn($i) => WarehouseUser::factory()->create([
+    $wus = collect(range(0, 2))->map(fn ($i) => WarehouseUser::factory()->create([
         'user_id' => $users[$i]->id,
         'warehouse_id' => $warehouses[$i]->id,
     ]));
@@ -189,7 +181,6 @@ test('super-admin bisa hapus banyak penempatan gudang', function () {
     }
 });
 
-
 test('admin dan viewer tidak bisa hapus banyak penempatan gudang', function () {
     $admin = createAdmin();
     $viewer = createViewer();
@@ -197,7 +188,7 @@ test('admin dan viewer tidak bisa hapus banyak penempatan gudang', function () {
     $users = \App\Models\User::factory()->count(2)->create();
     $warehouses = Warehouse::factory()->count(2)->create();
 
-    $wus = collect(range(0,1))->map(fn($i) => WarehouseUser::factory()->create([
+    $wus = collect(range(0, 1))->map(fn ($i) => WarehouseUser::factory()->create([
         'user_id' => $users[$i]->id,
         'warehouse_id' => $warehouses[$i]->id,
     ]));
@@ -207,7 +198,6 @@ test('admin dan viewer tidak bisa hapus banyak penempatan gudang', function () {
     actingAs($admin)->delete(route('warehouse-users.bulk-destroy'), ['ids' => $ids])->assertForbidden();
     actingAs($viewer)->delete(route('warehouse-users.bulk-destroy'), ['ids' => $ids])->assertForbidden();
 });
-
 
 test('viewer tidak bisa menukar penempatan gudang (forbidden)', function () {
     $viewer = createViewer();

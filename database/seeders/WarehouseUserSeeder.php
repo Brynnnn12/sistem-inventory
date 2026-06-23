@@ -35,5 +35,4 @@ class WarehouseUserSeeder extends Seeder
 
         $this->command->info('Warehouse users seeded successfully! Each user assigned to one warehouse only.');
     }
-
 }

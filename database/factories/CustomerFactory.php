@@ -60,7 +60,7 @@ class CustomerFactory extends Factory
         ];
 
         return [
-            'code' => 'CST-' . fake()->unique()->numberBetween(1000, 9999),
+            'code' => 'CST-'.fake()->unique()->numberBetween(1000, 9999),
             'name' => fake()->randomElement($customers),
             'contact_person' => fake()->randomElement($contactPersons),
             'phone' => fake()->numerify('08##########'),

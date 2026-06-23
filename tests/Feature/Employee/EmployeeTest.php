@@ -4,10 +4,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
 use function Pest\Laravel\actingAs;
-use function Pest\Laravel\delete;
-use function Pest\Laravel\get;
-use function Pest\Laravel\post;
-use function Pest\Laravel\put;
 
 test('super-admin bisa melakukan CRUD dan bulk pada karyawan; role lain dilarang', function () {
     Mail::fake();

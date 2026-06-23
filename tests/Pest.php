@@ -1,8 +1,9 @@
 <?php
 
 use App\Models\User;
-use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Spatie\Permission\Models\Role;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -16,7 +17,7 @@ use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-        ->beforeEach(function () {
+    ->beforeEach(function () {
         $this->withoutMiddleware(ValidateCsrfToken::class);
     })
     ->in('Feature');

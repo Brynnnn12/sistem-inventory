@@ -1,8 +1,6 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 use Laravel\Fortify\Features;
 
 test('login screen can be rendered', function () {
@@ -70,5 +68,3 @@ test('users can logout', function () {
     $this->assertGuest();
     $response->assertRedirect('/');
 });
-
-
