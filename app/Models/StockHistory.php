@@ -29,6 +29,11 @@ class StockHistory extends Model
     protected function casts(): array
     {
         return [
+            'stock_id' => 'integer',
+            'warehouse_id' => 'integer',
+            'product_id' => 'integer',
+            'reference_id' => 'integer',
+            'created_by' => 'integer',
             'previous_qty' => 'decimal:2',
             'new_qty' => 'decimal:2',
             'change_qty' => 'decimal:2',

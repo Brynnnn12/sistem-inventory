@@ -27,6 +27,7 @@ class Product extends Model
     protected function casts(): array
     {
         return [
+            'category_id' => 'integer',
             'min_stock' => 'integer',
             'max_stock' => 'integer',
             'price' => 'decimal:2',

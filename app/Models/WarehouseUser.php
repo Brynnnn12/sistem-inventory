@@ -22,6 +22,9 @@ class WarehouseUser extends Pivot
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
+        'warehouse_id' => 'integer',
+        'assigned_by' => 'integer',
         'assigned_at' => 'datetime',
         'is_primary' => 'boolean',
     ];

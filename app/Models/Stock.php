@@ -27,6 +27,7 @@ class Stock extends Model
         return [
             'warehouse_id' => 'integer',
             'product_id' => 'integer',
+            'updated_by' => 'integer',
             'quantity' => 'decimal:2',
             'available_qty' => 'decimal:2',
             'last_updated' => 'datetime',

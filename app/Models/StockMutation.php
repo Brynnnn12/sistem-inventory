@@ -34,6 +34,11 @@ class StockMutation extends Model
     protected function casts(): array
     {
         return [
+            'from_warehouse' => 'integer',
+            'to_warehouse' => 'integer',
+            'product_id' => 'integer',
+            'created_by' => 'integer',
+            'received_by' => 'integer',
             'quantity' => 'decimal:2',
             'received_qty' => 'decimal:2',
             'damaged_qty' => 'decimal:2',

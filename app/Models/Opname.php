@@ -30,6 +30,9 @@ class Opname extends Model
     protected function casts(): array
     {
         return [
+            'warehouse_id' => 'integer',
+            'product_id' => 'integer',
+            'created_by' => 'integer',
             'system_qty' => 'decimal:2',
             'physical_qty' => 'decimal:2',
             'difference_qty' => 'decimal:2',

@@ -28,6 +28,10 @@ class OutboundTransaction extends Model
     protected function casts(): array
     {
         return [
+            'customer_id' => 'integer',
+            'warehouse_id' => 'integer',
+            'product_id' => 'integer',
+            'created_by' => 'integer',
             'quantity' => 'decimal:2',
             'unit_price' => 'decimal:2',
             'total_price' => 'decimal:2',
