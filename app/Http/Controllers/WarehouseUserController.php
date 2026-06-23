@@ -11,6 +11,7 @@ use App\Http\Requests\WarehouseUsers\SwapWarehouseUsersRequest;
 use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseUser;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -64,6 +65,12 @@ class WarehouseUserController extends Controller
             $action->execute($request->validated());
 
             return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil.');
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return redirect()->route('warehouse-users.index')->with('error', 'Data penempatan sudah ada dan tidak dapat ditambahkan lagi.');
+            }
+
+            throw $e;
         } catch (\Exception $e) {
             return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
         }
@@ -131,6 +138,12 @@ class WarehouseUserController extends Controller
             $action->execute($request->input('warehouse_user1_id'), $request->input('warehouse_user2_id'));
 
             return redirect()->route('warehouse-users.index')->with('success', 'Penempatan gudang berhasil ditukar.');
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return redirect()->route('warehouse-users.index')->with('error', 'Tidak dapat menukar penempatan karena data sudah ada.');
+            }
+
+            throw $e;
         } catch (\Exception $e) {
             return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
         }
