@@ -98,7 +98,7 @@ export default function Dashboard({
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4">
+            <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-3 lg:gap-6 lg:p-4">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
@@ -129,7 +129,7 @@ export default function Dashboard({
                 </div>
 
                 {/* Stock Summary Cards */}
-                <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-4 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
@@ -186,7 +186,7 @@ export default function Dashboard({
                 </div>
 
                 {/* Charts and Recent Activity */}
-                <div className="grid gap-6 lg:grid-cols-3">
+                <div className="grid gap-4 lg:grid-cols-3 lg:gap-6">
                     {/* Monthly Chart Placeholder */}
                     <Card className="lg:col-span-2">
                         <CardHeader>
@@ -275,11 +275,11 @@ export default function Dashboard({
                                     >
                                         <div className="flex min-w-0 flex-1 items-center gap-3">
                                             {alert.type === 'low_stock' ? (
-                                                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                                                <AlertTriangle className="h-4 w-4 shrink-0 text-yellow-600" />
                                             ) : (
-                                                <PackageX className="h-4 w-4 text-red-600" />
+                                                <PackageX className="h-4 w-4 shrink-0 text-red-600" />
                                             )}
-                                            <div>
+                                            <div className="min-w-0">
                                                 <p className="text-sm font-medium">
                                                     {alert.message}
                                                 </p>
@@ -323,7 +323,7 @@ export default function Dashboard({
                 )}
 
                 {/* Products and Employees Grid */}
-                <div className="grid gap-6 lg:grid-cols-2">
+                <div className="grid gap-4 lg:grid-cols-2 lg:gap-6">
                     <ProductsList products={products} />
                     {isSuperAdmin && <EmployeesList employees={employees} />}
                 </div>

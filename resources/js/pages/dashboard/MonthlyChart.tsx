@@ -16,11 +16,11 @@ interface MonthlyChartProps {
 
 export default function MonthlyChart({ data }: MonthlyChartProps) {
     return (
-        <div className="h-64">
+        <div className="h-48 sm:h-64">
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart
                     data={data}
-                    margin={{ top: 20, right: 10, left: -10, bottom: 0 }}
+                    margin={{ top: 20, right: 10, left: 0, bottom: 0 }}
                 >
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
