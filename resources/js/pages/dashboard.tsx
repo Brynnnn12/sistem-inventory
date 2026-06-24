@@ -98,34 +98,38 @@ export default function Dashboard({
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <div className="flex h-full flex-1 flex-col gap-6 overflow-x-auto rounded-xl p-4">
-                <div className="flex items-center justify-between">
+            <div className="flex h-full flex-1 flex-col gap-6 rounded-xl p-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight">
+                        <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
                             Dashboard GudangKu
                         </h1>
-                        <p className="text-muted-foreground">
+                        <p className="text-sm text-muted-foreground sm:text-base">
                             Ringkasan inventory dan aktivitas terbaru
                         </p>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" asChild>
+                        <Button variant="outline" size="sm" asChild>
                             <Link href="/dashboard/reports/stock">
-                                <FileText className="mr-2 h-4 w-4" />
-                                Laporan Stok
+                                <FileText className="h-4 w-4 sm:mr-2" />
+                                <span className="hidden sm:inline">
+                                    Laporan Stok
+                                </span>
                             </Link>
                         </Button>
-                        <Button variant="outline" asChild>
+                        <Button variant="outline" size="sm" asChild>
                             <Link href="/dashboard/reports/alerts">
-                                <Bell className="mr-2 h-4 w-4" />
-                                Notifikasi
+                                <Bell className="h-4 w-4 sm:mr-2" />
+                                <span className="hidden sm:inline">
+                                    Notifikasi
+                                </span>
                             </Link>
                         </Button>
                     </div>
                 </div>
 
                 {/* Stock Summary Cards */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4">
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                             <CardTitle className="text-sm font-medium">
@@ -222,7 +226,7 @@ export default function Dashboard({
                                             </div>
                                             <div className="flex-1 space-y-1">
                                                 <div className="flex items-center gap-2">
-                                                    <p className="text-sm font-medium">
+                                                    <p className="min-w-0 text-sm font-medium">
                                                         {transaction.product}
                                                     </p>
                                                     {getTransactionBadge(
@@ -267,9 +271,9 @@ export default function Dashboard({
                                 {stockAlerts.slice(0, 3).map((alert, index) => (
                                     <div
                                         key={index}
-                                        className="flex items-center justify-between rounded-lg border p-3"
+                                        className="flex items-center justify-between gap-2 rounded-lg border p-3"
                                     >
-                                        <div className="flex items-center gap-3">
+                                        <div className="flex min-w-0 flex-1 items-center gap-3">
                                             {alert.type === 'low_stock' ? (
                                                 <AlertTriangle className="h-4 w-4 text-yellow-600" />
                                             ) : (

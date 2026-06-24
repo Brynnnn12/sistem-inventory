@@ -44,21 +44,25 @@ export function EmployeesList({ employees }: EmployeesListProps) {
                         employees.slice(0, 5).map((employee) => (
                             <div
                                 key={employee.id}
-                                className="flex items-center justify-between rounded-lg border p-3"
+                                className="flex flex-col gap-2 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
                                         <User className="h-5 w-5 text-muted-foreground" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0">
                                         <div className="font-medium">
                                             {employee.name}
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                            <span>{employee.email}</span>
+                                        <div className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
+                                            <span className="truncate">
+                                                {employee.email}
+                                            </span>
                                             {employee.role && (
                                                 <>
-                                                    <span>•</span>
+                                                    <span className="hidden sm:inline">
+                                                        •
+                                                    </span>
                                                     <Badge
                                                         variant="outline"
                                                         className="text-xs"
@@ -70,8 +74,8 @@ export function EmployeesList({ employees }: EmployeesListProps) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-right">
-                                    <div className="mt-1 text-xs text-muted-foreground">
+                                <div className="text-left sm:text-right">
+                                    <div className="text-xs text-muted-foreground">
                                         {formatDate(employee.created_at)}
                                     </div>
                                 </div>

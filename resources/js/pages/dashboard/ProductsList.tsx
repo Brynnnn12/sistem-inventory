@@ -47,33 +47,37 @@ export function ProductsList({ products }: ProductsListProps) {
                         products.slice(0, 5).map((product) => (
                             <div
                                 key={product.id}
-                                className="flex items-center justify-between rounded-lg border p-3"
+                                className="flex flex-col gap-2 rounded-lg border p-3 sm:flex-row sm:items-center sm:justify-between"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-muted">
                                         <Package className="h-5 w-5 text-muted-foreground" />
                                     </div>
-                                    <div>
+                                    <div className="min-w-0">
                                         <div className="font-medium">
                                             {product.name}
                                         </div>
-                                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <div className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
                                             <Badge
                                                 variant="secondary"
                                                 className="font-mono text-xs"
                                             >
                                                 {product.code}
                                             </Badge>
-                                            <span>•</span>
-                                            <span>
+                                            <span className="hidden sm:inline">
+                                                •
+                                            </span>
+                                            <span className="truncate">
                                                 {product.category?.name}
                                             </span>
-                                            <span>•</span>
+                                            <span className="hidden sm:inline">
+                                                •
+                                            </span>
                                             <span>{product.unit}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="text-right">
+                                <div className="flex items-center justify-between gap-2 sm:flex-col sm:items-end sm:justify-center">
                                     <div className="font-medium">
                                         {formatCurrency(product.price ?? 0)}
                                     </div>
