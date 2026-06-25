@@ -1,12 +1,15 @@
 <?php
 
+use App\Models\Category;
+use App\Models\Product;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
 
 test('super-admin bisa melihat daftar produk', function () {
     $superAdmin = createSuperAdmin();
 
-    $products = \App\Models\Product::factory()->count(3)->create(['is_active' => true]);
+    $products = Product::factory()->count(3)->create(['is_active' => true]);
 
     $response = actingAs($superAdmin)->get(route('products.index'));
 
@@ -39,7 +42,7 @@ test('super-admin bisa melihat daftar produk', function () {
 
 test('admin bisa melihat daftar produk', function () {
     $admin = createAdmin();
-    \App\Models\Product::factory()->count(2)->create(['is_active' => true]);
+    Product::factory()->count(2)->create(['is_active' => true]);
 
     $response = actingAs($admin)->get(route('products.index'));
 
@@ -52,7 +55,7 @@ test('admin bisa melihat daftar produk', function () {
 
 test('viewer tidak bisa melihat daftar produk', function () {
     $viewer = createViewer();
-    \App\Models\Product::factory()->count(2)->create(['is_active' => true]);
+    Product::factory()->count(2)->create(['is_active' => true]);
 
     $response = actingAs($viewer)->get(route('products.index'));
 
@@ -67,7 +70,9 @@ test('super-admin bisa buat produk', function () {
         'unit' => 'Pcs',
         'price' => 10000,
         'cost' => 8000,
-        'category_id' => \App\Models\Category::factory()->create()->id,
+        'min_stock' => 5,
+        'max_stock' => 100,
+        'category_id' => Category::factory()->create()->id,
     ];
 
     $response = actingAs($superAdmin)->post(route('products.store'), $productData);
@@ -76,14 +81,14 @@ test('super-admin bisa buat produk', function () {
         ->assertSessionHas('success', 'Produk berhasil dibuat.');
 
     // Verifikasi produk tersimpan di database
-    expect(\App\Models\Product::where([
+    expect(Product::where([
         'name' => 'Produk A',
         'unit' => 'Pcs',
         'category_id' => $productData['category_id'],
     ])->exists())->toBeTrue();
 
     // Verifikasi harga dan cost tersimpan
-    $product = \App\Models\Product::where('name', 'Produk A')->first();
+    $product = Product::where('name', 'Produk A')->first();
     expect((float) $product->price)->toBe(10000.0);
     expect((float) $product->cost)->toBe(8000.0);
 });
@@ -95,8 +100,10 @@ test('admin tidak bisa buat produk', function () {
         'name' => 'Produk B',
         'brand' => 'Merek B',
         'unit' => 'Pcs',
-        'selling_price' => 15000,
-        'cost_price' => 12000,
+        'price' => 15000,
+        'cost' => 12000,
+        'min_stock' => 5,
+        'max_stock' => 100,
         'category_id' => \App\Models\Category::factory()->create()->id,
     ];
 
@@ -112,8 +119,10 @@ test('viewer tidak bisa buat produk', function () {
         'name' => 'Produk C',
         'brand' => 'Merek C',
         'unit' => 'Pcs',
-        'selling_price' => 20000,
-        'cost_price' => 18000,
+        'price' => 20000,
+        'cost' => 18000,
+        'min_stock' => 5,
+        'max_stock' => 100,
         'category_id' => \App\Models\Category::factory()->create()->id,
     ];
 
@@ -124,7 +133,7 @@ test('viewer tidak bisa buat produk', function () {
 
 test('super-admin bisa update produk', function () {
     $superAdmin = createSuperAdmin();
-    $product = \App\Models\Product::factory()->create();
+    $product = Product::factory()->create();
 
     $updateData = [
         'name' => 'Produk Updated',
@@ -145,7 +154,7 @@ test('super-admin bisa update produk', function () {
 
 test('super-admin bisa hapus produk', function () {
     $superAdmin = createSuperAdmin();
-    $product = \App\Models\Product::factory()->create();
+    $product = Product::factory()->create();
 
     $response = actingAs($superAdmin)->delete(route('products.destroy', $product));
 
@@ -153,13 +162,13 @@ test('super-admin bisa hapus produk', function () {
         ->assertSessionHas('success', 'Produk berhasil dihapus.');
 
     // Verifikasi produk terhapus (soft delete)
-    expect(\App\Models\Product::find($product->id))->toBeNull();
-    expect(\App\Models\Product::withTrashed()->find($product->id))->not->toBeNull();
+    expect(Product::find($product->id))->toBeNull();
+    expect(Product::withTrashed()->find($product->id))->not->toBeNull();
 });
 
 test('super-admin bisa hapus banyak produk', function () {
     $superAdmin = createSuperAdmin();
-    $products = \App\Models\Product::factory()->count(3)->create();
+    $products = Product::factory()->count(3)->create();
     $ids = $products->pluck('id')->toArray();
 
     $response = actingAs($superAdmin)->delete(route('products.bulk-destroy'), ['ids' => $ids]);
@@ -168,14 +177,14 @@ test('super-admin bisa hapus banyak produk', function () {
         ->assertSessionHas('success', 'Berhasil menghapus 3 produk.');
 
     foreach ($ids as $id) {
-        expect(\App\Models\Product::find($id))->toBeNull();
-        expect(\App\Models\Product::withTrashed()->find($id))->not->toBeNull();
+        expect(Product::find($id))->toBeNull();
+        expect(Product::withTrashed()->find($id))->not->toBeNull();
     }
 });
 
 test('admin tidak bisa update produk', function () {
     $admin = createAdmin();
-    $product = \App\Models\Product::factory()->create();
+    $product = Product::factory()->create();
 
     $updateData = [
         'name' => 'Produk Updated by Admin',
@@ -191,7 +200,7 @@ test('admin tidak bisa update produk', function () {
 
 test('viewer tidak bisa update produk', function () {
     $viewer = createViewer();
-    $product = \App\Models\Product::factory()->create();
+    $product = Product::factory()->create();
 
     $updateData = [
         'name' => 'Produk Updated by Viewer',
@@ -207,7 +216,7 @@ test('viewer tidak bisa update produk', function () {
 
 test('admin tidak bisa hapus produk', function () {
     $admin = createAdmin();
-    $product = \App\Models\Product::factory()->create();
+    $product = Product::factory()->create();
 
     $response = actingAs($admin)->delete(route('products.destroy', $product));
 
@@ -216,7 +225,7 @@ test('admin tidak bisa hapus produk', function () {
 
 test('viewer tidak bisa hapus produk', function () {
     $viewer = createViewer();
-    $product = \App\Models\Product::factory()->create();
+    $product = Product::factory()->create();
 
     $response = actingAs($viewer)->delete(route('products.destroy', $product));
 

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Products;
 
+use App\Models\Category;
 use App\Models\Product;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class CreateProductAction
     {
         return DB::transaction(function () use ($input) {
 
-            if (! \App\Models\Category::find($input['category_id'])) {
+            if (! Category::find($input['category_id'])) {
                 throw new \Exception('Kategori tidak ditemukan');
             }
 
@@ -32,8 +33,8 @@ class CreateProductAction
                 'category_id' => $input['category_id'],
                 'name' => $input['name'],
                 'unit' => $input['unit'],
-                'min_stock' => $input['min_stock'] ?? 0,
-                'max_stock' => $input['max_stock'] ?? 0,
+                'min_stock' => $input['min_stock'],
+                'max_stock' => $input['max_stock'],
                 'price' => $input['price'] ?? 0,
                 'cost' => $input['cost'] ?? 0,
                 'description' => $input['description'] ?? null,

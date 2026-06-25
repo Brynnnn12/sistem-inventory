@@ -237,6 +237,7 @@ export function ProductFormModal({
                                     }
                                     placeholder="0"
                                     min="0"
+                                    required
                                 />
                                 <InputError message={form.errors.min_stock} />
                             </div>
@@ -258,8 +259,9 @@ export function ProductFormModal({
                                             ),
                                         )
                                     }
-                                    placeholder="0"
-                                    min="0"
+                                    placeholder="Maksimum stok"
+                                    min="1"
+                                    required
                                 />
                                 <InputError message={form.errors.max_stock} />
                             </div>
@@ -282,7 +284,6 @@ export function ProductFormModal({
                                         onChange={(e) =>
                                             form.setData('cost', e.target.value)
                                         }
-                                        step="0.01"
                                         placeholder="0"
                                         min="0"
                                         className="pl-8"
@@ -309,7 +310,6 @@ export function ProductFormModal({
                                                 e.target.value,
                                             )
                                         }
-                                        step="0.01"
                                         placeholder="0"
                                         min="0"
                                         className="pl-8"

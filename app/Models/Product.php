@@ -30,8 +30,8 @@ class Product extends Model
             'category_id' => 'integer',
             'min_stock' => 'integer',
             'max_stock' => 'integer',
-            'price' => 'decimal:2',
-            'cost' => 'decimal:2',
+            'price' => 'integer',
+            'cost' => 'integer',
             'is_active' => 'boolean',
             'deleted_at' => 'datetime',
         ];

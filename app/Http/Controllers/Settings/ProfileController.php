@@ -70,16 +70,13 @@ class ProfileController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
 
-            // Cari user yang sudah didaftarkan manual oleh Admin di database
             $user = User::where('email', $googleUser->email)->first();
 
-            // JIKA USER TIDAK DITEMUKAN (Artinya emailnya belum didaftarkan Admin)
             if (! $user) {
                 return redirect()->route('login')
                     ->with('error', 'Email Anda tidak terdaftar di sistem. Silakan hubungi Admin.');
             }
 
-            // Update data google jika user sudah terdaftar
             $user->update([
                 'google_id' => $googleUser->id,
                 'google_token' => $googleUser->token,
