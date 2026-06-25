@@ -35,6 +35,17 @@ class UpdateEmployeeAction
 
             // Check if role needs update
             if (isset($input['role']) && in_array($input['role'], ['admin', 'viewer'])) {
+                if (
+                    $input['role'] === 'viewer'
+                    && $user->hasRole('admin')
+                    && $user->warehouses()->count() > 0
+                ) {
+                    throw new \Exception(
+                        'Karyawan dengan peran admin masih ditugaskan di gudang. '.
+                        'Hapus penugasan gudang terlebih dahulu sebelum mengubah peran menjadi viewer.'
+                    );
+                }
+
                 $user->syncRoles([$input['role']]);
             }
 

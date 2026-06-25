@@ -52,6 +52,22 @@ class UpdateEmployeeRequest extends FormRequest
                 'required',
                 'string',
                 Rule::in(['admin', 'viewer']),
+                function ($attribute, $value, $fail) {
+                    $employee = $this->route('employee');
+
+                    if ($value !== 'viewer') {
+                        return;
+                    }
+
+                    if (! $employee->hasRole('admin')) {
+                        return;
+                    }
+
+                    $warehouseCount = $employee->warehouses()->count();
+                    if ($warehouseCount > 0) {
+                        $fail("Karyawan dengan peran admin masih ditugaskan di {$warehouseCount} gudang. Hapus penugasan gudang terlebih dahulu sebelum mengubah peran menjadi viewer.");
+                    }
+                },
             ],
         ];
     }
@@ -64,7 +80,6 @@ class UpdateEmployeeRequest extends FormRequest
             'email.unique' => 'Email ini sudah terdaftar.',
             'email.email' => 'Format email tidak valid.',
             'phone_number.regex' => 'Nomor HP harus format Indonesia (628...) dan panjang 12-14 digit.',
-
         ];
     }
 }
