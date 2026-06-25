@@ -14,9 +14,9 @@ test('super-admin bisa melihat daftar mutation', function () {
     $superAdmin = createSuperAdmin();
 
     $date = now()->format('Ymd');
-    $w1 = \App\Models\Warehouse::factory()->create(['code' => "WHS-{$date}-01", 'name' => "Gudang A {$date}"]);
-    $w2 = \App\Models\Warehouse::factory()->create(['code' => "WHS-{$date}-02", 'name' => "Gudang B {$date}"]);
-    $w3 = \App\Models\Warehouse::factory()->create(['code' => "WHS-{$date}-03", 'name' => "Gudang C {$date}"]);
+    $w1 = Warehouse::factory()->create(['code' => "WHS-{$date}-01", 'name' => "Gudang A {$date}"]);
+    $w2 = Warehouse::factory()->create(['code' => "WHS-{$date}-02", 'name' => "Gudang B {$date}"]);
+    $w3 = Warehouse::factory()->create(['code' => "WHS-{$date}-03", 'name' => "Gudang C {$date}"]);
 
     StockMutation::factory()->create(['code' => "MT-{$date}-001", 'from_warehouse' => $w1->id, 'to_warehouse' => $w2->id]);
     StockMutation::factory()->create(['code' => "MT-{$date}-002", 'from_warehouse' => $w2->id, 'to_warehouse' => $w3->id]);
@@ -81,7 +81,7 @@ test('super-admin bisa mengirim mutation', function () {
     $response = actingAs($superAdmin)->post(route('mutations.store'), $payload);
 
     $response->assertRedirect(route('mutations.index'))
-        ->assertSessionHas('success', 'Mutation berhasil dikirim.');
+        ->assertSessionHas('success', 'Mutasi berhasil dikirim.');
 
     $this->assertDatabaseHas('stock_mutations', [
         'from_warehouse' => $from->id,
@@ -171,7 +171,7 @@ test('super-admin bisa menerima mutation dan stok diperbarui', function () {
     ]);
 
     $response->assertRedirect(route('mutations.index'))
-        ->assertSessionHas('success', 'Mutation berhasil diterima.');
+        ->assertSessionHas('success', 'Mutasi berhasil diterima.');
 
     $mutation->refresh();
     expect($mutation->status_display)->toBe('completed');
@@ -225,7 +225,7 @@ test('admin yang bertanggung jawab di gudang tujuan bisa menerima mutation', fun
     ]);
 
     $response->assertRedirect(route('mutations.index'))
-        ->assertSessionHas('success', 'Mutation berhasil diterima.');
+        ->assertSessionHas('success', 'Mutasi berhasil diterima.');
 
     $this->assertDatabaseHas('stocks', [
         'warehouse_id' => $to->id,
@@ -298,7 +298,7 @@ test('super-admin bisa menolak mutation dan stok dikembalikan', function () {
     $response = actingAs($superAdmin)->post(route('mutations.reject', $mutation), ['notes' => 'Tidak sesuai']);
 
     $response->assertRedirect(route('mutations.index'))
-        ->assertSessionHas('success', 'Mutation berhasil ditolak.');
+        ->assertSessionHas('success', 'Mutasi berhasil ditolak.');
 
     $this->assertDatabaseHas('stock_mutations', ['id' => $mutation->id]);
 
@@ -320,7 +320,7 @@ test('admin di gudang tujuan bisa menolak mutation dan stok dikembalikan', funct
 
     actingAs($admin)->post(route('mutations.reject', $mutation), ['notes' => 'Alasan'])
         ->assertRedirect(route('mutations.index'))
-        ->assertSessionHas('success', 'Mutation berhasil ditolak.');
+        ->assertSessionHas('success', 'Mutasi berhasil ditolak.');
 
     $this->assertDatabaseMissing('stocks', [
         'warehouse_id' => $mutation->from_warehouse,

@@ -164,7 +164,7 @@ test('super-admin bisa membuat kategori', function () {
     ]);
 
     $response->assertRedirect(route('categories.index'))
-        ->assertSessionHas('success', 'Kategori Berhasil Dibuat.');
+        ->assertSessionHas('success', 'Kategori berhasil dibuat.');
 
     expect(Category::where('name', 'Minuman Segar')->exists())->toBeTrue();
 });
@@ -219,7 +219,7 @@ test('super-admin can update a category', function () {
     ]);
 
     $response->assertRedirect(route('categories.index'))
-        ->assertSessionHas('success', 'Kategori Berhasil Diperbarui.');
+        ->assertSessionHas('success', 'Kategori berhasil diperbarui.');
 
     expect($category->fresh()->name)->toBe('New Name');
 });
@@ -255,7 +255,7 @@ test('super-admin can delete a category', function () {
     $response = actingAs($superAdmin)->delete(route('categories.destroy', $category));
 
     $response->assertRedirect(route('categories.index'))
-        ->assertSessionHas('success', 'Kategori Berhasil Dihapus.');
+        ->assertSessionHas('success', 'Kategori berhasil dihapus.');
 
     expect(Category::find($category->id))->toBeNull();
 });

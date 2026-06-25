@@ -48,7 +48,7 @@ class WarehouseController extends Controller
 
             return redirect()->route('warehouses.index')->with('success', 'Gudang berhasil dibuat.');
         } catch (\Exception $e) {
-            return redirect()->route('warehouses.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouses.index')->with('error', 'Gagal membuat gudang: '.$e->getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ class WarehouseController extends Controller
 
             return redirect()->route('warehouses.index')->with('success', 'Gudang berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->route('warehouses.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouses.index')->with('error', 'Gagal memperbarui gudang: '.$e->getMessage());
         }
     }
 
@@ -92,7 +92,7 @@ class WarehouseController extends Controller
 
             return redirect()->route('warehouses.index')->with('success', 'Gudang berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('warehouses.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouses.index')->with('error', 'Gagal menghapus gudang: '.$e->getMessage());
         }
     }
 
@@ -111,9 +111,9 @@ class WarehouseController extends Controller
         try {
             $count = $action->execute($request->ids);
 
-            return redirect()->route('warehouses.index')->with('success', "{$count} gudang berhasil dihapus.");
+            return redirect()->route('warehouses.index')->with('success', "Berhasil menghapus {$count} gudang.");
         } catch (\Exception $e) {
-            return redirect()->route('warehouses.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouses.index')->with('error', 'Gagal menghapus gudang: '.$e->getMessage());
         }
     }
 }

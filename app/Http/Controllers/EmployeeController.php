@@ -60,7 +60,7 @@ class EmployeeController extends Controller
 
             return redirect()->route('employees.index')->with('success', 'Karyawan berhasil dibuat.');
         } catch (\Exception $e) {
-            return redirect()->route('employees.index')->with('error', $e->getMessage());
+            return redirect()->route('employees.index')->with('error', 'Gagal membuat karyawan: '.$e->getMessage());
         }
     }
 
@@ -87,7 +87,7 @@ class EmployeeController extends Controller
 
             return redirect()->route('employees.index')->with('success', 'Karyawan berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->route('employees.index')->with('error', $e->getMessage());
+            return redirect()->route('employees.index')->with('error', 'Gagal memperbarui karyawan: '.$e->getMessage());
         }
     }
 
@@ -101,9 +101,9 @@ class EmployeeController extends Controller
         try {
             $action->execute($employee);
 
-            return redirect()->route('employees.index')->with('success', 'Berhasil menghapus karyawan.');
+            return redirect()->route('employees.index')->with('success', 'Karyawan berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('employees.index')->with('error', $e->getMessage());
+            return redirect()->route('employees.index')->with('error', 'Gagal menghapus karyawan: '.$e->getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ class EmployeeController extends Controller
 
             return redirect()->route('employees.index')->with('success', "Berhasil menghapus {$count} karyawan.");
         } catch (\Exception $e) {
-            return redirect()->route('employees.index')->with('error', $e->getMessage());
+            return redirect()->route('employees.index')->with('error', 'Gagal menghapus karyawan: '.$e->getMessage());
         }
     }
 }

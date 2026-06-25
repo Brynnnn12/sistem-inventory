@@ -97,7 +97,7 @@ class SupplierController extends Controller
 
             return redirect()->route('suppliers.index')->with('success', 'Supplier berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('suppliers.index')->with('error', $e->getMessage());
+            return redirect()->route('suppliers.index')->with('error', 'Gagal menghapus supplier: '.$e->getMessage());
         }
     }
 
@@ -118,7 +118,7 @@ class SupplierController extends Controller
 
             return redirect()->route('suppliers.index')->with('success', "Berhasil menghapus {$count} supplier.");
         } catch (\Exception $e) {
-            return redirect()->route('suppliers.index')->with('error', $e->getMessage());
+            return redirect()->route('suppliers.index')->with('error', 'Gagal menghapus supplier: '.$e->getMessage());
         }
     }
 }

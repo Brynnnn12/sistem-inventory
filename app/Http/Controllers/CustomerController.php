@@ -84,7 +84,7 @@ class CustomerController extends Controller
 
             return redirect()->route('customers.index')->with('success', 'Customer berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('customers.index')->with('error', $e->getMessage());
+            return redirect()->route('customers.index')->with('error', 'Gagal menghapus customer: '.$e->getMessage());
         }
     }
 
@@ -105,7 +105,7 @@ class CustomerController extends Controller
 
             return redirect()->route('customers.index')->with('success', "Berhasil menghapus {$count} customer.");
         } catch (\Exception $e) {
-            return redirect()->route('customers.index')->with('error', $e->getMessage());
+            return redirect()->route('customers.index')->with('error', 'Gagal menghapus customer: '.$e->getMessage());
         }
     }
 }

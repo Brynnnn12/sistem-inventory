@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseUser;
 
@@ -42,7 +43,7 @@ test('super-admin bisa menukar penempatan gudang antar pengguna', function () {
 test('super-admin bisa melihat daftar penempatan gudang', function () {
     $superAdmin = createSuperAdmin();
 
-    $users = \App\Models\User::factory()->count(3)->create();
+    $users = User::factory()->count(3)->create();
     $warehouses = Warehouse::factory()->count(3)->create();
 
     $warehouseUsers = collect(range(0, 2))->map(fn ($i) => WarehouseUser::factory()->create([
@@ -79,7 +80,7 @@ test('admin dan viewer tidak bisa melihat daftar penempatan gudang', function ()
     $admin = createAdmin();
     $viewer = createViewer();
 
-    $users = \App\Models\User::factory()->count(2)->create();
+    $users = User::factory()->count(2)->create();
     $warehouses = Warehouse::factory()->count(2)->create();
 
     foreach (range(0, 1) as $i) {
@@ -106,7 +107,7 @@ test('super-admin bisa membuat penempatan gudang', function () {
     ]);
 
     $response->assertRedirect(route('warehouse-users.index'))
-        ->assertSessionHas('success', 'Penempatan berhasil.');
+        ->assertSessionHas('success', 'Penempatan berhasil dibuat.');
 
     $this->assertDatabaseHas('warehouse_users', [
         'user_id' => $adminUser->id,
@@ -118,7 +119,7 @@ test('admin dan viewer tidak bisa membuat penempatan gudang', function () {
     $admin = createAdmin();
     $viewer = createViewer();
 
-    $user = \App\Models\User::factory()->create();
+    $user = User::factory()->create();
     $warehouse = Warehouse::factory()->create();
 
     actingAs($admin)->post(route('warehouse-users.store'), [
@@ -142,8 +143,8 @@ test('super-admin bisa menghapus penempatan gudang', function () {
     $response->assertRedirect(route('warehouse-users.index'))
         ->assertSessionHas('success', 'Penempatan berhasil dihapus.');
 
-    expect(\App\Models\WarehouseUser::find($wu->id))->toBeNull();
-    expect(\App\Models\WarehouseUser::withTrashed()->find($wu->id))->not->toBeNull();
+    expect(WarehouseUser::find($wu->id))->toBeNull();
+    expect(WarehouseUser::withTrashed()->find($wu->id))->not->toBeNull();
 });
 
 test('admin dan viewer tidak bisa menghapus penempatan gudang', function () {
@@ -159,7 +160,7 @@ test('admin dan viewer tidak bisa menghapus penempatan gudang', function () {
 test('super-admin bisa hapus banyak penempatan gudang', function () {
     $superAdmin = createSuperAdmin();
 
-    $users = \App\Models\User::factory()->count(3)->create();
+    $users = User::factory()->count(3)->create();
     $warehouses = Warehouse::factory()->count(3)->create();
 
     $wus = collect(range(0, 2))->map(fn ($i) => WarehouseUser::factory()->create([
@@ -176,8 +177,8 @@ test('super-admin bisa hapus banyak penempatan gudang', function () {
 
     foreach ($ids as $id) {
         // soft deleted
-        expect(\App\Models\WarehouseUser::find($id))->toBeNull();
-        expect(\App\Models\WarehouseUser::withTrashed()->find($id))->not->toBeNull();
+        expect(WarehouseUser::find($id))->toBeNull();
+        expect(WarehouseUser::withTrashed()->find($id))->not->toBeNull();
     }
 });
 
@@ -185,7 +186,7 @@ test('admin dan viewer tidak bisa hapus banyak penempatan gudang', function () {
     $admin = createAdmin();
     $viewer = createViewer();
 
-    $users = \App\Models\User::factory()->count(2)->create();
+    $users = User::factory()->count(2)->create();
     $warehouses = Warehouse::factory()->count(2)->create();
 
     $wus = collect(range(0, 1))->map(fn ($i) => WarehouseUser::factory()->create([
@@ -202,8 +203,8 @@ test('admin dan viewer tidak bisa hapus banyak penempatan gudang', function () {
 test('viewer tidak bisa menukar penempatan gudang (forbidden)', function () {
     $viewer = createViewer();
 
-    $userA = \App\Models\User::factory()->create();
-    $userB = \App\Models\User::factory()->create();
+    $userA = User::factory()->create();
+    $userB = User::factory()->create();
 
     $warehouse1 = Warehouse::factory()->create();
     $warehouse2 = Warehouse::factory()->create();

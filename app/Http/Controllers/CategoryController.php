@@ -42,7 +42,7 @@ class CategoryController extends Controller
 
         $action->execute($request->validated());
 
-        return redirect()->route('categories.index')->with('success', 'Kategori Berhasil Dibuat.');
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil dibuat.');
     }
 
     /**
@@ -70,7 +70,7 @@ class CategoryController extends Controller
 
         $action->execute($category, $request->validated());
 
-        return redirect()->route('categories.index')->with('success', 'Kategori Berhasil Diperbarui.');
+        return redirect()->route('categories.index')->with('success', 'Kategori berhasil diperbarui.');
     }
 
     /**
@@ -83,9 +83,9 @@ class CategoryController extends Controller
         try {
             $action->execute($category);
 
-            return redirect()->route('categories.index')->with('success', 'Kategori Berhasil Dihapus.');
+            return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', $e->getMessage());
+            return redirect()->route('categories.index')->with('error', 'Gagal menghapus kategori: '.$e->getMessage());
         }
     }
 
@@ -104,9 +104,9 @@ class CategoryController extends Controller
         try {
             $count = $action->execute($request->ids);
 
-            return redirect()->route('categories.index')->with('success', "{$count} kategori berhasil dihapus.");
+            return redirect()->route('categories.index')->with('success', "Berhasil menghapus {$count} kategori.");
         } catch (\Exception $e) {
-            return redirect()->route('categories.index')->with('error', $e->getMessage());
+            return redirect()->route('categories.index')->with('error', 'Gagal menghapus kategori: '.$e->getMessage());
         }
     }
 }

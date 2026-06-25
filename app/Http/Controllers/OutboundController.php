@@ -7,6 +7,8 @@ use App\Http\Requests\Transaction\StoreOutboundRequest;
 use App\Models\Customer;
 use App\Models\OutboundTransaction;
 use App\Models\Product;
+use App\Models\Stock;
+use App\Models\User;
 use App\Models\Warehouse;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -20,22 +22,21 @@ class OutboundController extends Controller
 {
     public function __construct(
         private readonly CreateOutboundTransactionAction $createOutboundAction,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response
     {
         $this->authorize('viewAny', OutboundTransaction::class);
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         $query = OutboundTransaction::with(['customer', 'warehouse', 'product', 'creator'])
             ->when($request->search, function ($q) use ($request) {
                 $q->where(function ($searchQuery) use ($request) {
                     $searchQuery->where('code', 'like', "%{$request->search}%")
-                        ->orWhereHas('customer', fn($cq) => $cq->where('name', 'like', "%{$request->search}%"))
-                        ->orWhereHas('product', fn($pq) => $pq->where('name', 'like', "%{$request->search}%"));
+                        ->orWhereHas('customer', fn ($cq) => $cq->where('name', 'like', "%{$request->search}%"))
+                        ->orWhereHas('product', fn ($pq) => $pq->where('name', 'like', "%{$request->search}%"));
                 });
             })
             ->when($request->warehouse_id, function ($q) use ($request) {
@@ -44,7 +45,7 @@ class OutboundController extends Controller
             ->when($request->start_date && $request->end_date, function ($q) use ($request) {
                 $q->whereBetween('sale_date', [$request->start_date, $request->end_date]);
             })
-            ->when(!$user->hasRole('super-admin'), function ($q) use ($user) {
+            ->when(! $user->hasRole('super-admin'), function ($q) use ($user) {
                 $warehouseIds = $user->warehouses()->pluck('warehouses.id');
                 $q->whereIn('warehouse_id', $warehouseIds);
             })
@@ -59,12 +60,10 @@ class OutboundController extends Controller
         $customers = Customer::active()->get();
         $products = Product::active()->get(['id', 'name', 'price', 'unit']);
 
-        $stocks = \App\Models\Stock::with(['product', 'warehouse'])
+        $stocks = Stock::with(['product', 'warehouse'])
             ->whereIn('warehouse_id', $warehouses->pluck('id'))
             ->where('quantity', '>', 0)
             ->get();
-
-
 
         return Inertia::render('outbound/index', [
             'outbounds' => $outbounds,
@@ -100,14 +99,14 @@ class OutboundController extends Controller
             $newStock = $stockHistory ? $stockHistory->quantity_after : 0;
 
             return redirect()->route('outbound.index')
-                ->with('success', "Outbound transaction {$transaction->code} berhasil dibuat. Stok: {$oldStock} → {$newStock} (Berkurang {$validated['quantity']})");
+                ->with('success', "Transaksi outbound {$transaction->code} berhasil dibuat. Stok: {$oldStock} → {$newStock} (Berkurang {$validated['quantity']})");
         } catch (ValidationException $e) {
             return redirect()->back()
                 ->withErrors($e->errors())
                 ->withInput();
         } catch (Exception $e) {
             return redirect()->back()
-                ->with('error', "Gagal membuat outbound transaction: {$e->getMessage()}")
+                ->with('error', "Gagal membuat transaksi outbound: {$e->getMessage()}")
                 ->withInput();
         }
     }

@@ -26,15 +26,6 @@ export function FlashToaster() {
         if (flash.error) {
             toast.error(flash.error);
         }
-        if (flash.warning) {
-            toast.warning(flash.warning);
-        }
-        if (flash.message) {
-            toast.message(flash.message);
-        }
-        if (flash.status) {
-            toast.info(flash.status);
-        }
     }, [flash]);
 
     return null;

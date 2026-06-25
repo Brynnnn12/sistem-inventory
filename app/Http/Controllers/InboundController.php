@@ -7,6 +7,7 @@ use App\Http\Requests\Transaction\StoreInboundRequest;
 use App\Models\InboundTransaction;
 use App\Models\Product;
 use App\Models\Supplier;
+use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class InboundController extends Controller
     {
         $this->authorize('viewAny', InboundTransaction::class);
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
 
         $query = InboundTransaction::with(['supplier', 'warehouse', 'product', 'creator'])
@@ -88,6 +89,6 @@ class InboundController extends Controller
         $newStock = $stockHistory ? $stockHistory->quantity_after : $validated['quantity'];
 
         return redirect()->route('inbound.index')
-            ->with('success', "Inbound transaction {$transaction->code} berhasil dibuat. Stok: {$oldStock} → {$newStock} (Bertambah {$validated['quantity']})");
+            ->with('success', "Transaksi inbound {$transaction->code} berhasil dibuat. Stok: {$oldStock} → {$newStock} (Bertambah {$validated['quantity']})");
     }
 }

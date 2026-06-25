@@ -6,7 +6,9 @@ use App\Actions\Transaction\CreateMutationAction;
 use App\Http\Requests\Transaction\ReceiveMutationRequest;
 use App\Http\Requests\Transaction\StoreMutationRequest;
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\StockMutation;
+use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,21 +21,20 @@ class MutationController extends Controller
 {
     public function __construct(
         private readonly CreateMutationAction $createMutationAction,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request): Response
     {
         $this->authorize('viewAny', StockMutation::class);
 
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $isSuperAdmin = $user->hasRole('super-admin');
 
         // Get all mutations (both outgoing and incoming for the user)
         $query = StockMutation::with(['fromWarehouse', 'toWarehouse', 'product', 'creator']);
 
-        if (!$isSuperAdmin) {
+        if (! $isSuperAdmin) {
             $userWarehouseIds = $user->warehouses()->pluck('warehouses.id')->toArray();
             $query->where(function ($q) use ($userWarehouseIds) {
                 $q->whereIn('from_warehouse', $userWarehouseIds)
@@ -46,9 +47,9 @@ class MutationController extends Controller
             $query->where(function ($q) use ($request) {
                 $q->where(function ($searchQuery) use ($request) {
                     $searchQuery->where('code', 'like', "%{$request->search}%")
-                        ->orWhereHas('product', fn($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
-                        ->orWhereHas('fromWarehouse', fn($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
-                        ->orWhereHas('toWarehouse', fn($subQ) => $subQ->where('name', 'like', "%{$request->search}%"));
+                        ->orWhereHas('product', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
+                        ->orWhereHas('fromWarehouse', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"))
+                        ->orWhereHas('toWarehouse', fn ($subQ) => $subQ->where('name', 'like', "%{$request->search}%"));
                 });
             });
         }
@@ -61,13 +62,13 @@ class MutationController extends Controller
 
         if ($request->type) {
             if ($request->type === 'outgoing') {
-                if (!$isSuperAdmin) {
+                if (! $isSuperAdmin) {
                     $userWarehouseIds = $user->warehouses()->pluck('warehouses.id')->toArray();
                     $query->whereIn('from_warehouse', $userWarehouseIds);
                 }
                 // For super admin, no additional filter - show all mutations
             } elseif ($request->type === 'incoming') {
-                if (!$isSuperAdmin) {
+                if (! $isSuperAdmin) {
                     $userWarehouseIds = $user->warehouses()->pluck('warehouses.id')->toArray();
                     $query->whereIn('to_warehouse', $userWarehouseIds);
                 }
@@ -91,7 +92,7 @@ class MutationController extends Controller
                 } else {
                     // Default: determine based on user's warehouses if they have any, otherwise show actual direction
                     $userWarehouseIds = $user->warehouses()->pluck('warehouses.id')->toArray();
-                    if (!empty($userWarehouseIds)) {
+                    if (! empty($userWarehouseIds)) {
                         $mutation->type = in_array($mutation->from_warehouse, $userWarehouseIds) ? 'outgoing' : 'incoming';
                     } else {
                         // For super-admin with no specific warehouses, alternate between outgoing and incoming
@@ -114,24 +115,24 @@ class MutationController extends Controller
                 ? Warehouse::active()->get(['id', 'name'])
                 : $user->warehouses()->active()->select('warehouses.id', 'warehouses.name')->get(),
             'products' => Product::active()->get(['id', 'name']),
-            'stocks' => \App\Models\Stock::with(['product', 'warehouse'])
+            'stocks' => Stock::with(['product', 'warehouse'])
                 ->when(
-                    !$isSuperAdmin,
-                    fn($q) => $q->whereIn(
+                    ! $isSuperAdmin,
+                    fn ($q) => $q->whereIn(
                         'warehouse_id',
                         $user->warehouses()->pluck('warehouses.id')
                     )
                 )
                 ->when(
                     $isSuperAdmin,
-                    fn($q) => $q->whereHas(
+                    fn ($q) => $q->whereHas(
                         'warehouse',
-                        fn($warehouseQuery) => $warehouseQuery->active()
+                        fn ($warehouseQuery) => $warehouseQuery->active()
                     )
                 )
                 ->where('quantity', '>', 0)
                 ->get()
-                ->map(fn($stock) => [
+                ->map(fn ($stock) => [
                     'id' => (int) $stock->id,
                     'warehouse_id' => (int) $stock->warehouse_id,
                     'product_id' => (int) $stock->product_id,
@@ -170,7 +171,7 @@ class MutationController extends Controller
             );
 
             return redirect()->route('mutations.index')
-                ->with('success', 'Mutation berhasil dikirim.');
+                ->with('success', 'Mutasi berhasil dikirim.');
         } catch (ValidationException $e) {
             return redirect()->back()
                 ->withErrors($e->errors())
@@ -192,7 +193,7 @@ class MutationController extends Controller
             );
 
             return redirect()->route('mutations.index')
-                ->with('success', 'Mutation berhasil diterima.');
+                ->with('success', 'Mutasi berhasil diterima.');
         } catch (ValidationException $e) {
             return redirect()->back()
                 ->withErrors($e->errors());
@@ -214,7 +215,7 @@ class MutationController extends Controller
             );
 
             return redirect()->route('mutations.index')
-                ->with('success', 'Mutation berhasil ditolak.');
+                ->with('success', 'Mutasi berhasil ditolak.');
         } catch (ValidationException $e) {
             return redirect()->back()
                 ->withErrors($e->errors());

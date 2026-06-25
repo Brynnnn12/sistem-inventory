@@ -64,7 +64,7 @@ class WarehouseUserController extends Controller
         try {
             $action->execute($request->validated());
 
-            return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil.');
+            return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil dibuat.');
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
                 return redirect()->route('warehouse-users.index')->with('error', 'Data penempatan sudah ada dan tidak dapat ditambahkan lagi.');
@@ -72,7 +72,7 @@ class WarehouseUserController extends Controller
 
             throw $e;
         } catch (\Exception $e) {
-            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouse-users.index')->with('error', 'Gagal membuat penempatan: '.$e->getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ class WarehouseUserController extends Controller
 
             return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouse-users.index')->with('error', 'Gagal menghapus penempatan: '.$e->getMessage());
         }
     }
 
@@ -123,7 +123,7 @@ class WarehouseUserController extends Controller
 
             return redirect()->route('warehouse-users.index')->with('success', 'Penempatan berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouse-users.index')->with('error', 'Gagal menghapus penempatan: '.$e->getMessage());
         }
     }
 
@@ -145,7 +145,7 @@ class WarehouseUserController extends Controller
 
             throw $e;
         } catch (\Exception $e) {
-            return redirect()->route('warehouse-users.index')->with('error', $e->getMessage());
+            return redirect()->route('warehouse-users.index')->with('error', 'Gagal menukar penempatan: '.$e->getMessage());
         }
     }
 }

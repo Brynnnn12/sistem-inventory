@@ -51,7 +51,7 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->with('success', 'Produk berhasil dibuat.');
         } catch (\Exception $e) {
-            return redirect()->route('products.index')->with('error', $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Gagal membuat produk: '.$e->getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
         } catch (\Exception $e) {
-            return redirect()->route('products.index')->with('error', $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Gagal memperbarui produk: '.$e->getMessage());
         }
     }
 
@@ -97,7 +97,7 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
         } catch (\Exception $e) {
-            return redirect()->route('products.index')->with('error', $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Gagal menghapus produk: '.$e->getMessage());
         }
     }
 
@@ -118,7 +118,7 @@ class ProductController extends Controller
 
             return redirect()->route('products.index')->with('success', "Berhasil menghapus {$count} produk.");
         } catch (\Exception $e) {
-            return redirect()->route('products.index')->with('error', $e->getMessage());
+            return redirect()->route('products.index')->with('error', 'Gagal menghapus produk: '.$e->getMessage());
         }
     }
 }

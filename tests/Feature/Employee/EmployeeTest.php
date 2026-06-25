@@ -69,16 +69,16 @@ test('super-admin bisa melakukan CRUD dan bulk pada karyawan; role lain dilarang
     expect($employee->hasRole('viewer'))->toBeTrue();
 
     // destroy
-    $toDelete = \App\Models\User::factory()->create();
+    $toDelete = User::factory()->create();
     $response = actingAs($superAdmin)->delete(route('employees.destroy', $toDelete));
     $response->assertRedirect(route('employees.index'))
-        ->assertSessionHas('success', 'Berhasil menghapus karyawan.');
+        ->assertSessionHas('success', 'Karyawan berhasil dihapus.');
 
     expect(User::find($toDelete->id))->toBeNull();
     expect(User::withTrashed()->find($toDelete->id))->not->toBeNull();
 
     // bulk destroy
-    $batch = \App\Models\User::factory()->count(3)->create();
+    $batch = User::factory()->count(3)->create();
     $ids = $batch->pluck('id')->toArray();
 
     $response = actingAs($superAdmin)->delete(route('employees.bulk-destroy'), ['ids' => $ids]);
