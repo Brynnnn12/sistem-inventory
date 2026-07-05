@@ -26,12 +26,12 @@ class StoreEmployeeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'],
+            'name' => ['required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
             'email' => [
                 'required',
                 'string',
                 'email:dns',
-                'max:255',
+                'max:50',
                 Rule::unique('users', 'email')->whereNull('deleted_at'),
             ],
             'phone_number' => ['required', 'string', 'regex:/^628[0-9]{9,11}$/'],

@@ -44,14 +44,16 @@ export function ProductFormModal({
 }: ProductFormModalProps) {
     const isEditing = !!product;
 
+    const num = (v: unknown) => v != null ? String(Number(v)) : '';
+
     const form = useForm({
         category_id: product?.category_id?.toString() || '',
         name: product?.name || '',
         unit: product?.unit || '',
-        min_stock: product?.min_stock?.toString() || '',
-        max_stock: product?.max_stock?.toString() || '',
-        price: product?.price?.toString() || '',
-        cost: product?.cost?.toString() || '',
+        min_stock: num(product?.min_stock),
+        max_stock: num(product?.max_stock),
+        price: num(product?.price),
+        cost: num(product?.cost),
         description: product?.description || '',
         is_active: product?.is_active ?? true,
     });
@@ -62,10 +64,10 @@ export function ProductFormModal({
                 category_id: product.category_id?.toString() || '',
                 name: product.name,
                 unit: product.unit,
-                min_stock: product.min_stock?.toString() || '',
-                max_stock: product.max_stock?.toString() || '',
-                price: product.price?.toString() || '',
-                cost: product.cost?.toString() || '',
+                min_stock: num(product.min_stock),
+                max_stock: num(product.max_stock),
+                price: num(product.price),
+                cost: num(product.cost),
                 description: product.description || '',
                 is_active: product.is_active,
             });

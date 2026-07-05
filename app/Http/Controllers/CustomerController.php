@@ -49,18 +49,6 @@ class CustomerController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Customer $customer)
-    {
-        $this->authorize('view', $customer);
-
-        return Inertia::render('customers/show', [
-            'customer' => $customer,
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateCustomerRequest $request, Customer $customer, UpdateCustomerAction $action)

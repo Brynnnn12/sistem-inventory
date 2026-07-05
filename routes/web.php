@@ -48,7 +48,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::middleware(['throttle:crud'])->group(function () {
         Route::resource('employees', \App\Http\Controllers\EmployeeController::class)
             ->parameters(['employees' => 'employee'])
-            ->except(['create', 'edit']);
+            ->except(['create', 'edit', 'show']);
 
         Route::resource('categories', \App\Http\Controllers\CategoryController::class)
             ->parameters(['categories' => 'category'])
@@ -71,11 +71,12 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
         Route::resource('suppliers', \App\Http\Controllers\SupplierController::class)
             ->parameters(['suppliers' => 'supplier'])
+            ->except(['show'])
             ->except(['create', 'edit']);
 
         Route::resource('customers', \App\Http\Controllers\CustomerController::class)
             ->parameters(['customers' => 'customer'])
-            ->except(['create', 'edit']);
+            ->except(['create', 'edit', 'show']);
 
         // Stock Management
         Route::prefix('stocks')->name('stocks.')->group(function () {

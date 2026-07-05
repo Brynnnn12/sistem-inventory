@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
-import { Lock, Mail, Save, Shield, User } from 'lucide-react';
-import { useEffect } from 'react';
+import { Eye, EyeOff, Lock, Mail, Save, Shield, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import InputError from '@/components/input-error';
 import { ModalHeader } from '@/components/modal-header';
 import { Button } from '@/components/ui/button';
@@ -29,6 +29,8 @@ export function EmployeeFormModal({
     onClose,
 }: EmployeeFormModalProps) {
     const isEditing = !!employee;
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
 
     const form = useForm({
         name: '',
@@ -42,7 +44,6 @@ export function EmployeeFormModal({
     useEffect(() => {
         if (open) {
             if (employee) {
-                // Mode edit: populate form with employee data
                 form.setData({
                     name: employee.name,
                     email: employee.email,
@@ -52,7 +53,6 @@ export function EmployeeFormModal({
                     password_confirmation: '',
                 });
             } else {
-                // Mode create: reset form to empty state
                 form.reset();
                 form.clearErrors();
                 form.setData({
@@ -139,8 +139,9 @@ export function EmployeeFormModal({
                                                     e.target.value,
                                                 )
                                             }
-                                            placeholder="Contoh: John Doe, Ahmad Suharto"
+                                            placeholder="Contoh: Ahmad Suharto"
                                             required
+                                            maxLength={50}
                                             className="pl-9"
                                         />
                                     </div>
@@ -170,6 +171,7 @@ export function EmployeeFormModal({
                                             }
                                             placeholder="contoh@email.com"
                                             required
+                                            maxLength={50}
                                             className="pl-9"
                                         />
                                     </div>
@@ -196,13 +198,14 @@ export function EmployeeFormModal({
                                     }
                                     placeholder="628123456789"
                                     required
+                                    maxLength={14}
                                 />
                                 <InputError
                                     message={form.errors.phone_number}
                                 />
-                                <p className="text-xs text-muted-foreground">
-                                    💡 Format: 628xxxxxxxxxx (tanpa spasi atau
-                                    karakter khusus)
+                                <p className="text-sm text-muted-foreground">
+                                    Format: 628xxxxxxxxxx (diawali 62, maksimal
+                                    14 digit)
                                 </p>
                             </div>
                         </div>
@@ -250,86 +253,130 @@ export function EmployeeFormModal({
                             </div>
                         </div>
 
-                        {/* Security - Only show for create mode */}
-                        {!isEditing && (
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2 text-sm font-medium">
-                                    <Lock className="h-4 w-4" />
-                                    <span>Keamanan</span>
-                                </div>
-                                <Separator />
+                        {/* Security */}
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-2 text-sm font-medium">
+                                <Lock className="h-4 w-4" />
+                                <span>Keamanan</span>
+                            </div>
+                            <Separator />
 
-                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="create-password">
-                                            Password{' '}
-                                            <span className="text-destructive">
-                                                *
-                                            </span>
-                                        </Label>
-                                        <div className="relative">
-                                            <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                            <Input
-                                                id="create-password"
-                                                type="password"
-                                                value={form.data.password}
-                                                onChange={(e) =>
-                                                    form.setData(
-                                                        'password',
-                                                        e.target.value,
-                                                    )
-                                                }
-                                                placeholder="••••••••"
-                                                required
-                                                className="pl-9"
-                                            />
-                                        </div>
-                                        <InputError
-                                            message={form.errors.password}
+                            {isEditing && (
+                                <p className="text-sm text-muted-foreground">
+                                    Kosongkan jika tidak ingin mengubah
+                                    password.
+                                </p>
+                            )}
+
+                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor={`${isEditing ? 'edit' : 'create'}-password`}
+                                    >
+                                        Password{' '}
+                                        <span className="text-destructive">
+                                            {!isEditing ? '*' : ''}
+                                        </span>
+                                    </Label>
+                                    <div className="relative">
+                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                        <Input
+                                            id={`${isEditing ? 'edit' : 'create'}-password`}
+                                            type={
+                                                showPassword
+                                                    ? 'text'
+                                                    : 'password'
+                                            }
+                                            value={form.data.password}
+                                            onChange={(e) =>
+                                                form.setData(
+                                                    'password',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="Minimal 8 karakter"
+                                            required={!isEditing}
+                                            className="pl-9 pr-10"
                                         />
-                                        <p className="text-xs text-muted-foreground">
-                                            💡 Must be at least 8 characters
-                                            long
-                                        </p>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setShowPassword(!showPassword)
+                                            }
+                                            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            tabIndex={-1}
+                                        >
+                                            {showPassword ? (
+                                                <EyeOff className="h-4 w-4" />
+                                            ) : (
+                                                <Eye className="h-4 w-4" />
+                                            )}
+                                        </button>
                                     </div>
+                                    <InputError
+                                        message={form.errors.password}
+                                    />
+                                    <p className="text-sm text-muted-foreground">
+                                        Minimal 8 karakter, mengandung huruf
+                                        besar, huruf kecil, angka, dan simbol.
+                                    </p>
+                                </div>
 
-                                    <div className="space-y-2">
-                                        <Label htmlFor="create-password-confirmation">
-                                            Confirm Password{' '}
-                                            <span className="text-destructive">
-                                                *
-                                            </span>
-                                        </Label>
-                                        <div className="relative">
-                                            <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                                            <Input
-                                                id="create-password-confirmation"
-                                                type="password"
-                                                value={
-                                                    form.data
-                                                        .password_confirmation
-                                                }
-                                                onChange={(e) =>
-                                                    form.setData(
-                                                        'password_confirmation',
-                                                        e.target.value,
-                                                    )
-                                                }
-                                                placeholder="••••••••"
-                                                required
-                                                className="pl-9"
-                                            />
-                                        </div>
-                                        <InputError
-                                            message={
-                                                form.errors
+                                <div className="space-y-2">
+                                    <Label
+                                        htmlFor={`${isEditing ? 'edit' : 'create'}-password-confirmation`}
+                                    >
+                                        Konfirmasi Password{' '}
+                                        <span className="text-destructive">
+                                            {!isEditing ? '*' : ''}
+                                        </span>
+                                    </Label>
+                                    <div className="relative">
+                                        <Lock className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                                        <Input
+                                            id={`${isEditing ? 'edit' : 'create'}-password-confirmation`}
+                                            type={
+                                                showConfirm
+                                                    ? 'text'
+                                                    : 'password'
+                                            }
+                                            value={
+                                                form.data
                                                     .password_confirmation
                                             }
+                                            onChange={(e) =>
+                                                form.setData(
+                                                    'password_confirmation',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            placeholder="Ketik ulang password"
+                                            required={!isEditing}
+                                            className="pl-9 pr-10"
                                         />
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setShowConfirm(!showConfirm)
+                                            }
+                                            className="absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                            tabIndex={-1}
+                                        >
+                                            {showConfirm ? (
+                                                <EyeOff className="h-4 w-4" />
+                                            ) : (
+                                                <Eye className="h-4 w-4" />
+                                            )}
+                                        </button>
                                     </div>
+                                    <InputError
+                                        message={
+                                            form.errors.password_confirmation
+                                        }
+                                    />
                                 </div>
                             </div>
-                        )}
+                        </div>
                     </div>
 
                     <DialogFooter>

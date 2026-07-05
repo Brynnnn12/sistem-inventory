@@ -65,18 +65,6 @@ class EmployeeController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(User $employee)
-    {
-        $this->authorize('view', $employee);
-
-        return Inertia::render('employees/show', [
-            'employee' => $employee->load('roles'),
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateEmployeeRequest $request, User $employee, UpdateEmployeeAction $action)

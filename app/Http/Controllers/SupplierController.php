@@ -56,18 +56,6 @@ class SupplierController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(Supplier $supplier)
-    {
-        $this->authorize('view', $supplier);
-
-        return Inertia::render('suppliers/show', [
-            'supplier' => $supplier,
-        ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateSupplierRequest $request, Supplier $supplier, UpdateSupplierAction $action)

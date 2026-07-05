@@ -130,7 +130,7 @@ export function SupplierFormModal({
                                     }
                                     placeholder="Contoh: PT. Indofood Sukses Makmur"
                                     required
-                                    maxLength={255}
+                                    maxLength={60}
                                 />
                                 <InputError message={form.errors.name} />
                             </div>
@@ -151,7 +151,7 @@ export function SupplierFormModal({
                                     }
                                     placeholder="Contoh: Budi Santoso"
                                     required
-                                    maxLength={255}
+                                    maxLength={60}
                                 />
                                 <InputError
                                     message={form.errors.contact_person}
@@ -172,9 +172,12 @@ export function SupplierFormModal({
                                     onChange={(e) =>
                                         form.setData('phone', e.target.value)
                                     }
-                                    placeholder="Contoh: +62 812-3456-7890"
-                                    maxLength={20}
+                                    placeholder="Contoh: 081234567890"
+                                    maxLength={14}
                                 />
+                                <p className="text-sm text-muted-foreground">
+                                    Masukkan angka saja, maksimal 14 karakter
+                                </p>
                                 <InputError message={form.errors.phone} />
                             </div>
 
@@ -188,7 +191,7 @@ export function SupplierFormModal({
                                         form.setData('email', e.target.value)
                                     }
                                     placeholder="Contoh: contact@supplier.com"
-                                    maxLength={255}
+                                    maxLength={50}
                                 />
                                 <InputError message={form.errors.email} />
                             </div>
@@ -206,10 +209,14 @@ export function SupplierFormModal({
                                         e.target.value.toUpperCase(),
                                     )
                                 }
-                                placeholder="Contoh: NPWP-1234567890123456"
+                                placeholder="Contoh: 01.234.567.8-901.234"
                                 maxLength={50}
                                 className="font-mono"
                             />
+                            <p className="text-sm text-muted-foreground">
+                                Titik dan strip akan dihapus otomatis. Cukup
+                                masukkan angka & huruf saja.
+                            </p>
                             <InputError message={form.errors.tax_id} />
                         </div>
 

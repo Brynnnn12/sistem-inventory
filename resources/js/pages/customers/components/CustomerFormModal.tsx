@@ -146,7 +146,7 @@ export function CustomerFormModal({
                                         )
                                     }
                                     placeholder="Contoh: Ahmad Susanto"
-                                    maxLength={100}
+                                    maxLength={60}
                                 />
                                 <InputError
                                     message={form.errors.contact_person}
@@ -162,13 +162,17 @@ export function CustomerFormModal({
                                 </Label>
                                 <Input
                                     id="customer-phone"
+                                    type="tel"
                                     value={form.data.phone}
                                     onChange={(e) =>
                                         form.setData('phone', e.target.value)
                                     }
                                     placeholder="Contoh: 081234567890"
-                                    maxLength={20}
+                                    maxLength={14}
                                 />
+                                <p className="text-sm text-muted-foreground">
+                                    Masukkan angka saja, maksimal 14 karakter
+                                </p>
                                 <InputError message={form.errors.phone} />
                             </div>
 
@@ -182,7 +186,7 @@ export function CustomerFormModal({
                                         form.setData('email', e.target.value)
                                     }
                                     placeholder="Contoh: contact@tokomakmur.com"
-                                    maxLength={100}
+                                    maxLength={50}
                                 />
                                 <InputError message={form.errors.email} />
                             </div>

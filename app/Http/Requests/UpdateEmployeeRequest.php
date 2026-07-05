@@ -37,13 +37,13 @@ class UpdateEmployeeRequest extends FormRequest
         $employee = $this->route('employee');
 
         return [
-            'name' => ['sometimes', 'required', 'string', 'max:255', 'regex:/^[a-zA-Z\s]+$/'],
+            'name' => ['sometimes', 'required', 'string', 'max:50', 'regex:/^[a-zA-Z\s]+$/'],
             'email' => [
                 'sometimes',
                 'required',
                 'string',
                 'email:dns',
-                'max:255',
+                'max:50',
                 Rule::unique('users')->ignore($employee->id)->whereNull('deleted_at'),
             ],
             'phone_number' => ['sometimes', 'required', 'string', 'regex:/^628[0-9]{9,11}$/'],

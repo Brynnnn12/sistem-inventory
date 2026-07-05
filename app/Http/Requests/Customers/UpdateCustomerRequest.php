@@ -18,11 +18,10 @@ class UpdateCustomerRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            // Bersihkan input dari potensi XSS
             'name' => strip_tags(trim($this->name)),
             'contact_person' => strip_tags(trim($this->contact_person)),
-            'phone' => trim($this->phone),
-            'email' => strtolower(trim($this->email)),
+            'phone' => $this->phone ? trim($this->phone) : null,
+            'email' => $this->email ? strtolower(trim($this->email)) : null,
             'address' => strip_tags(trim($this->address)),
         ]);
     }
@@ -42,20 +41,20 @@ class UpdateCustomerRequest extends FormRequest
             'contact_person' => [
                 'nullable',
                 'string',
-                'max:100',
+                'max:60',
                 'regex:/^[a-zA-Z\s\-\.\']+$/',
             ],
             'phone' => [
                 'nullable',
                 'string',
-                'max:20',
+                'max:14',
                 'regex:/^[0-9\-\+\(\)\s]+$/',
             ],
             'email' => [
                 'sometimes',
                 'nullable',
                 'email:rfc,dns',
-                'max:100',
+                'max:50',
                 Rule::unique('customers', 'email')->ignore($customerId),
             ],
             'address' => [
@@ -80,13 +79,13 @@ class UpdateCustomerRequest extends FormRequest
             'name.max' => 'Nama customer tidak boleh lebih dari 100 karakter.',
             'name.regex' => 'Nama customer hanya boleh mengandung huruf, angka, spasi, dan tanda hubung (-), titik, atau kurung.',
             'contact_person.string' => 'Nama kontak person harus berupa teks.',
-            'contact_person.max' => 'Nama kontak person tidak boleh lebih dari 100 karakter.',
+            'contact_person.max' => 'Nama kontak person tidak boleh lebih dari 60 karakter.',
             'contact_person.regex' => 'Nama kontak person hanya boleh mengandung huruf, spasi, titik, dan apostrof.',
             'phone.string' => 'Nomor telepon harus berupa teks.',
-            'phone.max' => 'Nomor telepon tidak boleh lebih dari 20 karakter.',
+            'phone.max' => 'Nomor telepon tidak boleh lebih dari 14 karakter.',
             'phone.regex' => 'Format nomor telepon tidak valid.',
             'email.email' => 'Format email tidak valid.',
-            'email.max' => 'Email tidak boleh lebih dari 100 karakter.',
+            'email.max' => 'Email tidak boleh lebih dari 50 karakter.',
             'email.unique' => 'Email sudah digunakan.',
             'address.string' => 'Alamat harus berupa teks.',
             'address.max' => 'Alamat tidak boleh lebih dari 1000 karakter.',
