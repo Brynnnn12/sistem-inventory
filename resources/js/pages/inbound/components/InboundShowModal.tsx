@@ -87,8 +87,8 @@ export function InboundShowModal({
                             <p className="text-sm text-muted-foreground">
                                 {inbound.unit_price
                                     ? formatCurrency(
-                                        inbound.quantity * inbound.unit_price,
-                                    )
+                                          inbound.quantity * inbound.unit_price,
+                                      )
                                     : '-'}
                             </p>
                         </div>

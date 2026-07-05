@@ -68,8 +68,12 @@ export function OutboundFormModal({
         customer_id: outbound?.customer_id || '',
         warehouse_id: outbound?.warehouse_id || '',
         product_id: outbound?.product_id || '',
-        quantity: outbound?.quantity != null ? String(Number(outbound.quantity)) : '',
-        unit_price: outbound?.unit_price != null ? String(Number(outbound.unit_price)) : '',
+        quantity:
+            outbound?.quantity != null ? String(Number(outbound.quantity)) : '',
+        unit_price:
+            outbound?.unit_price != null
+                ? String(Number(outbound.unit_price))
+                : '',
         sale_date:
             outbound?.sale_date || new Date().toISOString().split('T')[0],
         notes: outbound?.notes || '',

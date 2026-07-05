@@ -27,7 +27,8 @@ export function MutationReceiveModal({
     onClose,
 }: MutationReceiveModalProps) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        received_qty: mutation?.quantity != null ? String(Number(mutation.quantity)) : '',
+        received_qty:
+            mutation?.quantity != null ? String(Number(mutation.quantity)) : '',
         damaged_qty: '',
         notes: '',
     });
@@ -97,7 +98,8 @@ export function MutationReceiveModal({
                                     Jumlah Dikirim
                                 </label>
                                 <p className="text-sm font-medium">
-                                    {formatQuantity(mutation.quantity)} {mutation.product?.unit}
+                                    {formatQuantity(mutation.quantity)}{' '}
+                                    {mutation.product?.unit}
                                 </p>
                             </div>
                         </div>
@@ -169,7 +171,7 @@ export function MutationReceiveModal({
                                 <span className="font-medium">
                                     {formatQuantity(
                                         parseFloat(data.received_qty || '0') +
-                                        parseFloat(data.damaged_qty || '0')
+                                            parseFloat(data.damaged_qty || '0'),
                                     )}{' '}
                                     {mutation.product?.unit}
                                 </span>
@@ -182,10 +184,10 @@ export function MutationReceiveModal({
                                             parseFloat(
                                                 data.received_qty || '0',
                                             ) +
-                                            parseFloat(
-                                                data.damaged_qty || '0',
-                                            ) -
-                                            mutation.quantity
+                                                parseFloat(
+                                                    data.damaged_qty || '0',
+                                                ) -
+                                                mutation.quantity,
                                         )}
                                         )
                                     </span>

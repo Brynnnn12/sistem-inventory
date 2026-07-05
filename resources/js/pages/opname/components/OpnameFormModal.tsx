@@ -86,9 +86,7 @@ export function OpnameFormModal({
         }
 
         const stockedProductIds = stocks
-            .filter(
-                (stock) => String(stock.warehouse_id) === data.warehouse_id,
-            )
+            .filter((stock) => String(stock.warehouse_id) === data.warehouse_id)
             .map((stock) => Number(stock.product_id));
 
         return products.filter((product) =>

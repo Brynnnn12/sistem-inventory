@@ -7,12 +7,15 @@ export function formatCurrency(amount: number | string): string {
     return new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
-        minimumFractionDigits: Number.isInteger(num) ? 0 : 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
     }).format(num);
 }
 
 export function formatQuantity(qty: number | string): string {
     const num = toNumber(qty);
-    return Number.isInteger(num) ? num.toString() : num.toFixed(2);
+    if (isNaN(num)) return '0';
+    return new Intl.NumberFormat('id-ID', {
+        maximumFractionDigits: num % 1 === 0 ? 0 : 2,
+    }).format(num);
 }

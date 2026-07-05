@@ -81,7 +81,8 @@ export function MutationRejectModal({
                                     Jumlah
                                 </label>
                                 <p className="text-sm font-medium">
-                                    {formatQuantity(mutation.quantity)} {mutation.product?.unit}
+                                    {formatQuantity(mutation.quantity)}{' '}
+                                    {mutation.product?.unit}
                                 </p>
                             </div>
                         </div>

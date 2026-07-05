@@ -44,8 +44,11 @@ export function ProductFormModal({
 }: ProductFormModalProps) {
     const isEditing = !!product;
 
-    const num = (v: unknown) =>
-        v != null ? String(Math.trunc(Number(v))) : '';
+    const num = (v: unknown) => {
+        if (v == null) return '';
+        const n = Number(v);
+        return Number.isNaN(n) ? '' : String(Math.trunc(n));
+    };
 
     const form = useForm({
         category_id: product?.category_id?.toString() || '',

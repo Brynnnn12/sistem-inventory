@@ -46,13 +46,9 @@ export function OpnameTable({
                     </Badge>
                 );
             case 'rejected':
-                return (
-                    <Badge variant="destructive">Ditolak</Badge>
-                );
+                return <Badge variant="destructive">Ditolak</Badge>;
             default:
-                return (
-                    <Badge variant="secondary">Draft</Badge>
-                );
+                return <Badge variant="secondary">Draft</Badge>;
         }
     };
 
@@ -122,9 +118,7 @@ export function OpnameTable({
                                     {formatQuantity(opname.difference_qty)}
                                 </div>
                             </TableCell>
-                            <TableCell>
-                                {statusBadge(opname.status)}
-                            </TableCell>
+                            <TableCell>{statusBadge(opname.status)}</TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">
                                     <Button
@@ -164,19 +158,20 @@ export function OpnameTable({
                                             </span>
                                         </Button>
                                     )}
-                                    {onDelete && opname.status === 'rejected' && (
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => onDelete(opname)}
-                                            className="h-8 gap-1.5 text-muted-foreground hover:text-destructive"
-                                        >
-                                            <Trash2 className="h-3.5 w-3.5" />
-                                            <span className="sr-only sm:not-sr-only">
-                                                Hapus
-                                            </span>
-                                        </Button>
-                                    )}
+                                    {onDelete &&
+                                        opname.status === 'rejected' && (
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => onDelete(opname)}
+                                                className="h-8 gap-1.5 text-muted-foreground hover:text-destructive"
+                                            >
+                                                <Trash2 className="h-3.5 w-3.5" />
+                                                <span className="sr-only sm:not-sr-only">
+                                                    Hapus
+                                                </span>
+                                            </Button>
+                                        )}
                                 </div>
                             </TableCell>
                         </TableRow>

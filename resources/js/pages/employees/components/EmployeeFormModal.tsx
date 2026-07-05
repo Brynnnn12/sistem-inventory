@@ -296,7 +296,7 @@ export function EmployeeFormModal({
                                             }
                                             placeholder="Minimal 8 karakter"
                                             required={!isEditing}
-                                            className="pl-9 pr-10"
+                                            className="pr-10 pl-9"
                                         />
                                         <button
                                             type="button"
@@ -341,8 +341,7 @@ export function EmployeeFormModal({
                                                     : 'password'
                                             }
                                             value={
-                                                form.data
-                                                    .password_confirmation
+                                                form.data.password_confirmation
                                             }
                                             onChange={(e) =>
                                                 form.setData(
@@ -352,7 +351,7 @@ export function EmployeeFormModal({
                                             }
                                             placeholder="Ketik ulang password"
                                             required={!isEditing}
-                                            className="pl-9 pr-10"
+                                            className="pr-10 pl-9"
                                         />
                                         <button
                                             type="button"

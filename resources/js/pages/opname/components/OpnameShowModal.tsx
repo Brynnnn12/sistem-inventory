@@ -79,19 +79,19 @@ export function OpnameShowModal({
                                     </label>
                                     <Badge
                                         variant={
-                                        opname.status === 'approved'
-                                            ? 'default'
+                                            opname.status === 'approved'
+                                                ? 'default'
+                                                : opname.status === 'rejected'
+                                                  ? 'destructive'
+                                                  : 'secondary'
+                                        }
+                                        className="mt-1"
+                                    >
+                                        {opname.status === 'approved'
+                                            ? 'Disetujui'
                                             : opname.status === 'rejected'
-                                              ? 'destructive'
-                                              : 'secondary'
-                                    }
-                                    className="mt-1"
-                                >
-                                    {opname.status === 'approved'
-                                        ? 'Disetujui'
-                                        : opname.status === 'rejected'
-                                          ? 'Ditolak'
-                                          : 'Draft'}
+                                              ? 'Ditolak'
+                                              : 'Draft'}
                                     </Badge>
                                 </div>
                             </div>
