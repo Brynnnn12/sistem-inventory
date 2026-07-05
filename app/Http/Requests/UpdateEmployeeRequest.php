@@ -9,8 +9,7 @@ class UpdateEmployeeRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        // Pastikan logic Policy 'update' sudah mengecek apakah user login
-        // punya hak untuk mengedit user tersebut.
+
         return $this->user()->can('update', $this->route('employee'));
     }
 
