@@ -95,8 +95,8 @@ class OutboundController extends Controller
 
             // Get stock change info
             $stockHistory = $transaction->stockHistories()->latest()->first();
-            $oldStock = $stockHistory ? $stockHistory->quantity_before : $validated['quantity'];
-            $newStock = $stockHistory ? $stockHistory->quantity_after : 0;
+            $oldStock = $stockHistory ? $stockHistory->previous_qty : $validated['quantity'];
+            $newStock = $stockHistory ? $stockHistory->new_qty : 0;
 
             return redirect()->route('outbound.index')
                 ->with('success', "Transaksi outbound {$transaction->code} berhasil dibuat. Stok: {$oldStock} → {$newStock} (Berkurang {$validated['quantity']})");

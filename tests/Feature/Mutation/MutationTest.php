@@ -90,12 +90,12 @@ test('super-admin bisa mengirim mutation', function () {
         'quantity' => 5,
     ]);
 
-    // stok gudang asal tetap (belum dikurangi) — akan dikurangi saat receive
+    // stok gudang asal langsung dikurangi saat send
     $this->assertDatabaseHas('stocks', [
         'warehouse_id' => $from->id,
         'product_id' => $product->id,
-        'quantity' => 20,
-        'available_qty' => 20,
+        'quantity' => 15,
+        'available_qty' => 15,
     ]);
 });
 
@@ -157,12 +157,12 @@ test('super-admin bisa menerima mutation dan stok diperbarui', function () {
         'quantity' => 10,
     ]);
 
-    // Stok gudang asal belum dikurangi (belum di-send)
+    // Stok gudang asal sudah 0 (sudah dikurangi saat send)
     Stock::factory()->create([
         'warehouse_id' => $from->id,
         'product_id' => $product->id,
-        'quantity' => 10,
-        'available_qty' => 10,
+        'quantity' => 0,
+        'available_qty' => 0,
     ]);
 
     $response = actingAs($superAdmin)->post(route('mutations.receive', $mutation), [
@@ -178,7 +178,7 @@ test('super-admin bisa menerima mutation dan stok diperbarui', function () {
     expect((float) $mutation->received_qty)->toBe(8.0);
     expect((float) $mutation->damaged_qty)->toBe(2.0);
 
-    // stok gudang asal dikurangi saat receive (10 - 10 = 0)
+    // stok gudang asal tetap 0 (tidak dikurangi lagi saat receive)
     $this->assertDatabaseHas('stocks', [
         'warehouse_id' => $from->id,
         'product_id' => $product->id,
@@ -211,12 +211,12 @@ test('admin yang bertanggung jawab di gudang tujuan bisa menerima mutation', fun
         'quantity' => 5,
     ]);
 
-    // Stok gudang asal belum dikurangi
+    // Stok gudang asal sudah 0 (sudah dikurangi saat send)
     Stock::factory()->create([
         'warehouse_id' => $from->id,
         'product_id' => $product->id,
-        'quantity' => 5,
-        'available_qty' => 5,
+        'quantity' => 0,
+        'available_qty' => 0,
     ]);
 
     $response = actingAs($admin)->post(route('mutations.receive', $mutation), [
@@ -272,13 +272,6 @@ test('gagal menerima jika jumlah diterima melebihi quantity', function () {
         'quantity' => 5,
     ]);
 
-    Stock::factory()->create([
-        'warehouse_id' => $from->id,
-        'product_id' => $product->id,
-        'quantity' => 5,
-        'available_qty' => 5,
-    ]);
-
     $response = actingAs($superAdmin)->post(route('mutations.receive', $mutation), [
         'received_qty' => 6,
         'damaged_qty' => 0,
@@ -292,8 +285,24 @@ test('gagal menerima jika jumlah diterima melebihi quantity', function () {
 test('super-admin bisa menolak mutation dan stok dikembalikan', function () {
     $superAdmin = createSuperAdmin();
 
+    $from = Warehouse::factory()->create();
+    $product = Product::factory()->create();
+
     $date = now()->format('Ymd');
-    $mutation = StockMutation::factory()->pending()->create(['code' => "MT-{$date}-401"]);
+    $mutation = StockMutation::factory()->pending()->create([
+        'code' => "MT-{$date}-401",
+        'from_warehouse' => $from->id,
+        'product_id' => $product->id,
+        'quantity' => 10,
+    ]);
+
+    // Stok sudah dikurangi saat send (dari 10 ke 0)
+    Stock::factory()->create([
+        'warehouse_id' => $from->id,
+        'product_id' => $product->id,
+        'quantity' => 0,
+        'available_qty' => 0,
+    ]);
 
     $response = actingAs($superAdmin)->post(route('mutations.reject', $mutation), ['notes' => 'Tidak sesuai']);
 
@@ -302,30 +311,47 @@ test('super-admin bisa menolak mutation dan stok dikembalikan', function () {
 
     $this->assertDatabaseHas('stock_mutations', ['id' => $mutation->id]);
 
-    // stok tidak berubah karena tidak pernah dikurangi saat send
-    $this->assertDatabaseMissing('stocks', [
-        'warehouse_id' => $mutation->from_warehouse,
-        'product_id' => $mutation->product_id,
-        'quantity' => $mutation->quantity,
+    // stok dikembalikan ke gudang asal (0 + 10 = 10)
+    $this->assertDatabaseHas('stocks', [
+        'warehouse_id' => $from->id,
+        'product_id' => $product->id,
+        'quantity' => 10,
     ]);
 });
 
 test('admin di gudang tujuan bisa menolak mutation dan stok dikembalikan', function () {
     $admin = createAdmin();
+    $from = Warehouse::factory()->create();
     $to = Warehouse::factory()->create();
+    $product = Product::factory()->create();
     WarehouseUser::factory()->create(['user_id' => $admin->id, 'warehouse_id' => $to->id]);
 
     $date = now()->format('Ymd');
-    $mutation = StockMutation::factory()->pending()->create(['code' => "MT-{$date}-402", 'to_warehouse' => $to->id]);
+    $mutation = StockMutation::factory()->pending()->create([
+        'code' => "MT-{$date}-402",
+        'from_warehouse' => $from->id,
+        'to_warehouse' => $to->id,
+        'product_id' => $product->id,
+        'quantity' => 5,
+    ]);
+
+    // Stok sudah dikurangi saat send (dari 5 ke 0)
+    Stock::factory()->create([
+        'warehouse_id' => $from->id,
+        'product_id' => $product->id,
+        'quantity' => 0,
+        'available_qty' => 0,
+    ]);
 
     actingAs($admin)->post(route('mutations.reject', $mutation), ['notes' => 'Alasan'])
         ->assertRedirect(route('mutations.index'))
         ->assertSessionHas('success', 'Mutasi berhasil ditolak.');
 
-    $this->assertDatabaseMissing('stocks', [
-        'warehouse_id' => $mutation->from_warehouse,
-        'product_id' => $mutation->product_id,
-        'quantity' => $mutation->quantity,
+    // stok dikembalikan ke gudang asal (0 + 5 = 5)
+    $this->assertDatabaseHas('stocks', [
+        'warehouse_id' => $from->id,
+        'product_id' => $product->id,
+        'quantity' => 5,
     ]);
 });
 

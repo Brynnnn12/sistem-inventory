@@ -85,8 +85,8 @@ class InboundController extends Controller
 
         // Get stock change info
         $stockHistory = $transaction->stockHistories()->latest()->first();
-        $oldStock = $stockHistory ? $stockHistory->quantity_before : 0;
-        $newStock = $stockHistory ? $stockHistory->quantity_after : $validated['quantity'];
+        $oldStock = $stockHistory ? $stockHistory->previous_qty : 0;
+        $newStock = $stockHistory ? $stockHistory->new_qty : $validated['quantity'];
 
         return redirect()->route('inbound.index')
             ->with('success', "Transaksi inbound {$transaction->code} berhasil dibuat. Stok: {$oldStock} → {$newStock} (Bertambah {$validated['quantity']})");

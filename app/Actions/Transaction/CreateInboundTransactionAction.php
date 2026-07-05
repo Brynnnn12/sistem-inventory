@@ -74,8 +74,8 @@ class CreateInboundTransactionAction
             throw new InvalidArgumentException('Jumlah harus lebih besar dari 0');
         }
 
-        if ($unitPrice <= 0) {
-            throw new InvalidArgumentException('Harga satuan harus lebih besar dari 0');
+        if ($unitPrice < 0) {
+            throw new InvalidArgumentException('Harga satuan tidak boleh negatif');
         }
 
         if (! strtotime($receivedDate)) {

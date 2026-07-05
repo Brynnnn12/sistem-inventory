@@ -146,15 +146,6 @@ class MutationController extends Controller
         ]);
     }
 
-    public function show(StockMutation $mutation): Response
-    {
-        $this->authorize('view', $mutation);
-
-        return Inertia::render('mutation/show', [
-            'mutation' => $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator', 'receiver']),
-        ]);
-    }
-
     public function store(StoreMutationRequest $request): RedirectResponse
     {
         $this->authorize('create', StockMutation::class);

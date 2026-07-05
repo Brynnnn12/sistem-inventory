@@ -77,20 +77,6 @@ class WarehouseUserController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(WarehouseUser $warehouseUser)
-    {
-        $this->authorize('view', $warehouseUser);
-
-        $warehouseUser->load(['warehouse:id,name,address', 'user:id,name,email']);
-
-        return Inertia::render('warehouse-users/show', [
-            'warehouseUser' => $warehouseUser,
-        ]);
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(WarehouseUser $warehouseUser, DeleteWarehouseUserAction $action)

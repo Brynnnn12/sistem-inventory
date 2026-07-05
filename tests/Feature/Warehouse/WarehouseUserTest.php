@@ -275,7 +275,7 @@ test('super-admin gagal swap jika assignment sama (user atau warehouse sama)', f
     ]);
 
     $response->assertRedirect(route('warehouse-users.index'))
-        ->assertSessionHas('error', 'Tidak bisa swap assignment yang sama.');
+        ->assertSessionHas('error', 'Gagal menukar penempatan: Tidak bisa swap assignment yang sama.');
 
     $wu1->refresh();
     $wu2->refresh();

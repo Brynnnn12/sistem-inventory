@@ -65,7 +65,16 @@ class CreateMutationAction
                 'created_by' => $createdBy,
             ]);
 
-            // Stock not deducted yet — will be deducted on receive/approve
+            $this->updateStockAction->execute(
+                warehouseId: $fromWarehouseId,
+                productId: $productId,
+                quantity: -$quantity,
+                type: 'mutation_sent',
+                referenceId: $mutation->id,
+                referenceCode: $mutation->code,
+                notes: "Mutation sent: {$mutation->code}",
+                updatedBy: $createdBy,
+            );
 
             return $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator']);
         });
@@ -108,19 +117,6 @@ class CreateMutationAction
                 ]);
             }
 
-            // Check source stock availability before deducting
-            $sourceStock = Stock::where('warehouse_id', $mutation->from_warehouse)
-                ->where('product_id', $mutation->product_id)
-                ->first();
-
-            $available = $sourceStock ? $sourceStock->available_qty : 0;
-
-            if ($available < $mutation->quantity) {
-                throw ValidationException::withMessages([
-                    'received_qty' => 'Stok gudang asal tidak cukup untuk menyelesaikan mutasi. Tersedia: '.$available.', dibutuhkan: '.$mutation->quantity,
-                ]);
-            }
-
             $mutation->update([
                 'received_qty' => $receivedQty,
                 'damaged_qty' => $damagedQty,
@@ -128,18 +124,6 @@ class CreateMutationAction
                 'received_at' => now(),
                 'received_by' => $receivedBy,
             ]);
-
-            // Deduct full quantity from source warehouse
-            $this->updateStockAction->execute(
-                warehouseId: $mutation->from_warehouse,
-                productId: $mutation->product_id,
-                quantity: -$mutation->quantity,
-                type: 'mutation_sent',
-                referenceId: $mutation->id,
-                referenceCode: $mutation->code,
-                notes: "Mutation completed: {$mutation->code}",
-                updatedBy: $receivedBy,
-            );
 
             // Add received stock to destination warehouse
             if ($receivedQty > 0) {
@@ -162,11 +146,10 @@ class CreateMutationAction
     public function reject(
         int $mutationId,
         ?string $notes = null,
-        ?int $rejectedBy = null,
     ): StockMutation {
-        $rejectedBy ??= (int) Auth::id();
+        $updatedBy = (int) Auth::id();
 
-        return DB::transaction(function () use ($mutationId, $notes, $rejectedBy) {
+        return DB::transaction(function () use ($mutationId, $notes, $updatedBy) {
             $mutation = $this->stockMutation->findOrFail($mutationId);
 
             if ($mutation->status_display !== 'sent') {
@@ -175,8 +158,6 @@ class CreateMutationAction
 
             $data = [
                 'status' => 'rejected',
-                'rejected_at' => now(),
-                'rejected_by' => $rejectedBy,
             ];
 
             if ($notes !== null) {
@@ -185,7 +166,16 @@ class CreateMutationAction
 
             $mutation->update($data);
 
-            // Stock was never deducted on send, so no need to return it
+            $this->updateStockAction->execute(
+                warehouseId: $mutation->from_warehouse,
+                productId: $mutation->product_id,
+                quantity: (float) $mutation->quantity,
+                type: 'mutation_rejected',
+                referenceId: $mutation->id,
+                referenceCode: $mutation->code,
+                notes: "Mutation rejected: {$mutation->code}",
+                updatedBy: $updatedBy,
+            );
 
             return $mutation->load(['fromWarehouse', 'toWarehouse', 'product', 'creator']);
         });

@@ -46,13 +46,7 @@ class CreateOpnameAction
                 ->where('product_id', $productId)
                 ->first();
 
-            if (! $stock || (float) $stock->quantity <= 0) {
-                throw ValidationException::withMessages([
-                    'product_id' => 'Opname hanya bisa dilakukan untuk produk yang memiliki stok di gudang ini.',
-                ]);
-            }
-
-            $systemQty = (float) $stock->quantity;
+            $systemQty = $stock ? (float) $stock->quantity : 0;
             $differenceQty = $physicalQty - $systemQty;
             $differenceType = $differenceQty > 0 ? 'lebih' : ($differenceQty < 0 ? 'kurang' : 'sama');
 

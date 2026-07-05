@@ -60,7 +60,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
 
         Route::resource('warehouse-users', \App\Http\Controllers\WarehouseUserController::class)
             ->parameters(['warehouse-users' => 'warehouseUser'])
-            ->except(['create', 'edit', 'update']);
+            ->except(['create', 'edit', 'update', 'show']);
 
         Route::post('warehouse-users/swap', [\App\Http\Controllers\WarehouseUserController::class, 'swap'])
             ->name('warehouse-users.swap');
@@ -106,7 +106,6 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
         });
         Route::prefix('mutations')->name('mutations.')->group(function () {
             Route::get('/', [\App\Http\Controllers\MutationController::class, 'index'])->name('index');
-            Route::get('/{mutation}', [\App\Http\Controllers\MutationController::class, 'show'])->name('show');
             Route::post('/', [\App\Http\Controllers\MutationController::class, 'store'])->name('store');
             Route::put('/{mutation}', [\App\Http\Controllers\MutationController::class, 'update'])->name('update');
             Route::delete('/{mutation}', [\App\Http\Controllers\MutationController::class, 'destroy'])->name('destroy');

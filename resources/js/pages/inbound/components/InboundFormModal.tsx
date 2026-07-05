@@ -65,8 +65,8 @@ export function InboundFormModal({
         supplier_id: inbound?.supplier_id || '',
         warehouse_id: inbound?.warehouse_id || '',
         product_id: inbound?.product_id || '',
-        quantity: inbound?.quantity || '',
-        unit_price: inbound?.unit_price || '',
+        quantity: inbound?.quantity != null ? String(Number(inbound.quantity)) : '',
+        unit_price: inbound?.unit_price != null ? String(Number(inbound.unit_price)) : '',
         received_date:
             inbound?.received_date || new Date().toISOString().split('T')[0],
         notes: inbound?.notes || '',

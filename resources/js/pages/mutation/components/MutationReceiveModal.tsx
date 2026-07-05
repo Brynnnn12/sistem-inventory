@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { formatQuantity } from '@/lib/utils';
 import type { StockMutation } from '@/types/models/mutation';
 
 interface MutationReceiveModalProps {
@@ -26,7 +27,7 @@ export function MutationReceiveModal({
     onClose,
 }: MutationReceiveModalProps) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        received_qty: mutation?.quantity || '',
+        received_qty: mutation?.quantity != null ? String(Number(mutation.quantity)) : '',
         damaged_qty: '',
         notes: '',
     });
@@ -60,7 +61,7 @@ export function MutationReceiveModal({
     React.useEffect(() => {
         if (mutation) {
             setData({
-                received_qty: mutation.quantity,
+                received_qty: String(Number(mutation.quantity)),
                 damaged_qty: '',
                 notes: '',
             });
@@ -96,7 +97,7 @@ export function MutationReceiveModal({
                                     Jumlah Dikirim
                                 </label>
                                 <p className="text-sm font-medium">
-                                    {mutation.quantity} {mutation.product?.unit}
+                                    {formatQuantity(mutation.quantity)} {mutation.product?.unit}
                                 </p>
                             </div>
                         </div>
@@ -166,10 +167,10 @@ export function MutationReceiveModal({
                             <p className="text-sm text-muted-foreground">
                                 Total diterima:{' '}
                                 <span className="font-medium">
-                                    {(
+                                    {formatQuantity(
                                         parseFloat(data.received_qty || '0') +
                                         parseFloat(data.damaged_qty || '0')
-                                    ).toFixed(2)}{' '}
+                                    )}{' '}
                                     {mutation.product?.unit}
                                 </span>
                                 {parseFloat(data.received_qty || '0') +
@@ -177,7 +178,7 @@ export function MutationReceiveModal({
                                     mutation.quantity && (
                                     <span className="ml-2 text-orange-600">
                                         (Selisih:{' '}
-                                        {(
+                                        {formatQuantity(
                                             parseFloat(
                                                 data.received_qty || '0',
                                             ) +
@@ -185,7 +186,7 @@ export function MutationReceiveModal({
                                                 data.damaged_qty || '0',
                                             ) -
                                             mutation.quantity
-                                        ).toFixed(2)}
+                                        )}
                                         )
                                     </span>
                                 )}

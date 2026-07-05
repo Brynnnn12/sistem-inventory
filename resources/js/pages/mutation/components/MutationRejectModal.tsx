@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { formatQuantity } from '@/lib/utils';
 import type { StockMutation } from '@/types/models/mutation';
 
 interface MutationRejectModalProps {
@@ -80,7 +81,7 @@ export function MutationRejectModal({
                                     Jumlah
                                 </label>
                                 <p className="text-sm font-medium">
-                                    {mutation.quantity} {mutation.product?.unit}
+                                    {formatQuantity(mutation.quantity)} {mutation.product?.unit}
                                 </p>
                             </div>
                         </div>
