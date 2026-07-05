@@ -104,6 +104,8 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
             Route::get('/', [\App\Http\Controllers\OpnameController::class, 'index'])->name('index');
             Route::post('/', [\App\Http\Controllers\OpnameController::class, 'store'])->name('store');
             Route::post('/{opname}/approve', [\App\Http\Controllers\OpnameController::class, 'approve'])->name('approve');
+            Route::post('/{opname}/reject', [\App\Http\Controllers\OpnameController::class, 'reject'])->name('reject');
+            Route::delete('/{opname}', [\App\Http\Controllers\OpnameController::class, 'destroy'])->name('destroy');
         });
         Route::prefix('mutations')->name('mutations.')->group(function () {
             Route::get('/', [\App\Http\Controllers\MutationController::class, 'index'])->name('index');

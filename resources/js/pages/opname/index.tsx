@@ -21,6 +21,8 @@ export default function Index({
     stocks,
     canSelectWarehouse,
     canApprove,
+    canReject,
+    canDelete,
     filters = {},
 }: {
     opnames: PageProps;
@@ -36,6 +38,8 @@ export default function Index({
     }>;
     canSelectWarehouse: boolean;
     canApprove: boolean;
+    canReject: boolean;
+    canDelete: boolean;
     filters?: Filters;
 }) {
     const {
@@ -55,11 +59,19 @@ export default function Index({
 
     const { modals, openModal, closeModal } = useGenericModals<Opname>({
         simple: ['create'],
-        withData: ['show', 'approve'],
+        withData: ['show', 'approve', 'reject', 'delete'],
     });
 
     const handleApprove = (opname: Opname) => {
         openModal('approve', opname);
+    };
+
+    const handleReject = (opname: Opname) => {
+        openModal('reject', opname);
+    };
+
+    const handleDelete = (opname: Opname) => {
+        openModal('delete', opname);
     };
 
     return (
@@ -93,6 +105,8 @@ export default function Index({
                     opnames={opnames.data}
                     onShow={(opname) => openModal('show', opname)}
                     onApprove={canApprove ? handleApprove : undefined}
+                    onReject={canReject ? handleReject : undefined}
+                    onDelete={canDelete ? handleDelete : undefined}
                 />
 
                 {opnames.total > 0 && (

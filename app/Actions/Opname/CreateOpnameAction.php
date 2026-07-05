@@ -34,6 +34,7 @@ class CreateOpnameAction
             $exists = $this->opname->where('warehouse_id', $warehouseId)
                 ->where('product_id', $productId)
                 ->whereDate('opname_date', $opnameDate)
+                ->whereNotIn('status', ['rejected'])
                 ->exists();
 
             if ($exists) {

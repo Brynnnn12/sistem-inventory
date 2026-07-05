@@ -62,4 +62,20 @@ class OpnamePolicy
     {
         return $user->hasRole('super-admin');
     }
+
+    /**
+     * Determine whether the user can reject the opname.
+     */
+    public function reject(User $user, Opname $opname): bool
+    {
+        return $user->hasRole('super-admin');
+    }
+
+    /**
+     * Determine whether the user can delete the opname.
+     */
+    public function delete(User $user, Opname $opname): bool
+    {
+        return $user->hasRole('super-admin');
+    }
 }

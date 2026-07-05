@@ -1,4 +1,4 @@
-import { Eye, CheckCircle } from 'lucide-react';
+import { CheckCircle, Eye, Trash2, XCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,7 +12,13 @@ import {
 import { formatQuantity } from '@/lib/utils';
 import type { OpnameTableProps } from '@/types/models/opname';
 
-export function OpnameTable({ opnames, onShow, onApprove }: OpnameTableProps) {
+export function OpnameTable({
+    opnames,
+    onShow,
+    onApprove,
+    onReject,
+    onDelete,
+}: OpnameTableProps) {
     if (opnames.length === 0) {
         return (
             <div className="rounded-lg border border-dashed bg-card">
@@ -30,6 +36,25 @@ export function OpnameTable({ opnames, onShow, onApprove }: OpnameTableProps) {
             </div>
         );
     }
+
+    const statusBadge = (status: string) => {
+        switch (status) {
+            case 'approved':
+                return (
+                    <Badge variant="default" className="bg-green-600">
+                        Disetujui
+                    </Badge>
+                );
+            case 'rejected':
+                return (
+                    <Badge variant="destructive">Ditolak</Badge>
+                );
+            default:
+                return (
+                    <Badge variant="secondary">Draft</Badge>
+                );
+        }
+    };
 
     return (
         <div className="rounded-lg border bg-card shadow-sm">
@@ -98,17 +123,7 @@ export function OpnameTable({ opnames, onShow, onApprove }: OpnameTableProps) {
                                 </div>
                             </TableCell>
                             <TableCell>
-                                <Badge
-                                    variant={
-                                        opname.status === 'approved'
-                                            ? 'default'
-                                            : 'secondary'
-                                    }
-                                >
-                                    {opname.status === 'approved'
-                                        ? 'Disetujui'
-                                        : 'Draft'}
-                                </Badge>
+                                {statusBadge(opname.status)}
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center justify-end gap-1">
@@ -133,6 +148,32 @@ export function OpnameTable({ opnames, onShow, onApprove }: OpnameTableProps) {
                                             <CheckCircle className="h-3.5 w-3.5" />
                                             <span className="sr-only sm:not-sr-only">
                                                 Setujui
+                                            </span>
+                                        </Button>
+                                    )}
+                                    {onReject && opname.status === 'draft' && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => onReject(opname)}
+                                            className="h-8 gap-1.5 text-red-500 hover:text-red-600"
+                                        >
+                                            <XCircle className="h-3.5 w-3.5" />
+                                            <span className="sr-only sm:not-sr-only">
+                                                Tolak
+                                            </span>
+                                        </Button>
+                                    )}
+                                    {onDelete && opname.status === 'rejected' && (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => onDelete(opname)}
+                                            className="h-8 gap-1.5 text-muted-foreground hover:text-destructive"
+                                        >
+                                            <Trash2 className="h-3.5 w-3.5" />
+                                            <span className="sr-only sm:not-sr-only">
+                                                Hapus
                                             </span>
                                         </Button>
                                     )}

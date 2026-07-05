@@ -1,7 +1,9 @@
 import type { ModalState, ModalWithData } from '@/hooks/useGenericModals';
 import type { Opname } from '@/types/models/opname';
 import { OpnameApproveModal } from './OpnameApproveModal';
+import { OpnameDeleteModal } from './OpnameDeleteModal';
 import { OpnameFormModal } from './OpnameFormModal';
+import { OpnameRejectModal } from './OpnameRejectModal';
 import { OpnameShowModal } from './OpnameShowModal';
 
 interface OpnameModalsProps {
@@ -53,6 +55,18 @@ export function OpnameModals({
                 open={(modals.approve as ModalWithData<Opname>).isOpen}
                 opname={(modals.approve as ModalWithData<Opname>).data}
                 onClose={() => onCloseModal('approve')}
+            />
+
+            <OpnameRejectModal
+                open={(modals.reject as ModalWithData<Opname>).isOpen}
+                opname={(modals.reject as ModalWithData<Opname>).data}
+                onClose={() => onCloseModal('reject')}
+            />
+
+            <OpnameDeleteModal
+                open={(modals.delete as ModalWithData<Opname>).isOpen}
+                opname={(modals.delete as ModalWithData<Opname>).data}
+                onClose={() => onCloseModal('delete')}
             />
         </>
     );

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actions\Opname\ApproveOpnameAction;
 use App\Actions\Opname\CreateOpnameAction;
+use App\Actions\Opname\DeleteOpnameAction;
+use App\Actions\Opname\RejectOpnameAction;
 use App\Http\Requests\Opname\StoreOpnameRequest;
 use App\Models\Opname;
 use App\Models\Product;
@@ -20,6 +22,8 @@ class OpnameController extends Controller
 {
     public function __construct(
         private readonly ApproveOpnameAction $approveOpnameAction,
+        private readonly RejectOpnameAction $rejectOpnameAction,
+        private readonly DeleteOpnameAction $deleteOpnameAction,
     ) {
     }
 
@@ -77,6 +81,8 @@ class OpnameController extends Controller
             'stocks' => $stocks,
             'canSelectWarehouse' => $user->hasRole('super-admin'),
             'canApprove' => $user->hasRole('super-admin'),
+            'canReject' => $user->hasRole('super-admin'),
+            'canDelete' => $user->hasRole('super-admin'),
             'filters' => $request->only(['search', 'warehouse_id', 'difference_type', 'start_date', 'end_date']),
         ]);
     }
@@ -114,6 +120,36 @@ class OpnameController extends Controller
         } catch (Exception $e) {
             return redirect()->back()
                 ->with('error', "Gagal mengapprove opname: {$e->getMessage()}");
+        }
+    }
+
+    public function reject(Request $request, Opname $opname): RedirectResponse
+    {
+        $this->authorize('reject', $opname);
+
+        try {
+            $this->rejectOpnameAction->execute($opname->getKey());
+
+            return redirect()->route('opname.index')
+                ->with('success', 'Opname berhasil ditolak.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->with('error', "Gagal menolak opname: {$e->getMessage()}");
+        }
+    }
+
+    public function destroy(Request $request, Opname $opname): RedirectResponse
+    {
+        $this->authorize('delete', $opname);
+
+        try {
+            $this->deleteOpnameAction->execute($opname->getKey());
+
+            return redirect()->route('opname.index')
+                ->with('success', 'Opname berhasil dihapus.');
+        } catch (Exception $e) {
+            return redirect()->back()
+                ->with('error', "Gagal menghapus opname: {$e->getMessage()}");
         }
     }
 }

@@ -7,7 +7,7 @@ interface Opname {
     physical_qty: number;
     difference_qty: number;
     difference_type: 'lebih' | 'kurang' | 'sama';
-    status: 'draft' | 'approved';
+    status: 'draft' | 'approved' | 'rejected';
     opname_date: string;
     notes: string | null;
     created_by: number;
@@ -58,6 +58,8 @@ interface OpnameTableProps {
     opnames: Opname[];
     onShow: (opname: Opname) => void;
     onApprove?: (opname: Opname) => void;
+    onReject?: (opname: Opname) => void;
+    onDelete?: (opname: Opname) => void;
 }
 
 interface OpnameToolbarProps {

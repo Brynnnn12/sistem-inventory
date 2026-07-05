@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamp('opname_date');
             $table->foreignId('created_by')->constrained('users');
-            $table->enum('status', ['draft', 'approved'])->default('draft');
+            $table->enum('status', ['draft', 'approved', 'rejected'])->default('draft');
 
             $table->timestamps();
 

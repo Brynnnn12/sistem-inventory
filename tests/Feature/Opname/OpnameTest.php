@@ -216,3 +216,145 @@ test('tidak bisa mengapprove opname yang sudah diapprove', function () {
     $response->assertRedirect();
     $response->assertSessionHas('error');
 });
+
+// ============================================
+// REJECT
+// ============================================
+
+test('super-admin bisa menolak opname', function () {
+    $superAdmin = createSuperAdmin();
+
+    $warehouse = Warehouse::factory()->create();
+    $product = Product::factory()->create();
+
+    $opname = Opname::factory()->create([
+        'warehouse_id' => $warehouse->id,
+        'product_id' => $product->id,
+        'status' => 'draft',
+    ]);
+
+    $response = actingAs($superAdmin)->post(route('opname.reject', $opname));
+
+    $response->assertRedirect(route('opname.index'))
+        ->assertSessionHas('success', 'Opname berhasil ditolak.');
+
+    $opname->refresh();
+    expect($opname->status)->toBe('rejected');
+});
+
+test('admin tidak bisa menolak opname (hanya super-admin)', function () {
+    $admin = createAdmin();
+    $warehouse = Warehouse::factory()->create();
+    \App\Models\WarehouseUser::factory()->create(['user_id' => $admin->id, 'warehouse_id' => $warehouse->id]);
+
+    $opname = Opname::factory()->create(['warehouse_id' => $warehouse->id, 'status' => 'draft']);
+
+    actingAs($admin)->post(route('opname.reject', $opname))->assertForbidden();
+});
+
+test('viewer tidak bisa menolak opname', function () {
+    $viewer = createViewer();
+    $opname = Opname::factory()->create();
+
+    actingAs($viewer)->post(route('opname.reject', $opname))->assertForbidden();
+});
+
+test('tidak bisa menolak opname yang sudah diapprove', function () {
+    $superAdmin = createSuperAdmin();
+    $opname = Opname::factory()->create(['status' => 'approved']);
+
+    $response = actingAs($superAdmin)->post(route('opname.reject', $opname));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
+});
+
+test('tidak bisa menolak opname yang sudah ditolak', function () {
+    $superAdmin = createSuperAdmin();
+    $opname = Opname::factory()->create(['status' => 'rejected']);
+
+    $response = actingAs($superAdmin)->post(route('opname.reject', $opname));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
+});
+
+// ============================================
+// DELETE
+// ============================================
+
+test('tidak bisa menghapus opname draft (hanya rejected)', function () {
+    $superAdmin = createSuperAdmin();
+    $opname = Opname::factory()->create(['status' => 'draft']);
+
+    $response = actingAs($superAdmin)->delete(route('opname.destroy', $opname));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
+});
+
+test('super-admin bisa menghapus opname rejected', function () {
+    $superAdmin = createSuperAdmin();
+    $opname = Opname::factory()->create(['status' => 'rejected']);
+
+    $response = actingAs($superAdmin)->delete(route('opname.destroy', $opname));
+
+    $response->assertRedirect(route('opname.index'))
+        ->assertSessionHas('success', 'Opname berhasil dihapus.');
+
+    $this->assertDatabaseMissing('opnames', ['id' => $opname->id]);
+});
+
+test('tidak bisa menghapus opname yang sudah diapprove', function () {
+    $superAdmin = createSuperAdmin();
+    $opname = Opname::factory()->create(['status' => 'approved']);
+
+    $response = actingAs($superAdmin)->delete(route('opname.destroy', $opname));
+
+    $response->assertRedirect();
+    $response->assertSessionHas('error');
+});
+
+test('admin tidak bisa menghapus opname (hanya super-admin)', function () {
+    $admin = createAdmin();
+    $warehouse = Warehouse::factory()->create();
+    \App\Models\WarehouseUser::factory()->create(['user_id' => $admin->id, 'warehouse_id' => $warehouse->id]);
+
+    $opname = Opname::factory()->create(['warehouse_id' => $warehouse->id, 'status' => 'draft']);
+
+    actingAs($admin)->delete(route('opname.destroy', $opname))->assertForbidden();
+});
+
+// ============================================
+// DUPLICATE CHECK WITH REJECTED
+// ============================================
+
+test('bisa membuat opname ulang jika opname sebelumnya ditolak', function () {
+    $superAdmin = createSuperAdmin();
+
+    $warehouse = Warehouse::factory()->create();
+    $product = Product::factory()->create();
+
+    // Opname sebelumnya ditolak
+    Opname::factory()->create([
+        'warehouse_id' => $warehouse->id,
+        'product_id' => $product->id,
+        'opname_date' => today()->format('Y-m-d'),
+        'status' => 'rejected',
+    ]);
+
+    $data = [
+        'warehouse_id' => $warehouse->id,
+        'product_id' => $product->id,
+        'physical_qty' => 10,
+        'opname_date' => today()->format('Y-m-d'),
+    ];
+
+    $response = actingAs($superAdmin)->post(route('opname.store'), $data);
+
+    $response->assertRedirect(route('opname.index'))
+        ->assertSessionHas('success', 'Opname berhasil dibuat.');
+
+    // total 2 opnames (1 rejected + 1 new)
+    $this->assertDatabaseCount('opnames', 2);
+});
