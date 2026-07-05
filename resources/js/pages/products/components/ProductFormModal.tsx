@@ -44,7 +44,8 @@ export function ProductFormModal({
 }: ProductFormModalProps) {
     const isEditing = !!product;
 
-    const num = (v: unknown) => v != null ? String(Number(v)) : '';
+    const num = (v: unknown) =>
+        v != null ? String(Math.trunc(Number(v))) : '';
 
     const form = useForm({
         category_id: product?.category_id?.toString() || '',
@@ -239,6 +240,7 @@ export function ProductFormModal({
                                     }
                                     placeholder="0"
                                     min="0"
+                                    step="1"
                                     required
                                 />
                                 <InputError message={form.errors.min_stock} />
@@ -263,6 +265,7 @@ export function ProductFormModal({
                                     }
                                     placeholder="Maksimum stok"
                                     min="1"
+                                    step="1"
                                     required
                                 />
                                 <InputError message={form.errors.max_stock} />
@@ -288,6 +291,7 @@ export function ProductFormModal({
                                         }
                                         placeholder="0"
                                         min="0"
+                                        step="1"
                                         className="pl-8"
                                     />
                                 </div>
@@ -314,6 +318,7 @@ export function ProductFormModal({
                                         }
                                         placeholder="0"
                                         min="0"
+                                        step="1"
                                         className="pl-8"
                                     />
                                 </div>
