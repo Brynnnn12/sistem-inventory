@@ -20,7 +20,6 @@ class StoreProductRequest extends FormRequest
             'name' => strip_tags(trim($this->name)),
             'code' => strtoupper(trim($this->code)),
             'unit' => trim($this->unit),
-            // Cukup gunakan satu metode pembersihan yang konsisten
             'price' => $this->formatNumeric($this->price),
             'cost' => $this->formatNumeric($this->cost),
             'min_stock' => $this->formatNumeric($this->min_stock),
@@ -43,8 +42,8 @@ class StoreProductRequest extends FormRequest
             'unit' => 'required|string|max:50',
             'min_stock' => 'required|integer|min:0',
             'max_stock' => 'required|integer|min:1|gte:min_stock',
-            'price' => 'nullable|integer|min:0',
-            'cost' => 'nullable|integer|min:0|lte:price',
+            'price' => 'nullable|integer|min:10000',
+            'cost' => 'nullable|integer|min:10000|lte:price',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean',
         ];
@@ -59,12 +58,10 @@ class StoreProductRequest extends FormRequest
             return null;
         }
 
-        // Jika sudah numeric (dari frontend type="number"), kembalikan langsung
         if (is_numeric($value)) {
             return $value;
         }
 
-        // Jika string format IDR (misal: 1.250.000,00), ubah ke 1250000.00
         $clean = str_replace('.', '', $value); // Hapus titik ribuan
         $clean = str_replace(',', '.', $clean); // Ubah koma desimal ke titik
 
@@ -93,9 +90,9 @@ class StoreProductRequest extends FormRequest
             'max_stock.min' => 'Stok maksimum harus lebih dari 0.',
             'max_stock.gte' => 'Stok maksimum harus lebih besar atau sama dengan stok minimum.',
             'price.integer' => 'Harga jual harus berupa angka bulat.',
-            'price.min' => 'Harga jual tidak boleh kurang dari 0.',
+            'price.min' => 'Harga jual tidak boleh kurang dari 10000.',
             'cost.integer' => 'Harga modal harus berupa angka bulat.',
-            'cost.min' => 'Harga modal tidak boleh kurang dari 0.',
+            'cost.min' => 'Harga modal tidak boleh kurang dari 10000.',
             'cost.lte' => 'Harga modal tidak boleh lebih besar dari harga jual.',
             'description.string' => 'Deskripsi harus berupa teks.',
             'description.max' => 'Deskripsi tidak boleh lebih dari 1000 karakter.',

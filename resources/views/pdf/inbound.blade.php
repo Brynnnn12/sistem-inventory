@@ -108,7 +108,7 @@
     <div class="header">
         <img src="{{ $logoData }}" alt="Logo">
         <div class="company-name">{{ config('app.name') }}</div>
-        <div class="company-address">Jl. Raya Gudang No. 1, Jakarta | Telp: (021) 1234-5678</div>
+        <div class="company-address">Jl. Raya Gudang No. 1, Brebes | Telp: (021) 1234-5678</div>
     </div>
 
     <div class="doc-title">SURAT JALAN BARANG MASUK</div>

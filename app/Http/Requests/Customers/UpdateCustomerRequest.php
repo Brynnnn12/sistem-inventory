@@ -48,7 +48,7 @@ class UpdateCustomerRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:14',
-                'regex:/^[0-9\-\+\(\)\s]+$/',
+                'regex:/^628[0-9]{9,11}$/',
             ],
             'email' => [
                 'sometimes',
@@ -83,7 +83,7 @@ class UpdateCustomerRequest extends FormRequest
             'contact_person.regex' => 'Nama kontak person hanya boleh mengandung huruf, spasi, titik, dan apostrof.',
             'phone.string' => 'Nomor telepon harus berupa teks.',
             'phone.max' => 'Nomor telepon tidak boleh lebih dari 14 karakter.',
-            'phone.regex' => 'Format nomor telepon tidak valid.',
+            'phone.regex' => 'Nomor telepon harus diawali dengan 628 dan diikuti 9-11 digit angka.',
             'email.email' => 'Format email tidak valid.',
             'email.max' => 'Email tidak boleh lebih dari 50 karakter.',
             'email.unique' => 'Email sudah digunakan.',
