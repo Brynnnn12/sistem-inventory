@@ -12,7 +12,7 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        Product::factory(rand(30, 50))->create();
+        Product::factory(rand(10, 20))->create();
 
     }
 }

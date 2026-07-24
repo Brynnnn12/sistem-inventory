@@ -17,11 +17,17 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
+            // unique() dibiarkan, pastikan saat menjalankan factory jumlahnya
+            // tidak melebihi total isi array di bawah ini agar tidak error.
             'name' => fake()->unique()->randomElement([
-                'Makanan', 'Minuman', 'Bahan Pokok', 'Peralatan', 'Elektronik',
-                'Kebersihan', 'ATK', 'Obat-obatan', 'Bumbu Dapur', 'Snack',
-                'Rokok', 'Pakaian', 'Otomotif', 'Pertanian', 'Perikanan',
-                'Kerajinan', 'Mainan', 'Olahraga', 'Kesehatan', 'Buku',
+                'Beras',
+                'Minyak Goreng',
+                'Telur',
+                'Susu',
+                'Bahan Pokok',
+                'Sembako',
+                'Minuman',
+                'Kebutuhan Dapur'
             ]),
         ];
     }

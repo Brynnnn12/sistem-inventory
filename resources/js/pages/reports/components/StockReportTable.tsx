@@ -14,7 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { formatCurrency, formatQuantity } from '@/lib/utils';
+import {  formatQuantity } from '@/lib/utils';
 import type { StockItem } from '@/types/models/reports';
 
 interface StockReportTableProps {
@@ -43,11 +43,7 @@ function renderStockTable(data: StockItem[]) {
                     <TableHead>Kode Produk</TableHead>
                     <TableHead>Nama Produk</TableHead>
                     <TableHead>Satuan</TableHead>
-                    <TableHead className="text-right">Qty</TableHead>
                     <TableHead className="text-right">Tersedia</TableHead>
-                    <TableHead className="text-right">Stok Min</TableHead>
-                    <TableHead className="text-right">Harga Beli</TableHead>
-                    <TableHead className="text-right">Nilai</TableHead>
                     <TableHead>Status</TableHead>
                 </TableRow>
             </TableHeader>
@@ -59,19 +55,7 @@ function renderStockTable(data: StockItem[]) {
                         <TableCell>{item.product_name}</TableCell>
                         <TableCell>{item.unit}</TableCell>
                         <TableCell className="text-right">
-                            {formatQuantity(item.quantity)}
-                        </TableCell>
-                        <TableCell className="text-right">
                             {formatQuantity(item.available_qty)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                            {item.min_stock}
-                        </TableCell>
-                        <TableCell className="text-right">
-                            {formatCurrency(item.cost)}
-                        </TableCell>
-                        <TableCell className="text-right">
-                            {formatCurrency(item.value)}
                         </TableCell>
                         <TableCell>{getStatusBadge(item.status)}</TableCell>
                     </TableRow>

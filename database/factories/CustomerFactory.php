@@ -4,9 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Customer>
- */
+
 class CustomerFactory extends Factory
 {
     /**
@@ -16,34 +14,16 @@ class CustomerFactory extends Factory
      */
     public function definition(): array
     {
-        $customers = [
-            // Toko Retail
-            'Toko Sembako Makmur',
-            'Minimarket Indah',
-            'Warung Kelontong Jaya',
-            'Supermarket Segar',
-            'Toko Elektronik Maju',
-            'Apotek Sehat',
-            'Toko Pakaian Modern',
-
-            // Restoran & Kafe
-            'Restoran Padang Raya',
-            'Kafe Kopi Kenangan',
-            'Warung Makan Sari Rasa',
-            'Bakery Cita Rasa',
-            'Food Court Plaza',
-
-            // Hotel & Penginapan
-            'Hotel Bintang Lima',
-            'Penginapan Melati',
-            'Villa Indah Resort',
-            'Guest House Permata',
-
-            // Perusahaan
-            'PT. Maju Bersama',
-            'CV. Sukses Abadi',
-            'UD. Makmur Sentosa',
-            'PT. Berkah Jaya',
+        // Variasi Koperasi dan Dapur MBG
+        $entities = [
+            'Koperasi Pusat',
+            'Koperasi Karyawan',
+            'Koperasi Unit 1',
+            'Koperasi Unit 2',
+            'Dapur MBG Pusat',
+            'Dapur MBG Wilayah Utara',
+            'Dapur MBG Wilayah Selatan',
+            'Dapur MBG Sektor 1',
         ];
 
         $contactPersons = [
@@ -55,13 +35,12 @@ class CustomerFactory extends Factory
             'Linda Kusuma',
             'Agus Priyanto',
             'Dewi Lestari',
-            'Hendra Wijaya',
-            'Rina Purnama',
         ];
 
         return [
+            // Ubah prefix 'CST-' menjadi 'SPL-' jika ini diubah menjadi SupplierFactory
             'code' => 'CST-'.fake()->unique()->numberBetween(1000, 9999),
-            'name' => fake()->randomElement($customers),
+            'name' => fake()->randomElement($entities),
             'contact_person' => fake()->randomElement($contactPersons),
             'phone' => fake()->numerify('08##########'),
             'email' => fake()->unique()->safeEmail(),

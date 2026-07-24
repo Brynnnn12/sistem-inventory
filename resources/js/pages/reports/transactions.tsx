@@ -33,7 +33,7 @@ import {
 } from '@/components/ui/table';
 
 import AppLayout from '@/layouts/app-layout';
-import { cn, formatCurrency, formatDate, formatQuantity } from '@/lib/utils';
+import {  formatDate, formatQuantity } from '@/lib/utils';
 
 // import { exportMethod } from '@/routes/reports/transactions';
 import { type BreadcrumbItem } from '@/types';
@@ -61,8 +61,6 @@ interface Transaction {
     to_warehouse?: string;
     quantity: number;
     received_qty?: number;
-    unit_price?: number;
-    total_price?: number;
     status?: string;
 }
 
@@ -352,108 +350,7 @@ export default function TransactionReport({
                 </Card>
 
                 {/* Summary */}
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm">
-                                Total Masuk
-                            </CardTitle>
 
-                            <ArrowDownLeft className="h-4 w-4 text-green-600" />
-                        </CardHeader>
-
-                        <CardContent>
-                            <div className="text-2xl font-bold text-green-600">
-                                {formatQuantity(
-                                    transactionReport.summary.total_inbound,
-                                )}
-                            </div>
-
-                            <p className="text-xs text-muted-foreground">
-                                {formatCurrency(
-                                    transactionReport.summary
-                                        .total_inbound_value,
-                                )}
-                            </p>
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm">
-                                Total Keluar
-                            </CardTitle>
-
-                            <ArrowUpRight className="h-4 w-4 text-red-600" />
-                        </CardHeader>
-
-                        <CardContent>
-                            <div className="text-2xl font-bold text-red-600">
-                                {formatQuantity(
-                                    transactionReport.summary.total_outbound,
-                                )}
-                            </div>
-
-                            <p className="text-xs text-muted-foreground">
-                                {formatCurrency(
-                                    transactionReport.summary
-                                        .total_outbound_value,
-                                )}
-                            </p>
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm">
-                                Total Mutasi
-                            </CardTitle>
-
-                            <ArrowRightLeft className="h-4 w-4 text-blue-600" />
-                        </CardHeader>
-
-                        <CardContent>
-                            <div className="text-2xl font-bold text-blue-600">
-                                {formatQuantity(
-                                    transactionReport.summary.total_mutations,
-                                )}
-                            </div>
-
-                            <p className="text-xs text-muted-foreground">
-                                {formatCurrency(
-                                    transactionReport.summary
-                                        .total_mutation_value || 0,
-                                )}
-                            </p>
-                        </CardContent>
-                    </Card>
-
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="text-sm">
-                                Net Movement
-                            </CardTitle>
-                        </CardHeader>
-
-                        <CardContent>
-                            <div
-                                className={cn(
-                                    'text-2xl font-bold',
-                                    transactionReport.summary.net_movement >= 0
-                                        ? 'text-green-600'
-                                        : 'text-red-600',
-                                )}
-                            >
-                                {transactionReport.summary.net_movement >= 0 &&
-                                    '+'}
-
-                                {formatQuantity(
-                                    transactionReport.summary.net_movement,
-                                )}
-                            </div>
-                        </CardContent>
-                    </Card>
-                </div>
 
                 {/* Table */}
                 <Card>
@@ -476,12 +373,6 @@ export default function TransactionReport({
                                     <TableHead>Gudang</TableHead>
                                     <TableHead className="text-right">
                                         Qty
-                                    </TableHead>
-                                    <TableHead className="text-right">
-                                        Harga
-                                    </TableHead>
-                                    <TableHead className="text-right">
-                                        Total
                                     </TableHead>
                                     <TableHead>Status</TableHead>
                                 </TableRow>
@@ -571,23 +462,7 @@ export default function TransactionReport({
                                                     )}
                                                 </TableCell>
 
-                                                <TableCell className="text-right">
-                                                    {transaction.unit_price !==
-                                                    undefined
-                                                        ? formatCurrency(
-                                                              transaction.unit_price,
-                                                          )
-                                                        : '-'}
-                                                </TableCell>
 
-                                                <TableCell className="text-right">
-                                                    {transaction.total_price !==
-                                                    undefined
-                                                        ? formatCurrency(
-                                                              transaction.total_price,
-                                                          )
-                                                        : '-'}
-                                                </TableCell>
 
                                                 <TableCell>
                                                     {getStatusBadge(
