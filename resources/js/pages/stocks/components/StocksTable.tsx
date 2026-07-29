@@ -57,9 +57,6 @@ export function StocksTable({
                             Qty Tersedia
                         </TableHead>
                         <TableHead className="text-right">Qty Total</TableHead>
-                        <TableHead className="text-right">
-                            Qty Minimum
-                        </TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead className="w-25">Aksi</TableHead>
                     </TableRow>
@@ -78,9 +75,6 @@ export function StocksTable({
                             </TableCell>
                             <TableCell className="text-right font-mono">
                                 {formatQuantity(stock.quantity || 0)}
-                            </TableCell>
-                            <TableCell className="text-right font-mono">
-                                {formatQuantity(stock.min_stock || 0)}
                             </TableCell>
                             <TableCell>
                                 <Badge

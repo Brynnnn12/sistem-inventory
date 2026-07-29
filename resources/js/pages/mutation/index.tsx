@@ -85,6 +85,8 @@ export default function Index({
                 <MutationTable
                     mutations={mutations.data}
                     isLoading={false}
+                    userWarehouses={userWarehouses}
+                    canSelectWarehouse={canSelectWarehouse}
                     onShowMutation={(mutation) => openModal('show', mutation)}
                     onReceiveMutation={(mutation) =>
                         openModal('receive', mutation)

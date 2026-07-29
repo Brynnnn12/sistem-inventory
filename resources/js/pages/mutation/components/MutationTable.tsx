@@ -16,10 +16,16 @@ import type { MutationTableProps } from '@/types/models/mutation';
 export function MutationTable({
     mutations,
     isLoading,
+    userWarehouses,
+    canSelectWarehouse,
     onShowMutation,
     onReceiveMutation,
     onRejectMutation,
 }: MutationTableProps) {
+    const canReceiveOrReject = (mutation: MutationTableProps['mutations'][number]) => {
+        if (canSelectWarehouse) return true;
+        return userWarehouses.some((w) => w.id === mutation.to_warehouse.id);
+    };
     if (isLoading) {
         return (
             <div className="flex h-32 items-center justify-center">
@@ -154,6 +160,7 @@ export function MutationTable({
                                         <Eye className="h-4 w-4" />
                                     </Button>
                                     {mutation.status_display === 'sent' &&
+                                        canReceiveOrReject(mutation) &&
                                         onReceiveMutation && (
                                             <Button
                                                 variant="ghost"
@@ -167,6 +174,7 @@ export function MutationTable({
                                             </Button>
                                         )}
                                     {mutation.status_display === 'sent' &&
+                                        canReceiveOrReject(mutation) &&
                                         onRejectMutation && (
                                             <Button
                                                 variant="ghost"

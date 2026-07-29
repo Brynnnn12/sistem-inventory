@@ -172,7 +172,7 @@ export function SupplierFormModal({
                                     onChange={(e) =>
                                         form.setData('phone', e.target.value)
                                     }
-                                    placeholder="Contoh: 081234567890"
+                                    placeholder="Contoh: 6281234567890"
                                     maxLength={14}
                                 />
                                 <p className="text-sm text-muted-foreground">

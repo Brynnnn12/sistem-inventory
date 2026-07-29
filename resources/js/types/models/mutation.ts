@@ -111,6 +111,8 @@ export interface MutationToolbarProps {
 export interface MutationTableProps {
     mutations: StockMutation[];
     isLoading: boolean;
+    userWarehouses: Array<{ id: number; name: string }>;
+    canSelectWarehouse: boolean;
     onShowMutation: (mutation: StockMutation) => void;
     onReceiveMutation?: (mutation: StockMutation) => void;
     onRejectMutation?: (mutation: StockMutation) => void;
