@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
+import { formatQuantity } from '@/utils/format';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
@@ -181,9 +182,9 @@ export default function StockAlerts({ alerts }: Props) {
                                                     <div>
                                                         <p className="font-semibold text-foreground">{alert.message}</p>
                                                         <p className="text-sm text-muted-foreground mt-0.5">
-                                                            Sisa: <span className="font-medium text-foreground">{alert.current_qty}</span> {alert.unit}
+                                                            Sisa: <span className="font-medium text-foreground">{formatQuantity(alert.current_qty)}</span> {alert.unit}
                                                             <span className="mx-2 text-muted-foreground/40">•</span>
-                                                            Min: {alert.min_stock} {alert.unit}
+                                                            Min: {formatQuantity(alert.min_stock)} {alert.unit}
                                                         </p>
                                                     </div>
                                                 </div>

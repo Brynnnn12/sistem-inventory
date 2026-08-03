@@ -49,7 +49,7 @@ export function MutationShowModal({
                                 <label className="text-sm font-medium text-muted-foreground">
                                     Status
                                 </label>
-                                <Badge
+                                <Badge className="capitalize ml-1"
                                     variant={
                                         mutation.status_display === 'sent'
                                             ? 'default'

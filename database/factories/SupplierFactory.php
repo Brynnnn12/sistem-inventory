@@ -56,7 +56,7 @@ class SupplierFactory extends Factory
             'code' => 'SUP-'.fake()->unique()->numberBetween(1000, 9999),
             'name' => fake()->randomElement($suppliers),
             'contact_person' => fake()->randomElement($contactPersons),
-            'phone' => fake()->numerify('08##########'),
+            'phone' => '628'.fake()->numerify('##########'),
             'email' => fake()->unique()->safeEmail(),
             'address' => fake()->address(),
             // Menghasilkan 15 digit angka murni untuk NPWP

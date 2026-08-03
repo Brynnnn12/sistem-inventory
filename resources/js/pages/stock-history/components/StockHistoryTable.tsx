@@ -90,9 +90,6 @@ export function StockHistoryTable({
                             Perubahan
                         </TableHead>
                         <TableHead className="font-semibold">
-                            Dari → Ke
-                        </TableHead>
-                        <TableHead className="font-semibold">
                             Referensi
                         </TableHead>
                         <TableHead className="font-semibold">Petugas</TableHead>
@@ -127,10 +124,6 @@ export function StockHistoryTable({
                                     {history.change_qty > 0 ? '+' : ''}
                                     {formatQuantity(history.change_qty)}
                                 </div>
-                            </TableCell>
-                            <TableCell className="font-mono text-sm">
-                                {formatQuantity(history.previous_qty)} →{' '}
-                                {formatQuantity(history.new_qty)}
                             </TableCell>
                             <TableCell>
                                 <div className="flex items-center gap-2">

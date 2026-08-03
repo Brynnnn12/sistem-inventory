@@ -57,7 +57,7 @@ expect()->extend('toHaveRole', function (string $roleName) {
 /**
  * Create a user with specific role(s)
  */
-function createUserWithRole(string|array $roles, array $attributes = []): User
+function createUserWithRole(string|array $roles, array $attributes = [], bool $withWarehouse = false): User
 {
     $user = User::factory()->create($attributes);
 
@@ -66,6 +66,14 @@ function createUserWithRole(string|array $roles, array $attributes = []): User
     });
 
     $user->assignRole($roleInstances);
+
+    if ($withWarehouse) {
+        $warehouse = \App\Models\Warehouse::factory()->create();
+        $user->warehouses()->attach($warehouse->id, [
+            'assigned_at' => now(),
+            'is_primary' => true,
+        ]);
+    }
 
     return $user;
 }
@@ -81,17 +89,17 @@ function createSuperAdmin(array $attributes = []): User
 /**
  * Create an admin user
  */
-function createAdmin(array $attributes = []): User
+function createAdmin(array $attributes = [], bool $withWarehouse = true): User
 {
-    return createUserWithRole('admin', $attributes);
+    return createUserWithRole('admin', $attributes, $withWarehouse);
 }
 
 /**
  * Create a viewer user
  */
-function createViewer(array $attributes = []): User
+function createViewer(array $attributes = [], bool $withWarehouse = true): User
 {
-    return createUserWithRole('viewer', $attributes);
+    return createUserWithRole('viewer', $attributes, $withWarehouse);
 }
 
 /**

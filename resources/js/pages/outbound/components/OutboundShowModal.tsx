@@ -9,7 +9,7 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { formatQuantity, formatDate } from '@/lib/utils';
+import { formatQuantity, formatDate, formatCurrency } from '@/lib/utils';
 import type { OutboundTransaction } from '@/types/models/outbound';
 
 interface OutboundShowModalProps {
@@ -78,7 +78,7 @@ export function OutboundShowModal({
                             </Label>
                             <p className="text-sm text-muted-foreground">
                                 {outbound.unit_price
-                                    ? `Rp ${outbound.unit_price.toLocaleString('id-ID')}`
+                                    ? formatCurrency(outbound.unit_price)
                                     : '-'}
                             </p>
                         </div>
@@ -86,7 +86,9 @@ export function OutboundShowModal({
                             <Label className="text-sm font-medium">Total</Label>
                             <p className="text-sm text-muted-foreground">
                                 {outbound.unit_price
-                                    ? `Rp ${(outbound.quantity * outbound.unit_price).toLocaleString('id-ID')}`
+                                    ? formatCurrency(
+                                          outbound.quantity * outbound.unit_price,
+                                      )
                                     : '-'}
                             </p>
                         </div>

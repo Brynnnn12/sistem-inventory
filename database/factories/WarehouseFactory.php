@@ -17,8 +17,8 @@ class WarehouseFactory extends Factory
     public function definition(): array
     {
         return [
-            'code' => 'WHS-'.$this->faker->unique()->numberBetween(100, 999),
-            'name' => $this->faker->unique()->randomElement(['Gudang Brebes', 'Gudang Tegal', 'Gudang Pemalang']),
+            'code' => 'WHS-'.$this->faker->unique()->numberBetween(100000, 999999),
+            'name' => $this->faker->randomElement(['Gudang Brebes', 'Gudang Tegal', 'Gudang Pemalang']),
             'address' => $this->faker->address(),
             'phone' => $this->faker->numerify('08##########'),
             'is_active' => $this->faker->boolean(90),

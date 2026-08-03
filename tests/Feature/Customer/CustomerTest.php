@@ -111,7 +111,7 @@ test('super-admin bisa membuat customer', function () {
     $data = [
         'name' => 'Toko Baru Sukses',
         'contact_person' => 'Agus',
-        'phone' => '+6281234567890',
+        'phone' => '6281234567890',
         'address' => 'Jl. Contoh No.1',
         'is_active' => true,
     ];

@@ -1,6 +1,23 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InboundController;
+use App\Http\Controllers\MutationController;
+use App\Http\Controllers\OpnameController;
+use App\Http\Controllers\OutboundController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProofDocumentController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\StockController;
+use App\Http\Controllers\StockHistoryController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\UnassignedController;
+use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\WarehouseUserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,129 +31,133 @@ Route::get('auth/google/callback', [ProfileController::class, 'google_callback']
     ->middleware('guest')
     ->name('google.callback');
 
-Route::get('dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])
+Route::get('unassigned', [UnassignedController::class, 'index'])
     ->middleware(['auth'])
+    ->name('unassigned');
+
+Route::get('dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'has.warehouse'])
     ->name('dashboard');
 
-Route::prefix('dashboard')->middleware(['auth'])->group(function () {
+Route::prefix('dashboard')->middleware(['auth', 'has.warehouse'])->group(function () {
 
     Route::middleware(['throttle:bulk'])->group(function () {
-        Route::delete('employees/bulk-destroy', [\App\Http\Controllers\EmployeeController::class, 'bulkDestroy'])
+        Route::delete('employees/bulk-destroy', [EmployeeController::class, 'bulkDestroy'])
             ->name('employees.bulk-destroy');
 
-        Route::delete('categories/bulk-destroy', [\App\Http\Controllers\CategoryController::class, 'bulkDestroy'])
+        Route::delete('categories/bulk-destroy', [CategoryController::class, 'bulkDestroy'])
             ->name('categories.bulk-destroy');
 
-        Route::delete('warehouses/bulk-destroy', [\App\Http\Controllers\WarehouseController::class, 'bulkDestroy'])
+        Route::delete('warehouses/bulk-destroy', [WarehouseController::class, 'bulkDestroy'])
             ->name('warehouses.bulk-destroy');
 
-        Route::delete('warehouse-users/bulk-destroy', [\App\Http\Controllers\WarehouseUserController::class, 'bulkDestroy'])
+        Route::delete('warehouse-users/bulk-destroy', [WarehouseUserController::class, 'bulkDestroy'])
             ->name('warehouse-users.bulk-destroy');
 
-        Route::delete('products/bulk-destroy', [\App\Http\Controllers\ProductController::class, 'bulkDestroy'])
+        Route::delete('products/bulk-destroy', [ProductController::class, 'bulkDestroy'])
             ->name('products.bulk-destroy');
 
-        Route::delete('suppliers/bulk-destroy', [\App\Http\Controllers\SupplierController::class, 'bulkDestroy'])
+        Route::delete('suppliers/bulk-destroy', [SupplierController::class, 'bulkDestroy'])
             ->name('suppliers.bulk-destroy');
 
-        Route::delete('customers/bulk-destroy', [\App\Http\Controllers\CustomerController::class, 'bulkDestroy'])
+        Route::delete('customers/bulk-destroy', [CustomerController::class, 'bulkDestroy'])
             ->name('customers.bulk-destroy');
 
     });
 
     // CRUD operations - Rate limit: 30 per minute
     Route::middleware(['throttle:crud'])->group(function () {
-        Route::resource('employees', \App\Http\Controllers\EmployeeController::class)
+        Route::resource('employees', EmployeeController::class)
             ->parameters(['employees' => 'employee'])
             ->except(['create', 'edit', 'show']);
 
-        Route::resource('categories', \App\Http\Controllers\CategoryController::class)
+        Route::resource('categories', CategoryController::class)
             ->parameters(['categories' => 'category'])
             ->except(['create', 'edit']);
 
-        Route::resource('warehouses', \App\Http\Controllers\WarehouseController::class)
+        Route::resource('warehouses', WarehouseController::class)
             ->parameters(['warehouses' => 'warehouse'])
             ->except(['create', 'edit']);
 
-        Route::resource('warehouse-users', \App\Http\Controllers\WarehouseUserController::class)
+        Route::resource('warehouse-users', WarehouseUserController::class)
             ->parameters(['warehouse-users' => 'warehouseUser'])
             ->except(['create', 'edit', 'update', 'show']);
 
-        Route::post('warehouse-users/swap', [\App\Http\Controllers\WarehouseUserController::class, 'swap'])
+        Route::post('warehouse-users/swap', [WarehouseUserController::class, 'swap'])
             ->name('warehouse-users.swap');
 
-        Route::resource('products', \App\Http\Controllers\ProductController::class)
+        Route::resource('products', ProductController::class)
             ->parameters(['products' => 'product'])
             ->except(['create', 'edit']);
 
-        Route::resource('suppliers', \App\Http\Controllers\SupplierController::class)
+        Route::resource('suppliers', SupplierController::class)
             ->parameters(['suppliers' => 'supplier'])
             ->except(['show'])
             ->except(['create', 'edit']);
 
-        Route::resource('customers', \App\Http\Controllers\CustomerController::class)
+        Route::resource('customers', CustomerController::class)
             ->parameters(['customers' => 'customer'])
             ->except(['create', 'edit', 'show']);
 
         // Stock Management
         Route::prefix('stocks')->name('stocks.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\StockController::class, 'index'])->name('index');
+            Route::get('/', [StockController::class, 'index'])->name('index');
         });
 
         // Inbound Transactions
         Route::prefix('inbound')->name('inbound.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\InboundController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\InboundController::class, 'store'])->name('store');
-            Route::put('/{transaction}', [\App\Http\Controllers\InboundController::class, 'update'])->name('update');
-            Route::delete('/{transaction}', [\App\Http\Controllers\InboundController::class, 'destroy'])->name('destroy');
+            Route::get('/', [InboundController::class, 'index'])->name('index');
+            Route::post('/', [InboundController::class, 'store'])->name('store');
+            Route::put('/{transaction}', [InboundController::class, 'update'])->name('update');
+            Route::delete('/{transaction}', [InboundController::class, 'destroy'])->name('destroy');
         });
 
         // Outbound Transactions
         Route::prefix('outbound')->name('outbound.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\OutboundController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\OutboundController::class, 'store'])->name('store');
-            Route::put('/{transaction}', [\App\Http\Controllers\OutboundController::class, 'update'])->name('update');
-            Route::delete('/{transaction}', [\App\Http\Controllers\OutboundController::class, 'destroy'])->name('destroy');
+            Route::get('/', [OutboundController::class, 'index'])->name('index');
+            Route::post('/', [OutboundController::class, 'store'])->name('store');
+            Route::put('/{transaction}', [OutboundController::class, 'update'])->name('update');
+            Route::delete('/{transaction}', [OutboundController::class, 'destroy'])->name('destroy');
         });
 
         // Opname
         Route::prefix('opname')->name('opname.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\OpnameController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\OpnameController::class, 'store'])->name('store');
-            Route::post('/{opname}/approve', [\App\Http\Controllers\OpnameController::class, 'approve'])->name('approve');
-            Route::post('/{opname}/reject', [\App\Http\Controllers\OpnameController::class, 'reject'])->name('reject');
-            Route::delete('/{opname}', [\App\Http\Controllers\OpnameController::class, 'destroy'])->name('destroy');
+            Route::get('/', [OpnameController::class, 'index'])->name('index');
+            Route::post('/', [OpnameController::class, 'store'])->name('store');
+            Route::post('/{opname}/approve', [OpnameController::class, 'approve'])->name('approve');
+            Route::post('/{opname}/reject', [OpnameController::class, 'reject'])->name('reject');
+            Route::delete('/{opname}', [OpnameController::class, 'destroy'])->name('destroy');
         });
         Route::prefix('mutations')->name('mutations.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\MutationController::class, 'index'])->name('index');
-            Route::post('/', [\App\Http\Controllers\MutationController::class, 'store'])->name('store');
-            Route::put('/{mutation}', [\App\Http\Controllers\MutationController::class, 'update'])->name('update');
-            Route::delete('/{mutation}', [\App\Http\Controllers\MutationController::class, 'destroy'])->name('destroy');
-            Route::post('/{mutation}/receive', [\App\Http\Controllers\MutationController::class, 'receive'])->name('receive');
-            Route::post('/{mutation}/reject', [\App\Http\Controllers\MutationController::class, 'reject'])->name('reject');
+            Route::get('/', [MutationController::class, 'index'])->name('index');
+            Route::post('/', [MutationController::class, 'store'])->name('store');
+            Route::put('/{mutation}', [MutationController::class, 'update'])->name('update');
+            Route::delete('/{mutation}', [MutationController::class, 'destroy'])->name('destroy');
+            Route::post('/{mutation}/receive', [MutationController::class, 'receive'])->name('receive');
+            Route::post('/{mutation}/reject', [MutationController::class, 'reject'])->name('reject');
         });
 
         // Stock History
         Route::prefix('stock-history')->name('stock-history.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\StockHistoryController::class, 'index'])->name('index');
+            Route::get('/', [StockHistoryController::class, 'index'])->name('index');
         });
 
         // Stock Management
         Route::prefix('stocks')->name('stocks.')->group(function () {
-            Route::get('/', [\App\Http\Controllers\StockController::class, 'index'])->name('index');
+            Route::get('/', [StockController::class, 'index'])->name('index');
         });
 
         // Reports
         Route::prefix('reports')->name('reports.')->group(function () {
-            Route::get('/stock', [\App\Http\Controllers\ReportController::class, 'stock'])->name('stock');
-            Route::get('/transactions', [\App\Http\Controllers\ReportController::class, 'transactions'])->name('transactions');
-            Route::get('/alerts', [\App\Http\Controllers\ReportController::class, 'alerts'])->name('alerts');
-            Route::get('/stock/export', [\App\Http\Controllers\ReportController::class, 'exportStock'])->name('stock.export');
-            Route::get('/transactions/export', [\App\Http\Controllers\ReportController::class, 'exportTransactions'])->name('transactions.export');
+            Route::get('/stock', [ReportController::class, 'stock'])->name('stock');
+            Route::get('/transactions', [ReportController::class, 'transactions'])->name('transactions');
+            Route::get('/alerts', [ReportController::class, 'alerts'])->name('alerts');
+            Route::get('/stock/export', [ReportController::class, 'exportStock'])->name('stock.export');
+            Route::get('/transactions/export', [ReportController::class, 'exportTransactions'])->name('transactions.export');
         });
 
         // Proof Documents
-        Route::get('proof-documents/{type}/{id}/download', [\App\Http\Controllers\ProofDocumentController::class, 'download'])
+        Route::get('proof-documents/{type}/{id}/download', [ProofDocumentController::class, 'download'])
             ->name('proof-documents.download')
             ->whereIn('type', ['inbound', 'outbound', 'mutation'])
             ->whereNumber('id');

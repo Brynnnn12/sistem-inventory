@@ -69,7 +69,7 @@ test('super-admin bisa buat produk', function () {
         'name' => 'Produk A',
         'unit' => 'Pcs',
         'price' => 10000,
-        'cost' => 8000,
+        'cost' => 10000,
         'min_stock' => 5,
         'max_stock' => 100,
         'category_id' => Category::factory()->create()->id,
@@ -90,7 +90,7 @@ test('super-admin bisa buat produk', function () {
     // Verifikasi harga dan cost tersimpan
     $product = Product::where('name', 'Produk A')->first();
     expect((float) $product->price)->toBe(10000.0);
-    expect((float) $product->cost)->toBe(8000.0);
+    expect((float) $product->cost)->toBe(10000.0);
 });
 
 test('admin tidak bisa buat produk', function () {

@@ -2,8 +2,35 @@
 
 use App\Models\InboundTransaction;
 use App\Models\OutboundTransaction;
+use App\Models\Warehouse;
 
 use function Pest\Laravel\actingAs;
+
+it('redirects admin without warehouse placement to unassigned page', function () {
+    $admin = createAdmin(withWarehouse: false);
+
+    actingAs($admin)->get(route('dashboard'))->assertRedirect(route('unassigned'));
+});
+
+it('allows admin with warehouse placement to access dashboard', function () {
+    $admin = createAdmin();
+    $warehouse = Warehouse::factory()->create();
+    $admin->warehouses()->attach($warehouse->id);
+
+    actingAs($admin)->get(route('dashboard'))->assertOk();
+});
+
+it('redirects viewer without warehouse placement to unassigned page', function () {
+    $viewer = createViewer(withWarehouse: false);
+
+    actingAs($viewer)->get(route('dashboard'))->assertRedirect(route('unassigned'));
+});
+
+it('allows super admin without warehouse placement to access dashboard', function () {
+    $superAdmin = createSuperAdmin();
+
+    actingAs($superAdmin)->get(route('dashboard'))->assertOk();
+});
 
 it('provides a twelve-item monthlyChart on dashboard', function () {
     $superAdmin = createSuperAdmin();

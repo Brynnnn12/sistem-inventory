@@ -216,7 +216,7 @@ export default function Dashboard({
                                                             {alert.message}
                                                         </p>
                                                         <p className="text-xs text-muted-foreground">
-                                                            Sisa: <span className="font-medium text-foreground">{alert.current_qty}</span> {alert.unit}
+                                                            Sisa: <span className="font-medium text-foreground">{formatQuantity(alert.current_qty)}</span> {alert.unit}
                                                         </p>
                                                     </div>
                                                 </div>
