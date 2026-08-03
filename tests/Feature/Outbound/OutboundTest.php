@@ -107,7 +107,7 @@ test('super-admin bisa membuat outbound dan mengurangi stok', function () {
 });
 
 test('admin bisa membuat outbound tanpa mengirim warehouse_id (diisi otomatis)', function () {
-    $admin = createAdmin();
+    $admin = createAdmin(withWarehouse: false);
 
     $warehouse = Warehouse::factory()->create();
     WarehouseUser::factory()->create([

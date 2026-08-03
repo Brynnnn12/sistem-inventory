@@ -52,7 +52,7 @@ test('super-admin bisa melihat daftar penempatan gudang', function () {
     ]));
 
     // ensure role `admin` exists for controller's User::role('admin') call
-    createAdmin();
+    createAdmin(withWarehouse: false);
 
     $response = actingAs($superAdmin)->get(route('warehouse-users.index'));
 
@@ -97,7 +97,7 @@ test('admin dan viewer tidak bisa melihat daftar penempatan gudang', function ()
 test('super-admin bisa membuat penempatan gudang', function () {
     $superAdmin = createSuperAdmin();
 
-    $adminUser = createAdmin();
+    $adminUser = createAdmin(withWarehouse: false);
     $warehouse = Warehouse::factory()->create();
 
     $response = actingAs($superAdmin)->post(route('warehouse-users.store'), [
@@ -148,10 +148,18 @@ test('super-admin bisa menghapus penempatan gudang', function () {
 });
 
 test('admin dan viewer tidak bisa menghapus penempatan gudang', function () {
-    $admin = createAdmin();
-    $viewer = createViewer();
+    $admin = createAdmin(withWarehouse: false);
+    $viewer = createViewer(withWarehouse: false);
 
-    $wu = WarehouseUser::factory()->create();
+    $assignedWarehouse = Warehouse::factory()->create();
+    $admin->warehouses()->attach($assignedWarehouse->id);
+    $viewer->warehouses()->attach($assignedWarehouse->id);
+
+    $otherUser = User::factory()->create();
+    $wu = WarehouseUser::factory()->create([
+        'user_id' => $otherUser->id,
+        'warehouse_id' => Warehouse::factory()->create()->id,
+    ]);
 
     actingAs($admin)->delete(route('warehouse-users.destroy', $wu))->assertForbidden();
     actingAs($viewer)->delete(route('warehouse-users.destroy', $wu))->assertForbidden();

@@ -79,7 +79,7 @@ test('transactions page memanggil service dan menampilkan hasil', function () {
 });
 
 test('alerts page mengembalikan alerts sesuai warehouse user', function () {
-    $admin = createAdmin();
+    $admin = createAdmin(withWarehouse: false);
     $warehouse = Warehouse::factory()->create();
     $admin->warehouses()->sync([$warehouse->id]);
 

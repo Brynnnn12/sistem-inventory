@@ -97,7 +97,7 @@ test('super-admin bisa membuat inbound dan memperbarui stok', function () {
 });
 
 test('admin bisa membuat inbound tanpa mengirim warehouse_id (diisi otomatis)', function () {
-    $admin = createAdmin();
+    $admin = createAdmin(withWarehouse: false);
 
     $warehouse = Warehouse::factory()->create();
     WarehouseUser::factory()->create([

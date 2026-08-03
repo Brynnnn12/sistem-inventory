@@ -32,7 +32,7 @@ test('super-admin bisa melihat daftar gudang', function () {
 });
 
 test('admin bisa melihat daftar gudang', function () {
-    $admin = createAdmin();
+    $admin = createAdmin(withWarehouse: false);
     $warehouses = \App\Models\Warehouse::factory()->count(2)->create(['is_active' => true]);
 
     // Attach warehouses ke admin supaya controller mengikutkan mereka
