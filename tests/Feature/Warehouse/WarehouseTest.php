@@ -1,12 +1,15 @@
 <?php
 
+use App\Models\User;
+use App\Models\Warehouse;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
 
 test('super-admin bisa melihat daftar gudang', function () {
     $superAdmin = createSuperAdmin();
 
-    $warehouses = \App\Models\Warehouse::factory()->count(3)->create(['is_active' => true]);
+    $warehouses = Warehouse::factory()->count(3)->create(['is_active' => true]);
 
     $response = actingAs($superAdmin)->get(route('warehouses.index'));
 
@@ -33,7 +36,7 @@ test('super-admin bisa melihat daftar gudang', function () {
 
 test('admin bisa melihat daftar gudang', function () {
     $admin = createAdmin(withWarehouse: false);
-    $warehouses = \App\Models\Warehouse::factory()->count(2)->create(['is_active' => true]);
+    $warehouses = Warehouse::factory()->count(2)->create(['is_active' => true]);
 
     // Attach warehouses ke admin supaya controller mengikutkan mereka
     $admin->warehouses()->sync($warehouses->pluck('id'));
@@ -50,7 +53,7 @@ test('admin bisa melihat daftar gudang', function () {
 
 test('viewer tidak bisa melihat daftar gudang', function () {
     $viewer = createViewer();
-    \App\Models\Warehouse::factory()->count(2)->create();
+    Warehouse::factory()->count(2)->create();
 
     $response = actingAs($viewer)->get(route('warehouses.index'));
 
@@ -58,8 +61,8 @@ test('viewer tidak bisa melihat daftar gudang', function () {
 });
 
 test('user tanpa peran tidak bisa melihat daftar gudang', function () {
-    $user = \App\Models\User::factory()->create();
-    \App\Models\Warehouse::factory()->count(2)->create();
+    $user = User::factory()->create();
+    Warehouse::factory()->count(2)->create();
 
     $response = actingAs($user)->get(route('warehouses.index'));
 
@@ -80,7 +83,7 @@ test('super-admin bisa buat gudang', function () {
         ->assertSessionHas('success', 'Gudang berhasil dibuat.');
 
     // verifikasi data name dan address tersimpan di database
-    expect(\App\Models\Warehouse::where('name', 'Gudang Baru')
+    expect(Warehouse::where('name', 'Gudang Baru')
         ->where('address', 'Jl. Contoh Alamat No.123, Kota')
         ->exists())->toBeTrue();
 
@@ -114,7 +117,7 @@ test('viewer tidak bisa buat gudang', function () {
 
 test('super-admin bisa update gudang', function () {
     $superAdmin = createSuperAdmin();
-    $warehouse = \App\Models\Warehouse::factory()->create();
+    $warehouse = Warehouse::factory()->create();
 
     $updateData = [
         'name' => 'Gudang Updated',
@@ -134,7 +137,7 @@ test('super-admin bisa update gudang', function () {
 
 test('super-admin bisa hapus gudang', function () {
     $superAdmin = createSuperAdmin();
-    $warehouse = \App\Models\Warehouse::factory()->create();
+    $warehouse = Warehouse::factory()->create();
 
     $response = actingAs($superAdmin)->delete(route('warehouses.destroy', $warehouse));
 
@@ -142,13 +145,13 @@ test('super-admin bisa hapus gudang', function () {
         ->assertSessionHas('success', 'Gudang berhasil dihapus.');
 
     // Verifikasi gudang terhapus (soft delete)
-    expect(\App\Models\Warehouse::find($warehouse->id))->toBeNull();
-    expect(\App\Models\Warehouse::withTrashed()->find($warehouse->id))->not->toBeNull();
+    expect(Warehouse::find($warehouse->id))->toBeNull();
+    expect(Warehouse::withTrashed()->find($warehouse->id))->not->toBeNull();
 });
 
 test('admin tidak bisa update gudang', function () {
     $admin = createAdmin();
-    $warehouse = \App\Models\Warehouse::factory()->create();
+    $warehouse = Warehouse::factory()->create();
 
     $updateData = [
         'name' => 'Gudang Updated by Admin',
@@ -162,7 +165,7 @@ test('admin tidak bisa update gudang', function () {
 
 test('viewer tidak bisa update gudang', function () {
     $viewer = createViewer();
-    $warehouse = \App\Models\Warehouse::factory()->create();
+    $warehouse = Warehouse::factory()->create();
 
     $updateData = [
         'name' => 'Gudang Updated by Viewer',
@@ -176,7 +179,7 @@ test('viewer tidak bisa update gudang', function () {
 
 test('admin tidak bisa hapus gudang', function () {
     $admin = createAdmin();
-    $warehouse = \App\Models\Warehouse::factory()->create();
+    $warehouse = Warehouse::factory()->create();
 
     $response = actingAs($admin)->delete(route('warehouses.destroy', $warehouse));
 
@@ -185,7 +188,7 @@ test('admin tidak bisa hapus gudang', function () {
 
 test('viewer tidak bisa hapus gudang', function () {
     $viewer = createViewer();
-    $warehouse = \App\Models\Warehouse::factory()->create();
+    $warehouse = Warehouse::factory()->create();
 
     $response = actingAs($viewer)->delete(route('warehouses.destroy', $warehouse));
 

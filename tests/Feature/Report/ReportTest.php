@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use App\Models\Warehouse;
 use App\Services\ReportService;
 use Carbon\Carbon;
@@ -38,8 +39,8 @@ test('super-admin dapat melihat halaman laporan stok dan menerima data dari serv
 });
 
 test('user tanpa peran tidak bisa mengakses halaman laporan', function () {
-    /** @var \App\Models\User $user */
-    $user = \App\Models\User::factory()->create();
+    /** @var User $user */
+    $user = User::factory()->create();
 
     $response = actingAs($user)->get(route('reports.stock'));
 

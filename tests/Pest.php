@@ -1,8 +1,12 @@
 <?php
 
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +19,8 @@ use Spatie\Permission\Models\Role;
 |
 */
 
-pest()->extend(Tests\TestCase::class)
-    ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
+pest()->extend(TestCase::class)
+    ->use(RefreshDatabase::class)
     ->beforeEach(function () {
         $this->withoutMiddleware(ValidateCsrfToken::class);
     })
@@ -68,7 +72,7 @@ function createUserWithRole(string|array $roles, array $attributes = [], bool $w
     $user->assignRole($roleInstances);
 
     if ($withWarehouse) {
-        $warehouse = \App\Models\Warehouse::factory()->create();
+        $warehouse = Warehouse::factory()->create();
         $user->warehouses()->attach($warehouse->id, [
             'assigned_at' => now(),
             'is_primary' => true,
@@ -105,7 +109,7 @@ function createViewer(array $attributes = [], bool $withWarehouse = true): User
 /**
  * Create multiple roles
  */
-function createRoles(array $roles): \Illuminate\Support\Collection
+function createRoles(array $roles): Collection
 {
     return collect($roles)->map(fn ($role) => Role::firstOrCreate(['name' => $role]));
 }
