@@ -94,6 +94,7 @@ export function EmployeeToolbar({
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">Semua Peran</SelectItem>
+                        <SelectItem value="super-admin">Super Admin</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="viewer">Viewer</SelectItem>
                     </SelectContent>

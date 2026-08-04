@@ -50,7 +50,7 @@ class UpdateEmployeeRequest extends FormRequest
                 'sometimes',
                 'required',
                 'string',
-                Rule::in(['admin', 'viewer']),
+                Rule::in(['super-admin', 'admin', 'viewer']),
                 function ($attribute, $value, $fail) {
                     $employee = $this->route('employee');
 
@@ -58,7 +58,7 @@ class UpdateEmployeeRequest extends FormRequest
                         return;
                     }
 
-                    if (! $employee->hasRole('admin')) {
+                    if (! $employee->hasAnyRole(['super-admin', 'admin'])) {
                         return;
                     }
 

@@ -1,5 +1,5 @@
 import { useForm } from '@inertiajs/react';
-import { Eye, EyeOff, Lock, Mail, Save, Shield, User } from 'lucide-react';
+import { Crown, Eye, EyeOff, Lock, Mail, Save, Shield, User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import InputError from '@/components/input-error';
 import { ModalHeader } from '@/components/modal-header';
@@ -235,6 +235,12 @@ export function EmployeeFormModal({
                                         <SelectValue placeholder="Pilih peran" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="super-admin">
+                                            <div className="flex items-center gap-2">
+                                                <Crown className="h-4 w-4 text-red-500" />
+                                                <span>Super Admin</span>
+                                            </div>
+                                        </SelectItem>
                                         <SelectItem value="admin">
                                             <div className="flex items-center gap-2">
                                                 <Shield className="h-4 w-4 text-orange-500" />

@@ -36,7 +36,7 @@ class StoreEmployeeRequest extends FormRequest
             ],
             'phone_number' => ['required', 'string', 'regex:/^628[0-9]{9,11}$/'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'string', 'in:admin,viewer'],
+            'role' => ['required', 'string', 'in:super-admin,admin,viewer'],
         ];
     }
 

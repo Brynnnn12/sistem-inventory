@@ -21,7 +21,7 @@ test('super-admin bisa melakukan CRUD dan bulk pada karyawan; role lain dilarang
     $response->assertOk()
         ->assertInertia(fn ($page) => $page
             ->component('employees/index')
-            ->has('employees.data', 3)
+            ->has('employees.data', 4)
             ->has('employees.data.0', fn ($u) => $u
                 ->has('id')
                 ->has('name')
