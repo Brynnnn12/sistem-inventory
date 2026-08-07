@@ -116,7 +116,6 @@ export function MutationRejectModal({
                         <Button
                             type="submit"
                             disabled={processing}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                         >
                             {processing ? 'Memproses...' : 'Tolak Mutasi'}
                         </Button>
