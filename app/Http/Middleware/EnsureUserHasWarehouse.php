@@ -19,11 +19,11 @@ class EnsureUserHasWarehouse
             return redirect()->route('login');
         }
 
-        if ($user->hasRole('super-admin') || $user->roles->isEmpty()) {
+        if ($user->hasAnyRole(['super-admin', 'viewer']) || $user->roles->isEmpty()) {
             return $next($request);
         }
 
-        if ($user->warehouses()->count() === 0) {
+        if ($user->hasRole('admin') && $user->warehouses()->count() === 0) {
             return redirect()->route('unassigned');
         }
 

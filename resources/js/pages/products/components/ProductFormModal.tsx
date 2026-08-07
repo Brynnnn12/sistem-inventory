@@ -30,8 +30,7 @@ const UNITS = [
     'Pcs',
     'Liter',
     'Kg',
-    'Meter',
-    'Buah',
+    "Ball",
     'Lusin',
     'Pack',
 ];

@@ -19,32 +19,23 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         // Unit disesuaikan dengan produk Telur, Minyak, Beras, dan Susu
-        $units = ['Kg', 'Liter', 'Karton', 'Pack', 'Karung', 'Pouch', 'Pcs', 'Tray'];
+        $units = ['Kg', 'Karton', 'Pack',  'Pcs', 'Ball'];
 
         $products = [
             // Telur
-            'Telur Ayam Negeri 1 Kg',
-            'Telur Ayam Kampung (Isi 10)',
-            'Telur Bebek 1 Kg',
-            'Telur Puyuh 500g',
+            'Telur Ayam 1 Kg',
 
             // Minyak
-            'Minyak Goreng Bimoli Pouch 2L',
-            'Minyak Goreng Sunco 1L',
-            'Minyak Goreng Filma Jerigen 5L',
-            'Minyak Goreng Curah 1 Kg',
+            'Minyak Goreng Bimoli',
 
             // Beras
             'Beras Premium 5 Kg',
-            'Beras Rojolele 10 Kg',
-            'Beras Pandan Wangi 5 Kg',
-            'Beras Merah 1 Kg',
 
             // Susu
             'Susu UHT Full Cream 1L',
-            'Susu Bubuk Dancow 400g',
-            'Susu Kental Manis Frisian Flag 370g',
-            'Susu Beruang Bear Brand 189ml',
+
+            //Garam
+            'Garam Man',
         ];
 
         return [
@@ -54,9 +45,11 @@ class ProductFactory extends Factory
             'unit' => fake()->randomElement($units),
             'min_stock' => fake()->numberBetween(5, 20),
             'max_stock' => fake()->numberBetween(50, 200),
-            // Harga dinaikkan agar lebih masuk akal untuk Beras 5kg atau Minyak 2L
-            'price' => fake()->numberBetween(15000, 150000),
-            'cost' => fake()->numberBetween(10000, 130000),
+
+            // Dikalikan 1000 agar hasilnya genap (kelipatan 1000)
+            'price' => fake()->numberBetween(15, 150) * 1000,
+            'cost' => fake()->numberBetween(10, 130) * 1000,
+
             'description' => fake()->optional(0.7)->sentence(),
             'is_active' => fake()->boolean(90), // 90% chance of being active
         ];

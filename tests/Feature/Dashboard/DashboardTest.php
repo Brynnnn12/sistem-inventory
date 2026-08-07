@@ -20,10 +20,10 @@ it('allows admin with warehouse placement to access dashboard', function () {
     actingAs($admin)->get(route('dashboard'))->assertOk();
 });
 
-it('redirects viewer without warehouse placement to unassigned page', function () {
+it('allows viewer without warehouse placement to access dashboard', function () {
     $viewer = createViewer(withWarehouse: false);
 
-    actingAs($viewer)->get(route('dashboard'))->assertRedirect(route('unassigned'));
+    actingAs($viewer)->get(route('dashboard'))->assertOk();
 });
 
 it('allows super admin without warehouse placement to access dashboard', function () {

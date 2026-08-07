@@ -2,6 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InboundTransaction;
+use App\Models\OutboundTransaction;
+use App\Models\Product;
+use App\Models\Stock;
+use App\Models\StockMutation;
+use App\Models\User;
+use App\Models\Warehouse;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -14,13 +22,14 @@ class DashboardController extends Controller
      */
     public function index(): Response
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = Auth::user();
         $isSuperAdmin = $user->hasRole('super-admin');
-        $warehouseIds = $isSuperAdmin ? null : $user->warehouses()->pluck('warehouses.id')->toArray();
+        $canViewAll = $isSuperAdmin || $user->hasRole('viewer');
+        $warehouseIds = $canViewAll ? null : $user->warehouses()->pluck('warehouses.id')->toArray();
 
         // Get latest 5 products with category
-        $products = \App\Models\Product::query()
+        $products = Product::query()
             ->active()
             ->with(['category:id,name'])
             ->when($warehouseIds, function ($query) use ($warehouseIds) {
@@ -48,7 +57,7 @@ class DashboardController extends Controller
             });
 
         // Get latest 5 employees (excluding superadmin)
-        $employees = \App\Models\User::query()
+        $employees = User::query()
             ->select('id', 'name', 'email', 'created_at')
             ->whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'super-admin');
@@ -96,7 +105,7 @@ class DashboardController extends Controller
 
     private function getStockSummary(?array $warehouseIds = null): array
     {
-        $totalProductsQuery = \App\Models\Product::active();
+        $totalProductsQuery = Product::active();
         if ($warehouseIds) {
             $totalProductsQuery->whereIn('id', function ($sub) use ($warehouseIds) {
                 $sub->select('product_id')
@@ -106,8 +115,8 @@ class DashboardController extends Controller
             });
         }
         $totalProducts = $totalProductsQuery->count();
-        $totalWarehouses = $warehouseIds ? count($warehouseIds) : \App\Models\Warehouse::count();
-        $totalStockValueQuery = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
+        $totalWarehouses = $warehouseIds ? count($warehouseIds) : Warehouse::count();
+        $totalStockValueQuery = Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at');
         if ($warehouseIds) {
@@ -115,7 +124,7 @@ class DashboardController extends Controller
         }
         $totalStockValue = $totalStockValueQuery->sum(DB::raw('stocks.quantity * products.cost'));
 
-        $lowStockQuery = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
+        $lowStockQuery = Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
             ->where('products.min_stock', '>', 0)
@@ -126,7 +135,7 @@ class DashboardController extends Controller
         }
         $lowStockCount = $lowStockQuery->count();
 
-        $outOfStockQuery = \App\Models\Stock::join('products', 'stocks.product_id', '=', 'products.id')
+        $outOfStockQuery = Stock::join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
             ->where('stocks.quantity', '<=', 0);
@@ -146,7 +155,7 @@ class DashboardController extends Controller
 
     private function getRecentTransactions(?array $warehouseIds = null): array
     {
-        $inboundQuery = \App\Models\InboundTransaction::with(['product', 'warehouse', 'supplier']);
+        $inboundQuery = InboundTransaction::with(['product', 'warehouse', 'supplier']);
         if ($warehouseIds) {
             $inboundQuery->whereIn('warehouse_id', $warehouseIds);
         }
@@ -165,7 +174,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $outboundQuery = \App\Models\OutboundTransaction::with(['product', 'warehouse', 'customer']);
+        $outboundQuery = OutboundTransaction::with(['product', 'warehouse', 'customer']);
         if ($warehouseIds) {
             $outboundQuery->whereIn('warehouse_id', $warehouseIds);
         }
@@ -184,7 +193,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $mutationsQuery = \App\Models\StockMutation::with(['product', 'fromWarehouse', 'toWarehouse']);
+        $mutationsQuery = StockMutation::with(['product', 'fromWarehouse', 'toWarehouse']);
         if ($warehouseIds) {
             $mutationsQuery->where(function ($q) use ($warehouseIds) {
                 $q->whereIn('from_warehouse', $warehouseIds)
@@ -218,7 +227,7 @@ class DashboardController extends Controller
 
     private function getStockAlerts(?array $warehouseIds = null): array
     {
-        $lowStockQuery = \App\Models\Stock::with(['product', 'warehouse'])
+        $lowStockQuery = Stock::with(['product', 'warehouse'])
             ->join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
@@ -242,7 +251,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        $outOfStockQuery = \App\Models\Stock::with(['product', 'warehouse'])
+        $outOfStockQuery = Stock::with(['product', 'warehouse'])
             ->join('products', 'stocks.product_id', '=', 'products.id')
             ->where('products.is_active', true)
             ->whereNull('products.deleted_at')
@@ -273,10 +282,10 @@ class DashboardController extends Controller
         $monthlyData = [];
 
         for ($month = 1; $month <= 12; $month++) {
-            $startDate = \Carbon\Carbon::create($currentYear, $month, 1)->startOfMonth();
-            $endDate = \Carbon\Carbon::create($currentYear, $month, 1)->endOfMonth();
+            $startDate = Carbon::create($currentYear, $month, 1)->startOfMonth();
+            $endDate = Carbon::create($currentYear, $month, 1)->endOfMonth();
 
-            $inboundQuery = \App\Models\InboundTransaction::whereBetween('received_date', [
+            $inboundQuery = InboundTransaction::whereBetween('received_date', [
                 $startDate->format('Y-m-d'),
                 $endDate->format('Y-m-d'),
             ]);
@@ -285,7 +294,7 @@ class DashboardController extends Controller
             }
             $inbound = $inboundQuery->sum('quantity');
 
-            $outboundQuery = \App\Models\OutboundTransaction::whereBetween('sale_date', [
+            $outboundQuery = OutboundTransaction::whereBetween('sale_date', [
                 $startDate->format('Y-m-d'),
                 $endDate->format('Y-m-d'),
             ]);
